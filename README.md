@@ -1,7 +1,7 @@
 # FlyRecursos
 Este é um projeto de código aberto e voluntário, desenvolvido para a ONG [Fly Educação](https://www.flyeducacao.org/), que impacta a vida de mais de 7.580 pessoas em situação de vulnerabilidade social. Nosso objetivo é criar um repositório centralizado e acessível de recursos visuais para os cursos oferecidos pela [Fly Educação](https://www.flyeducacao.org/).
 
-Foi criado com Vite, React, TypeScript e Tailwind CSS.
+Foi criado com Vite, React e TypeScript.
 
 ## Requisitos
 Antes de começar, certifique-se de ter os seguintes softwares instalados:
@@ -19,7 +19,7 @@ npm -v
 ## Tecnologias Utilizadas
 
 
-[React](reactjs.org) | [TypeScript](typescriptlang.org) | [Tailwind CSS](tailwindcss.com) | [Vite](vitejs.dev) | [NPM](https://www.npmjs.com/)
+[React](reactjs.org) | [TypeScript](typescriptlang.org) | [Vite](vitejs.dev) | [NPM](https://www.npmjs.com/)
 
 ### Versão Mobile
 <br />
@@ -27,7 +27,7 @@ npm -v
   <img 
     alt="Versão Mobile"
     src="https://github.com/nadiduno/flyrecursos/blob/main/.github/appMobile.png" 
-    width="60%"
+    width="30%"
   >
   <br />
 </div>
