@@ -1,6 +1,6 @@
 import { Footer } from "../componets/Footer";
 import { HeaderMain } from "../componets/HeaderMain";
-import { Navibar } from "../componets/Navibar";
+import { Navibar } from "../componets/Navbar";
 import { Resource } from "../componets/Resource";
 import { TopTen } from "../componets/TopTen";
 
