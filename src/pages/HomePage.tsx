@@ -29,7 +29,7 @@ export function HomePage(){
             <nav className="h-[5.375rem] md:h-[7.75rem]shadow-md">
                 <Navibar />
             </nav>
-            <header className="h-[23.5rem] md:h-[31.375rem] bg-white text-black">
+            <header className="h-[23.5rem] md:h-[31.375rem] bg-white text-black border-b-[3px] border-primary2 sticky top-0 z-10">
                 <HeaderMain />
             </header>
             <section className="h-[11.5rem] md:h-[38.25rem] text-primary2">
