@@ -87,7 +87,7 @@ export function Navibar({ user }: NavibarProps) {
                                 onClick={toggleDropdown} // Muestra/oculta el menú desplegable
                             />
                             {isDropdownVisible && (
-                                <div className="absolute right-0 mt-2 bg-white shadow-lg rounded-lg p-4">
+                                <div className="absolute right-0 mt-2 bg-white shadow-lg rounded-lg p-4 z-50">
                                     <button
                                         className="bg-red-500 px-4 py-2 text-white rounded-lg"
                                         onClick={handleLogout}
