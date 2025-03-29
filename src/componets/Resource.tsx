@@ -1,4 +1,4 @@
-import { CardVideo } from "./CardVideo";
+/* import { CardVideo } from "./CardVideo";
 
 export interface ResourceType{
     id: number
@@ -19,4 +19,4 @@ export function Resource({ resource }: ResourceProps){
             <CardVideo />
         </div>
     )
-}
+} */

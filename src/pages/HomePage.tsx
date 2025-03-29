@@ -42,7 +42,8 @@ export function HomePage(){
                             key={resource.id} 
                             className={`h-[11.5rem] md:h-[38.25rem] border-t-[3px] border-primary2 odd:bg-white transition-all duration-300 hover:shadow-lg text-primary2 `}
                         >
-                            <Resource key={resource.id} resource={resource} />
+                            {/* <Resource key={resource.id} resource={resource} /> */}
+                            
                         </div>
 
                     )
