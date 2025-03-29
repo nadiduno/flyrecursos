@@ -5,7 +5,6 @@ export function TopTen(){
         <div>
             Código do Top 10
             <CardVideoTen />
-            <CardVideoTen />
         </div>
     )
 }
