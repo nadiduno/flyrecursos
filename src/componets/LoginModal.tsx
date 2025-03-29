@@ -19,23 +19,31 @@ const LoginModal: React.FC<LoginModalProps> = ({ isOpen, onClose, onLogin }) => 
   }
 
   return (
-    <div className="modal">
-      <div className="modal-content">
-        <h2>Iniciar sesión</h2>
+    <div className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center">
+      <div className="bg-white p-6 rounded-md w-full max-w-sm">
+        <h2 className="text-2xl font-bold mb-4">Iniciar sesión</h2>
         <input
           type="text"
           placeholder="Nombre de usuario"
           value={username}
           onChange={(e) => setUsername(e.target.value)}
+          className="w-full p-2 border rounded-md mb-2"
         />
         <input
           type="password"
           placeholder="Contraseña"
           value={password}
           onChange={(e) => setPassword(e.target.value)}
+          className="w-full p-2 border rounded-md mb-4"
         />
-        <button onClick={handleLogin}>Ingresar</button>
-        <button onClick={onClose}>Cancelar</button>
+        <div className="flex justify-end">
+          <button onClick={handleLogin} className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded mr-2">
+            Ingresar
+          </button>
+          <button onClick={onClose} className="bg-gray-300 hover:bg-gray-400 text-gray-800 font-bold py-2 px-4 rounded">
+            Cancelar
+          </button>
+        </div>
       </div>
     </div>
   );
