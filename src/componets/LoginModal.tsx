@@ -21,7 +21,7 @@ const LoginModal: React.FC<LoginModalProps> = ({ isOpen, onClose, onLogin }) => 
   return (
     <div className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center">
       <div className="bg-white p-6 rounded-md w-full max-w-sm">
-        <h2 className="text-2xl font-bold mb-4">Iniciar sesión</h2>
+        <h2 className="text-2xl font-bold mb-4">Faça seu login</h2>
         <input
           type="text"
           placeholder="Nombre de usuario"
