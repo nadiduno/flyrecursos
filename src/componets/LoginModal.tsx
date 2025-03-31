@@ -19,32 +19,38 @@ const LoginModal: React.FC<LoginModalProps> = ({ isOpen, onClose, onLogin }) => 
   }
 
   return (
-    <div className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center">
-      <div className="bg-white p-6 rounded-md w-full max-w-sm">
-        <h2 className="text-2xl font-bold mb-4">Faça seu login</h2>
+    <div className="fixed inset-0  flex items-center justify-center bg-[#FFFFFFB2] z-50">
+      <div className="bg-[#004054] p-6 rounded-md w-full max-w-sm">
+        <h2 className="mt-[50px] mb-[49px] w-[236px] h-[35px] text-3xl mx-auto text-center font-bold font-roboto ">FAÇA SEU LOGIN</h2>
+
+        <label className="w-[50px] h-[21px] text-lg font-normal">
+                E-mail
+        </label> 
         <input
           type="text"
-          placeholder="Nombre de usuario"
+          placeholder="Digite seu e-mail"
           value={username}
           onChange={(e) => setUsername(e.target.value)}
           className="w-full p-2 border rounded-md mb-2"
         />
+        <label className="w-[50px] h-[21px] text-lg font-normal">
+                Senha
+        </label> 
         <input
           type="password"
-          placeholder="Contraseña"
+          placeholder="Digite sua senha"
           value={password}
           onChange={(e) => setPassword(e.target.value)}
           className="w-full p-2 border rounded-md mb-4"
         />
-        <div className="flex justify-end">
-          <button onClick={handleLogin} className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded mr-2">
-            Ingresar
+        <p>Ainda não tem conta? <span className="font-bold text-[#00CAFE]">Cadastre-se</span></p>
+        <div className="flex justify-center bg-[#FFFFFF] rounded-b-md mt-4 w-full p-4 items-center">
+          <button onClick={handleLogin} className="w-[400px] h-[40px]  rounded-[50px] bg-[#00CAFE] shadow-[0px_4px_4px_0px_rgba(0,0,0,0.2)]cking-normal text-center font-bold text-[20px]">
+            Entrar
           </button>
-          <button onClick={onClose} className="bg-gray-300 hover:bg-gray-400 text-gray-800 font-bold py-2 px-4 rounded">
-            Cancelar
-          </button>
-        </div>
       </div>
+      </div>
+      
     </div>
   );
 };

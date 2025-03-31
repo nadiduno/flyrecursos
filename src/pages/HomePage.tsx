@@ -4,7 +4,6 @@ import { Navibar } from "../componets/Navbar";
 import { Resource, ResourceType} from "../componets/Resource";
 import { TopTen } from "../componets/TopTen";
 
-import { CreateAccount } from "../componets/CreateAccount";
 
 const resources: ResourceType[] = [
     {
@@ -24,20 +23,7 @@ const resources: ResourceType[] = [
         title: 'SuperProfs'
     }
 ]
-const [isModalOpen, setIsModalOpen] = useState(false);
 
-  const handleOpenModal = () => {
-    setIsModalOpen(true);
-  };
-
-  const handleCloseModal = () => {
-    setIsModalOpen(false);
-  };
-
-  const handleLogin = (username: string, password: string) => {
-    console.log('Inicio de sesión:', username, password);
-    handleCloseModal();
-  };
 
 export function HomePage(){
     return(
@@ -53,7 +39,6 @@ export function HomePage(){
             <header className="bg-white text-black border-b-[3px] border-primary2 sticky top-0 z-10">
                 <HeaderMain />
             </header>
-            <CreateAccount />
             <section className="text-primary2">
                 <TopTen />
             </section>
@@ -71,10 +56,7 @@ export function HomePage(){
                     )
                 })}
             </section>
-            <div>
-                <button onClick={handleOpenModal}>Abrir modal de inicio de sesión</button>
-                <LoginModal isOpen={isModalOpen} onClose={handleCloseModal} onLogin={handleLogin} />
-            </div>
+           
             <footer className="h-[5.375rem] md:h-[7.75rem]">
                 <Footer />
             </footer>

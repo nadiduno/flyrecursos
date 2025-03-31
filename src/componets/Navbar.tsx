@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { AiOutlineSearch } from "react-icons/ai";
 import { CreateAccount } from "./CreateAccount";
+import LoginModal from "./LoginModal";
 
 interface User {
     photoUrl?: string;
@@ -16,11 +17,7 @@ export function Navibar({ user }: NavibarProps) {
     const [searchQuery, setSearchQuery] = useState<string>(""); // Estado para el input de búsqueda
     const [isDropdownVisible, setIsDropdownVisible] = useState<boolean>(false); // Controla la visibilidad del menú desplegable
     const [isCreateAccountVisible, setIsCreateAccountVisible] = useState<boolean>(false);
-
-    const handleLogin = (): void => {
-        setIsLoggedIn(true);
-        setShowSignupLogin(false);
-    };
+     const [isModalOpen, setIsModalOpen] = useState(false);
 
     const handleLogout = (): void => {
         setIsLoggedIn(false);
@@ -46,6 +43,19 @@ export function Navibar({ user }: NavibarProps) {
         //console.log(isCreateAccountVisible)
       };
 
+      const handleOpenModal = () => {
+        setIsModalOpen(true);
+      };
+    
+      const handleCloseModal = () => {
+        setIsModalOpen(false);
+      };
+    
+      const handleLogin = (username: string, password: string) => {
+        console.log('Inicio de sesión:', username, password);
+        handleCloseModal();
+      };
+
     return (
         <div className="flex justify-between py-4 px-8 items-center">
             <div className="w-12 h-12">
@@ -67,10 +77,11 @@ export function Navibar({ user }: NavibarProps) {
                         </button>
                         <button
                             className="bg-secondary px-2 py-1 rounded-xl text-primary1"
-                            onClick={handleLogin}
+                            onClick={handleOpenModal}
                         >
                             Entrar
                         </button>
+                        <LoginModal isOpen={isModalOpen} onClose={handleCloseModal} onLogin={handleLogin} />
                     </>
                 ) : isLoggedIn ? (
                     <>
