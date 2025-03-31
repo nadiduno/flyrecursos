@@ -1,10 +1,10 @@
 import { Footer } from "../componets/Footer";
 import { HeaderMain } from "../componets/HeaderMain";
-import { Navibar } from "../componets/Navibar";
-import LoginModal from "../componets/LoginModal";
+import { Navibar } from "../componets/Navbar";
 import { Resource, ResourceType} from "../componets/Resource";
 import { TopTen } from "../componets/TopTen";
-import { useState } from 'react';
+
+import { CreateAccount } from "../componets/CreateAccount";
 
 const resources: ResourceType[] = [
     {
@@ -45,9 +45,15 @@ export function HomePage(){
             <nav className="h-[5.375rem] md:h-[7.75rem]shadow-md">
                 <Navibar />
             </nav>
+           {/*Login component */}
+            <div className="h-[5.375rem] md:h-[7.75rem]">
+               
+            </div>
+            {/*End of login component */}
             <header className="bg-white text-black border-b-[3px] border-primary2 sticky top-0 z-10">
                 <HeaderMain />
             </header>
+            <CreateAccount />
             <section className="text-primary2">
                 <TopTen />
             </section>
