@@ -27,7 +27,7 @@ export const CreateAccount: React.FC<CreateAccountProps> = ({ isVisible: propIsV
   const [creationError, setCreationError] = useState<string | null>(null);
 
   const onSubmit = async (formData: FormData) => {
-    console.log("submitted data", formData);
+    //console.log("submitted data", formData);
 
     try {
       //replace create user url
@@ -53,6 +53,9 @@ export const CreateAccount: React.FC<CreateAccountProps> = ({ isVisible: propIsV
       }
     } catch (error) {
       console.error('Error:', error);
+      // Convertendo para string
+      setCreationError(error instanceof Error ? error.message : String(error));
+      setMessage(null);
     }
 
     
@@ -102,13 +105,13 @@ export const CreateAccount: React.FC<CreateAccountProps> = ({ isVisible: propIsV
         </h1>
         <form action="" onSubmit={handleSubmit(onSubmit)}>
           <div className="ml-[57px]">
-            <div className="w-[400px] h-[73px] mb-[24px]">
-              <label className="w-[50px] h-[21px] text-lg font-normal">
+            <div className="flex flex-col w-[400px] h-[73px] mb-[24px]">
+              <label className="block h-[21px] text-lg font-normal mb-[4px] text-left">
                 Nome completo
               </label>
               <input
                 {...register("name", { required: true })}
-                className="w-[400px] h-[50px] bg-[#EBEBF5] rounded-[5px] pl-[16px] font-normal text-black text-lg font-normal placeholder:h-[21px] border-[#0000001A] shadow-[0px_4px_4px_0px_rgba(0,0,0,0.2)] 
+                className="w-[400px] min-h-[50px] bg-[#EBEBF5] rounded-[5px] pl-[16px] font-normal text-black text-lg font-normal placeholder:h-[21px] border-[#0000001A] shadow-[0px_4px_4px_0px_rgba(0,0,0,0.2)] 
                  placeholder:text-[#8D8686]"
                 type="text"
                 placeholder="Digite seu nome completo"
@@ -119,12 +122,12 @@ export const CreateAccount: React.FC<CreateAccountProps> = ({ isVisible: propIsV
                 </p>
               )}
             </div>
-            <div className="w-[400px] h-[73px] mb-[24px]">
-              <label className="w-[50px] h-[21px] text-lg font-normal">
+            <div className="flex flex-col w-[400px] h-[73px] mb-[24px]">
+              <label className="block h-[21px] text-lg font-normal mb-[4px] text-left">
                 E-mail
               </label>
               <input
-                className="w-[400px] h-[50px] bg-[#EBEBF5] rounded-[5px] pl-[16px] font-normal text-black text-lg font-normal placeholder:h-[21px] border-[#0000001A] shadow-[0px_4px_4px_0px_rgba(0,0,0,0.2)] 
+                className="w-[400px] min-h-[50px] bg-[#EBEBF5] rounded-[5px] pl-[16px] font-normal text-black text-lg font-normal placeholder:h-[21px] border-[#0000001A] shadow-[0px_4px_4px_0px_rgba(0,0,0,0.2)] 
                  placeholder:text-[#8D8686]"
                 {...register("email", { required: true},)}
                 type="email"
@@ -133,21 +136,21 @@ export const CreateAccount: React.FC<CreateAccountProps> = ({ isVisible: propIsV
               {errors.email && <p className="text-red-500 text-xs mt-1">O e-mail é obrigatório</p>}
             </div>
 
-            <div className="w-[400px] h-[73px] mb-[24px]">
-              <label className="w-[50px] h-[21px] text-lg font-normal">
+            <div className="flex flex-col w-[400px] h-[73px] mb-[24px]">
+              <label className="block h-[21px] text-lg font-normal mb-[4px] text-left">
                 Senha
               </label>
               <input
                 {...register("password", { required: true })}
-                className="w-[400px] h-[50px] bg-[#EBEBF5] rounded-[5px] pl-[16px] font-normal text-black text-lg font-normal placeholder:h-[21px] border-[#0000001A] shadow-[0px_4px_4px_0px_rgba(0,0,0,0.2)] 
+                className="w-[400px] min-h-[50px] bg-[#EBEBF5] rounded-[5px] pl-[16px] font-normal text-black text-lg font-normal placeholder:h-[21px] border-[#0000001A] shadow-[0px_4px_4px_0px_rgba(0,0,0,0.2)] 
                  placeholder:text-[#8D8686]"
                 type="password"
                 placeholder="Digite sua senha"
               />
               {errors.password && <p className="text-red-500 text-xs mt-1">A Senha é obrigatória</p>}
             </div>
-            <div className="w-[400px] h-[73px] mb-[39px]">
-              <label className="w-[50px] h-[21px] text-lg font-normal">
+            <div className="flex flex-col w-[400px] h-[73px] mb-[24px]">
+              <label className="block h-[21px] text-lg font-normal mb-[4px] text-left">
                 Repita a senha
               </label> 
               <input
@@ -156,7 +159,7 @@ export const CreateAccount: React.FC<CreateAccountProps> = ({ isVisible: propIsV
                   validate: (value) =>
                     value === watch("password") || "As senhas não coincidem",
                 })}
-                className="w-[400px] h-[50px] bg-[#EBEBF5] rounded-[5px] pl-[16px] font-normal text-black text-lg font-normal placeholder:h-[21px] border-[#0000001A] shadow-[0px_4px_4px_0px_rgba(0,0,0,0.2)] 
+                className="w-[400px] min-h-[50px] bg-[#EBEBF5] rounded-[5px] pl-[16px] font-normal text-black text-lg font-normal placeholder:h-[21px] border-[#0000001A] shadow-[0px_4px_4px_0px_rgba(0,0,0,0.2)] 
                  placeholder:text-[#8D8686]"
                 type="password"
                 placeholder="Digite sua senha novamente"
@@ -170,7 +173,7 @@ export const CreateAccount: React.FC<CreateAccountProps> = ({ isVisible: propIsV
           <div className="w-[500px] h-[152px] bt-[5px] rounded-b-[5px] bg-[#FFFFFF] flex justify-center items-center space-x-4">
           
             <button
-              className="w-[400px] h-[50px]  rounded-[50px] bg-[#00CAFE] shadow-[0px_4px_4px_0px_rgba(0,0,0,0.2)]"
+              className="w-[400px] min-h-[50px]  rounded-[50px] bg-[#00CAFE] shadow-[0px_4px_4px_0px_rgba(0,0,0,0.2)]"
               type="submit"
             > <p className="h-[23px] leading-tight tracking-normal text-center font-bold text-[20px]">CRIAR CONTA</p>
             </button>
