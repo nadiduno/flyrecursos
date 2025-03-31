@@ -9,12 +9,12 @@ type FormData = {
 };
 
 interface CreateAccountProps {
-  isVisible: boolean;
+  isVisible: boolean; // Prop from parent
+  setIsVisible: React.Dispatch<React.SetStateAction<boolean>>; // Setter function from parent
+
 }
 
-export const CreateAccount: React.FC<CreateAccountProps> = ({ isVisible: propIsVisible }) => {
-
-  const [isVisible, setIsVisible] = useState<boolean>(propIsVisible);
+export const CreateAccount: React.FC<CreateAccountProps> = ({ isVisible: propIsVisible, setIsVisible }) => {
   
   const {
     register,
@@ -74,7 +74,7 @@ export const CreateAccount: React.FC<CreateAccountProps> = ({ isVisible: propIsV
 
   // Set up event listeners on component mount
   useEffect(() => {
-    setIsVisible(true);
+    
     // Listener for Escape key
     window.addEventListener('keydown', handleEscape);
 
@@ -88,8 +88,8 @@ export const CreateAccount: React.FC<CreateAccountProps> = ({ isVisible: propIsV
     };
   }, []);
 
-  // PARA VER COMPONENTE MUDAR PARA isVisible 
-  if (!isVisible) return null;
+  //  PARA VER COMPONENTE MUDAR PARA isVisible 
+  if (!propIsVisible) return null;
 
 
   return (
