@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { AiOutlineSearch } from "react-icons/ai";
+import { CreateAccount } from "./CreateAccount";
 
 interface User {
     photoUrl?: string;
@@ -14,6 +15,7 @@ export function Navibar({ user }: NavibarProps) {
     const [showSignupLogin, setShowSignupLogin] = useState<boolean>(true);
     const [searchQuery, setSearchQuery] = useState<string>(""); // Estado para el input de búsqueda
     const [isDropdownVisible, setIsDropdownVisible] = useState<boolean>(false); // Controla la visibilidad del menú desplegable
+    const [isCreateAccountVisible, setIsCreateAccountVisible] = useState<boolean>(false);
 
     const handleLogin = (): void => {
         setIsLoggedIn(true);
@@ -37,6 +39,13 @@ export function Navibar({ user }: NavibarProps) {
         setIsDropdownVisible((prevState) => !prevState); // Alterna la visibilidad del menú desplegable
     };
 
+    //Alternar visibilidade do componente de criar conta
+    const createAccountToggleVisibility = () => {
+        //console.log("toggle")
+        setIsCreateAccountVisible(true);
+        //console.log(isCreateAccountVisible)
+      };
+
     return (
         <div className="flex justify-between py-4 px-8 items-center">
             <div className="w-12 h-12">
@@ -51,9 +60,10 @@ export function Navibar({ user }: NavibarProps) {
                     <>
                         <button
                             className="bg-secondary px-2 py-1 rounded-xl text-primary1"
-                            onClick={() => setShowSignupLogin(false)}
+                            onClick={createAccountToggleVisibility}
                         >
                             Criar conta
+                            <CreateAccount isVisible={isCreateAccountVisible} setIsVisible={setIsCreateAccountVisible} />
                         </button>
                         <button
                             className="bg-secondary px-2 py-1 rounded-xl text-primary1"
