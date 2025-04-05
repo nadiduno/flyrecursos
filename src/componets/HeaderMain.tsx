@@ -54,7 +54,6 @@ export function HeaderMain() {
                       />
                   ) 
                 })} */}
-            </div>
         </div>
     );
         
