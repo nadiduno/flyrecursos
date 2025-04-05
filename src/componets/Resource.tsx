@@ -10,7 +10,8 @@ const cardVideos: CardVideoType[] = [
     imageUrl: 'src/assets/imgprevvideo.png',
     videoUrl: 'https://www.youtube.com/watch?v=DE488HhysSU',
     teacher: 'Professora 1',
-    trilha: 'Front-end'
+    trilha: 'Front-end',
+    viewcount:0
   },
   {
     id: 2,
@@ -18,7 +19,8 @@ const cardVideos: CardVideoType[] = [
     imageUrl: 'src/assets/imgprevvideo.png',
     videoUrl: 'https://www.youtube.com/watch?v=VR5SNLu6fJI',
     teacher: 'Professora 2',
-    trilha: 'Front-end'
+    trilha: 'Front-end',
+    viewcount:0
   },
   {
     id: 3,
@@ -26,7 +28,8 @@ const cardVideos: CardVideoType[] = [
     imageUrl: 'src/assets/imgprevvideo.png',
     videoUrl: 'https://www.youtube.com/watch?v=DE488HhysSU',
     teacher: 'Professora 3',
-    trilha: 'Front-end'
+    trilha: 'Front-end',
+    viewcount:0
   },
   {
     id: 4,
@@ -34,7 +37,8 @@ const cardVideos: CardVideoType[] = [
     imageUrl: 'src/assets/imgprevvideo.png',
     videoUrl: 'https://www.youtube.com/watch?v=VR5SNLu6fJI',
     teacher: 'Professora 4',
-    trilha: 'Front-end'
+    trilha: 'Front-end',
+    viewcount:0
   },
   {
     id: 5,
@@ -42,7 +46,8 @@ const cardVideos: CardVideoType[] = [
     imageUrl: 'src/assets/imgprevvideo.png',
     videoUrl: 'https://www.youtube.com/watch?v=DE488HhysSU',
     teacher: 'Professora 5',
-    trilha: 'Front-end'
+    trilha: 'Front-end',
+    viewcount:0
   },
   
   {
@@ -51,7 +56,8 @@ const cardVideos: CardVideoType[] = [
     imageUrl: 'src/assets/imgprevvideo.png',
     videoUrl: 'https://www.youtube.com/watch?v=VR5SNLu6fJI',
     teacher: 'Professora 6',
-    trilha: 'Front-end'
+    trilha: 'Front-end',
+    viewcount:0
   },
 
 ];
@@ -105,7 +111,7 @@ export function Resource({ resource }: ResourceProps) {
         ref={carouselRef}
         className="h-[250px] w-auto overflow-hidden whitespace-nowrap flex items-center"
       >
-      <div className="carouselbox h-[250px] w-auto overflow-hidden whitespace-nowrap flex items-center">
+      <div className="carouselbox h-[250px] w-full overflow-hidden whitespace-nowrap flex items-center">
         {cardVideos.map((cardVideo) => (
           <div
             key={cardVideo.id}
