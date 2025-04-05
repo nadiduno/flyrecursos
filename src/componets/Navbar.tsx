@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { AiOutlineSearch } from "react-icons/ai";
-
+import logo from "../assets/Navi.png";
 interface User {
     photoUrl?: string;
 }
@@ -38,25 +38,25 @@ export function Navibar({ user }: NavibarProps) {
     };
 
     return (
-        <div className="flex justify-between py-4 px-8 items-center">
-            <div className="w-12 h-12">
+        <div className="w-full h-[80px]  flex justify-between py-4 px-4 items-center">
+            <div className="bg-white w-[15%] h-[100%] flex items-center justify-center" >
                 <img
-                    className="h-12 w-12 object-cover"
-                    src="https://static.wixstatic.com/media/d7a054_004284127742499c88a4914992b6e3fa~mv2.png/v1/fill/w_192,h_192,lg_1,usm_0.66_1.00_0.01/d7a054_004284127742499c88a4914992b6e3fa~mv2.png"
-                    alt=""
+                    className="h-full w-full object-contain"
+                    src={logo}
+                    alt="fly logo"
                 />
             </div>
-            <div className="flex gap-6 items-center">
+            <div className="flex justify-end lg:w-[40%] gap-3 items-center lg:bg-white sm:w-[85%] sm:bg-red-200 md:bg-blue-200 md:w-[60%] xs:bg-red-400">
                 {showSignupLogin ? (
                     <>
                         <button
-                            className="bg-secondary px-2 py-1 rounded-xl text-primary1"
+                            className="border-4 border-white px-8 py-2 rounded-3xl text-white font-bold hover:bg-yellow hover:border-yellow hover:text-black transition duration-300 sm:px-6 sm:py-2 sm:text-base"
                             onClick={() => setShowSignupLogin(false)}
                         >
                             Criar conta
                         </button>
                         <button
-                            className="bg-secondary px-2 py-1 rounded-xl text-primary1"
+                            className="border-4 border-white px-8 py-2 rounded-3xl text-white font-bold hover:bg-yellow hover:border-yellow hover:text-black transition duration-300"
                             onClick={handleLogin}
                         >
                             Entrar
