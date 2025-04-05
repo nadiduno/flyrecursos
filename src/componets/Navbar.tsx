@@ -38,15 +38,15 @@ export function Navibar({ user }: NavibarProps) {
     };
 
     return (
-        <div className="w-full h-[80px]  flex justify-between py-4 px-4 items-center">
-            <div className="bg-white w-[15%] h-[100%] flex items-center justify-center" >
+        <div className="w-full h-[80px] flex justify-between py-4 px-3 items-center">
+            <div className="lg:w-[6%] h-[100%] flex items-center justify-start xs:w-[20%]" >
                 <img
                     className="h-full w-full object-contain"
                     src={logo}
                     alt="fly logo"
                 />
             </div>
-            <div className="flex justify-end lg:w-[40%] gap-3 items-center lg:bg-white sm:w-[85%] sm:bg-red-200 md:bg-blue-200 md:w-[60%] xs:bg-red-400">
+            <div className="flex justify-end lg:w-[40%] gap-3 items-center sm:w-[85%] md:w-[60%] xs:w-[80%]">
                 {showSignupLogin ? (
                     <>
                         <button
@@ -64,7 +64,7 @@ export function Navibar({ user }: NavibarProps) {
                     </>
                 ) : isLoggedIn ? (
                     <>
-                        <div className="flex items-center gap-2">
+                        <div className="flex items-center lg:gap-2 xs:gap-0 ">
                             <input
                                 type="text"
                                 value={searchQuery}
