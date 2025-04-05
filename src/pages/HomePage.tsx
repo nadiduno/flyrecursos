@@ -1,8 +1,9 @@
 import { Footer } from "../componets/Footer";
 import { HeaderMain } from "../componets/HeaderMain";
-import { Navibar } from "../componets/Navibar";
+import { Navibar } from "../componets/Navbar";
 import { Resource, ResourceType} from "../componets/Resource";
 import { TopTen } from "../componets/TopTen";
+
 
 const resources: ResourceType[] = [
     {
@@ -23,12 +24,18 @@ const resources: ResourceType[] = [
     }
 ]
 
+
 export function HomePage(){
     return(
         <div className=" min-h-screen flex flex-col">
             <nav className="h-[5.375rem] md:h-[7.75rem]shadow-md">
                 <Navibar />
             </nav>
+           {/*Login component */}
+            <div className="h-[5.375rem] md:h-[7.75rem]">
+               
+            </div>
+            {/*End of login component */}
             <header className="bg-white text-black border-b-[3px] border-primary2 sticky top-0 z-10">
                 <HeaderMain />
             </header>
@@ -49,6 +56,7 @@ export function HomePage(){
                     )
                 })}
             </section>
+           
             <footer className="h-[5.375rem] md:h-[7.75rem]">
                 <Footer />
             </footer>

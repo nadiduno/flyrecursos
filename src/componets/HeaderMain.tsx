@@ -45,7 +45,19 @@ export function HeaderMain() {
                         </p>
                     </div>
                 </div>
+                {/* {videosData.map((video) =>{
+                  return(
+                      <Video 
+                          src={video.src}
+                          title={video.title}
+                          thumbnail={video.thumbnail}
+                      />
+                  ) 
+                })} */}
             </div>
         </div>
     );
+        
+      </div>  
+  );
 }
