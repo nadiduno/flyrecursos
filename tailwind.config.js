@@ -17,6 +17,9 @@ xs:'320px'
           black: '#000000',        
         },
       },
+      fontFamily: {
+        roboto: ['Roboto', 'sans-serif'],
+      },
     },
   },
   plugins: [],

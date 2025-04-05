@@ -8,38 +8,58 @@ const cardVideos: CardVideoType[] = [
     id: 1,
     title: 'Video 1',
     imageUrl: 'src/assets/imgprevvideo.png',
-    videoUrl: 'https://www.youtube.com/watch?v=DE488HhysSU'
+    videoUrl: 'https://www.youtube.com/watch?v=DE488HhysSU',
+    teacher: 'Professora 1',
+    trilha: 'Front-end',
+    viewcount:0
   },
   {
     id: 2,
     title: 'Video 2',
     imageUrl: 'src/assets/imgprevvideo.png',
-    videoUrl: 'https://www.youtube.com/watch?v=DE488HhysSU'
+    videoUrl: 'https://www.youtube.com/watch?v=VR5SNLu6fJI',
+    teacher: 'Professora 2',
+    trilha: 'Front-end',
+    viewcount:0
   },
   {
     id: 3,
     title: 'Video 3',
     imageUrl: 'src/assets/imgprevvideo.png',
-    videoUrl: 'https://www.youtube.com/watch?v=DE488HhysSU'
+    videoUrl: 'https://www.youtube.com/watch?v=DE488HhysSU',
+    teacher: 'Professora 3',
+    trilha: 'Front-end',
+    viewcount:0
   },
   {
     id: 4,
     title: 'Video 4',
     imageUrl: 'src/assets/imgprevvideo.png',
-    videoUrl: 'https://www.youtube.com/watch?v=DE488HhysSU'
+    videoUrl: 'https://www.youtube.com/watch?v=VR5SNLu6fJI',
+    teacher: 'Professora 4',
+    trilha: 'Front-end',
+    viewcount:0
   },
   {
     id: 5,
     title: 'Video 5',
     imageUrl: 'src/assets/imgprevvideo.png',
-    videoUrl: 'https://www.youtube.com/watch?v=DE488HhysSU'
+    videoUrl: 'https://www.youtube.com/watch?v=DE488HhysSU',
+    teacher: 'Professora 5',
+    trilha: 'Front-end',
+    viewcount:0
   },
+  
   {
     id: 6,
     title: 'Video 6',
     imageUrl: 'src/assets/imgprevvideo.png',
-    videoUrl: 'https://www.youtube.com/watch?v=DE488HhysSU'
-  }
+    videoUrl: 'https://www.youtube.com/watch?v=VR5SNLu6fJI',
+    teacher: 'Professora 6',
+    trilha: 'Front-end',
+    viewcount:0
+  },
+
 ];
 
 export interface ResourceType {
@@ -84,19 +104,30 @@ export function Resource({ resource }: ResourceProps) {
 
   return (
     <div className="w-[80%] relative mx-auto">
-      <h1>{resource.title}</h1>
+      <h1 className="text-xl md:text-2xl pt-[0.5rem] md:pt-[1rem] md:px-1">
+        {resource.title}
+      </h1> 
       <div
         ref={carouselRef}
-        className="h-[250px] w-auto overflow-hidden whitespace-nowrap flex items-center pb-[10px]"
+        className="h-[250px] w-auto overflow-hidden whitespace-nowrap flex items-center"
       >
+      <div className="carouselbox h-[250px] w-full overflow-hidden whitespace-nowrap flex items-center">
         {cardVideos.map((cardVideo) => (
           <div
             key={cardVideo.id}
-            className={`transition-all duration-300 hover:shadow-lg text-primary2`}
+            className={`transition-all duration-300 hover:shadow-lg text-primary2 relative`}
           >
-            <CardVideo key={cardVideo.id} cardVideo={cardVideo} />
+            <div className="relative cursor-pointer hover:scale-[1.4] transition-transform duration-500  hover:z-20">
+              <CardVideo key={cardVideo.id} cardVideo={cardVideo} />
+              <div className="absolute inset-0 flex flex-col items-center justify-end text-white opacity-0 hover:opacity-100 transition-opacity duration-700">
+                <div className="text-base mt-2 text-center">
+                  {cardVideo.title}
+                </div>
+              </div>
+            </div>
           </div>
         ))}
+      </div>
       </div>
       <button
         onClick={sliderScrollLeft}
