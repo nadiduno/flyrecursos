@@ -20,3 +20,8 @@ body {
   background-color: #004054;
   color:#FFFFFF;
 }
+
+#top-ten,
+section {
+  scroll-margin-top: 28rem;
+}
