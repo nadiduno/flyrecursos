@@ -6,14 +6,12 @@ interface MenuItem {
   href: string;
 }
 
-const menuItems: MenuItem[] = [
-  { label: 'Mercado', href: '#' },
-  { label: 'Tecnologia', href: '#' },
-  { label: 'Marketing e Empreendedorismo', href: '#' },
-  { label: 'SuperProfs', href: '#' },
-  { label: 'Colorindo', href: '#' },
-  { label: 'Vídeo Cursos', href: '#' },
-  { label: 'Artigos', href: '#' },
+export const menuItems: MenuItem[] = [
+  { label: 'Mercado', href: '#mercado' },
+  { label: 'Tecnologia', href: '#tecnologia' },
+  { label: 'Marketing e Empreendedorismo', href: '#marketing-e-empreendedorismo' },
+  { label: 'SuperProfs', href: '#superprofs' },
+  { label: 'Colorindo', href: '#colorindo' },
 ];
 
 export function HeaderMain() {
@@ -37,7 +35,7 @@ export function HeaderMain() {
               {menuItems.map((item, index) => (
                 <li
                   key={index}
-                  className='leading-5 py-2 px-3 rounded-md transition-all duration-200 ease-in-out cursor-pointer hover:bg-gray-100 hover:text-primary2 hover:translate-x-1'
+                  className='leading-5 py-2 px-3 rounded-md transition-all duration-200 ease-in-out cursor-pointer opacity-90  bg-gray-100 hover:bg-primary1 hover:text-primary2 hover:translate-x-1 hover:opacity-100 transition-transform duration-500 text-lg'
                 >
                   <a href={item.href}>{item.label}</a>
                 </li>
