@@ -67,9 +67,9 @@ export function Resource({ resource }: ResourceProps) {
 
   return (
     <div className="w-[90%] relative mx-auto">
-      <h1 className="text-xl md:text-2xl pt-[0.5rem] md:pt-[1rem] md:px-1">
+      <h2 className="text-3xl pt-[0.5rem] md:pt-[1rem] md:px-1 md:text-5xl transform -rotate-3">
         {resource.title}
-      </h1>
+      </h2>
       <div
         ref={carouselRef}
         className="h-[250px] w-full overflow-hidden whitespace-nowrap flex items-center scroll-smooth"

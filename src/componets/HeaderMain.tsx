@@ -45,7 +45,7 @@ export function HeaderMain() {
 
           <div className='rounded-md p-[0.25rem] md:p-[3rem] z-20 h-fit w-full md:max-w-[380px] lg:max-w-[620px] text-xs'>
             <div className='hidden lg:block'>
-              <h1 className='text-2xl font-bold text-primary2 md:text-3xl '>
+              <h1 className='text-2xl font-bold text-primary2 md:text-6xl transform -rotate-3 pb-8'>
                 Aprenda Mais com Nossos Recursos
               </h1>
               <p className='text-sm leading-relaxed text-black mt-3 md:text-base'>
