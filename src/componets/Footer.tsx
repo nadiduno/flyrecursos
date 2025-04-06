@@ -1,3 +1,5 @@
+
+import logo from '../assets/Navi.png'
 export function Footer(){
     return(
         <footer className= "bg-primary1 text-white p-2">
@@ -5,7 +7,7 @@ export function Footer(){
                 <div className= "grid mx-auto font-serif sm:grid-cols-1 md:grid-cols-5 gap-3">
                     
                     <div className="flex flex-col items-center justify-around mx-auto gap-3">
-                       <img src="Navi.png" alt="Fly Logo" className="h-auto w-16 mx-auto"/> 
+                       <img src={logo} alt="Fly Logo" className="h-auto w-16 mx-auto"/> 
                     
                     </div> 
                     <div className="text-sm flex flex-col justify-center gap-3">

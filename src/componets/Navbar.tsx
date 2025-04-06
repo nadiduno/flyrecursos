@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { AiOutlineSearch } from "react-icons/ai";
-import { CreateAccount } from "./CreateAccount";
-import LoginModal from "./LoginModal";
+import logo from "../assets/Navi.png";
+import { Link } from "react-router-dom";
 
 interface User {
     photoUrl?: string;
@@ -16,8 +16,11 @@ export function Navibar({ user }: NavibarProps) {
     const [showSignupLogin, setShowSignupLogin] = useState<boolean>(true);
     const [searchQuery, setSearchQuery] = useState<string>(""); // Estado para el input de búsqueda
     const [isDropdownVisible, setIsDropdownVisible] = useState<boolean>(false); // Controla la visibilidad del menú desplegable
-    const [isCreateAccountVisible, setIsCreateAccountVisible] = useState<boolean>(false);
-     const [isModalOpen, setIsModalOpen] = useState(false);
+
+    const handleLogin = (): void => {
+        setIsLoggedIn(true);
+        setShowSignupLogin(false);
+    };
 
     const handleLogout = (): void => {
         setIsLoggedIn(false);
@@ -36,56 +39,39 @@ export function Navibar({ user }: NavibarProps) {
         setIsDropdownVisible((prevState) => !prevState); // Alterna la visibilidad del menú desplegable
     };
 
-    //Alternar visibilidade do componente de criar conta
-    const createAccountToggleVisibility = () => {
-        //console.log("toggle")
-        setIsCreateAccountVisible(true);
-        //console.log(isCreateAccountVisible)
-      };
-
-      const handleOpenModal = () => {
-        setIsModalOpen(true);
-      };
-    
-      const handleCloseModal = () => {
-        setIsModalOpen(false);
-      };
-    
-      const handleLogin = (username: string, password: string) => {
-        console.log('Inicio de sesión:', username, password);
-        handleCloseModal();
-      };
-
     return (
-        <div className="flex justify-between py-4 px-8 items-center">
-            <div className="w-12 h-12">
+        <div className="w-full h-[80px] flex justify-between py-4 px-3 items-center">
+            <div className="lg:w-[6%] h-[100%] flex items-center justify-start xs:w-[20%]" >
                 <img
-                    className="h-12 w-12 object-cover"
-                    src="https://static.wixstatic.com/media/d7a054_004284127742499c88a4914992b6e3fa~mv2.png/v1/fill/w_192,h_192,lg_1,usm_0.66_1.00_0.01/d7a054_004284127742499c88a4914992b6e3fa~mv2.png"
-                    alt=""
+                    className="h-full w-full object-contain"
+                    src={logo}
+                    alt="fly logo"
                 />
             </div>
-            <div className="flex gap-6 items-center">
+            <div className="flex justify-end lg:w-[40%] gap-3 items-center sm:w-[85%] md:w-[60%] xs:w-[80%]">
                 {showSignupLogin ? (
                     <>
                         <button
-                            className="bg-secondary px-2 py-1 rounded-xl text-primary1"
-                            onClick={createAccountToggleVisibility}
+                            className="border-4 border-white px-8 py-2 rounded-3xl text-white font-bold hover:bg-yellow hover:border-yellow hover:text-black transition duration-300 sm:px-6 sm:py-2 sm:text-base"
+                            onClick={() => setShowSignupLogin(false)}
                         >
-                            Criar conta
-                            <CreateAccount isVisible={isCreateAccountVisible} setIsVisible={setIsCreateAccountVisible} />
+                             <Link to="/criarconta" className="block w-full h-full">
+        Criar conta
+    </Link>
+
                         </button>
                         <button
-                            className="bg-secondary px-2 py-1 rounded-xl text-primary1"
-                            onClick={handleOpenModal}
+                            className="border-4 border-white px-8 py-2 rounded-3xl text-white font-bold hover:bg-yellow hover:border-yellow hover:text-black transition duration-300 sm:text-base"
+                            onClick={handleLogin}
                         >
-                            Entrar
+                            <Link to="/login" className="block w-full h-full">
+        Entrar
+    </Link>
                         </button>
-                        <LoginModal isOpen={isModalOpen} onClose={handleCloseModal} onLogin={handleLogin} />
                     </>
                 ) : isLoggedIn ? (
                     <>
-                        <div className="flex items-center gap-2">
+                        <div className="flex items-center lg:gap-2 xs:gap-0 ">
                             <input
                                 type="text"
                                 value={searchQuery}
