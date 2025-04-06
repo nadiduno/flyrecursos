@@ -45,6 +45,8 @@ export function Footer(){
                         <img src="https://github.com/jexaez.png" alt="Mulher..."
                         className="mx-auto rounded-full h-5 w-5"/>
                         <img src="https://github.com/adrianaessa.png" alt="Mulher branca, com cabelo cacheado, sorrindo, fundo branco"
+                         className="mx-auto rounded-full h-5 w-5"/>
+                        <img src="https://github.com/vasconcelos3011.png" alt="Mulher branca, com cabelo cumprido, sorrindo, fundo cinza"
                          className="mx-auto rounded-full h-5 w-5"/>           
                     </div>
 
