@@ -1,6 +1,8 @@
 import { useState } from "react";
 import { AiOutlineSearch } from "react-icons/ai";
 import logo from "../assets/Navi.png";
+import { Link } from "react-router-dom";
+
 interface User {
     photoUrl?: string;
 }
@@ -53,13 +55,18 @@ export function Navibar({ user }: NavibarProps) {
                             className="border-4 border-white px-8 py-2 rounded-3xl text-white font-bold hover:bg-yellow hover:border-yellow hover:text-black transition duration-300 sm:px-6 sm:py-2 sm:text-base"
                             onClick={() => setShowSignupLogin(false)}
                         >
-                            Criar conta
+                             <Link to="/criarconta" className="block w-full h-full">
+        Criar conta
+    </Link>
+
                         </button>
                         <button
-                            className="border-4 border-white px-8 py-2 rounded-3xl text-white font-bold hover:bg-yellow hover:border-yellow hover:text-black transition duration-300"
+                            className="border-4 border-white px-8 py-2 rounded-3xl text-white font-bold hover:bg-yellow hover:border-yellow hover:text-black transition duration-300 sm:text-base"
                             onClick={handleLogin}
                         >
-                            Entrar
+                            <Link to="/login" className="block w-full h-full">
+        Entrar
+    </Link>
                         </button>
                     </>
                 ) : isLoggedIn ? (
