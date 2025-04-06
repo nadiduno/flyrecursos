@@ -25,11 +25,11 @@ const resourcesData: ResourceType[] = [
 
 export function HomePage() {
   return (
-    <div className=" min-h-screen flex flex-col">
+    <div className="min-h-screen flex flex-col bg-primary1">
       <nav className="h-[5.375rem] md:h-[7.75rem]shadow-md">
         <Navibar />
       </nav>
-      <header className="bg-white text-black border-b-[3px] border-primary2 sticky top-0 z-10">
+      <header className="bg-white text-black border-b-[3px] border-primary2 sticky top-0 z-20">
         <HeaderMain />
       </header>
       <section id="top-ten" className="text-primary2 py-10">
@@ -54,7 +54,7 @@ export function HomePage() {
           <section
             key={index}
             id={sectionId}
-            className={`py-10 border-t-[3px] border-primary2 ${index % 2 === 0 ? 'bg-white' : 'odd:bg-primary1'} transition-all duration-300 hover:shadow-lg text-primary2`}
+            className={`py-1 border-t-[3px] border-primary2 ${index % 2 === 0 ? 'bg-white' : 'odd:bg-primary1'} transition-all duration-300 hover:shadow-lg text-primary2`}
           >
             {sectionContent}
           </section>

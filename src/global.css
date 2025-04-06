@@ -14,6 +14,7 @@
   font-weight: 400;
   text-rendering: optimizeLegibility;
   -webkit-font-smoothing: antialiased;
+  
 }
 
 body {
@@ -24,4 +25,14 @@ body {
 #top-ten,
 section {
   scroll-margin-top: 28rem;
+}
+@media  only screen and (min-width: 768px) {
+  :root {
+    display: flex;
+    justify-content: center;
+  }
+  body{
+    max-width: 1400px;
+    background: #0f0f0f;
+  }
 }
