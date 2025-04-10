@@ -1,10 +1,10 @@
 
 export function Footer(){
     return(
-        <footer className= "bg-black text-white p-4 w-full">
-            <div className= "container flex flex-col mx-auto text-center items-center justify-center sm:grid-cols-1 md:grid-cols-4 lg:grid-cols-4 mt-5 mb-0 lg:px-8 lg:w-full"> 
+        <footer className= "bg-black text-white w-full">
+            <div className= "container mx-auto flex flex-col text-center items-center justify-center sm:grid-cols-1 md:grid-cols-4 lg:grid-cols-4 lg:w-auto"> 
 
-                <div className= "grid mx-auto text-center items-center justify-center font-primaryfont sm:grid-cols-1 md:grid-cols-4 lg:grid-cols-4 gap-3">
+                <div className= "grid mx-auto text-center items-center justify-center font-primaryfont sm:grid-cols-1 md:grid-cols-4 lg:grid-cols-4 mt-5 lg:w-auto gap-3">
 
                     <div className="text-md flex flex-col items-center justify-center gap-3">
                         <a href="https://www.flyeducacao.org/pol%C3%ADtica-de-cookies" 
@@ -25,11 +25,11 @@ export function Footer(){
 
                 </div>    
 
-                <div className="mx-auto flex items-center justify-center mt-8">
+                <div className="mx-auto flex items-center justify-center mt-6 mb-2">
                         <p className="text-sm flex font-serif pb-1">Colaboradores do site:</p>       
                 </div> 
             
-                <div className="mx-auto flex items-center justify-center text-center sm:grid-cols-1 sm:gap-2 md:gap-4 mt-3">
+                <div className="mx-auto flex items-center justify-center text-center sm:grid-cols-1 sm:gap-2 md:gap-4 mt-2 mb-2">
                      <a href="www.linkedin.com/in/adrianacamposguevara">
                         <img src="https://github.com/adrianaessa.png" title="Adriana Guevara" alt="Mulher branca, com cabelo cacheado, sorrindo, fundo branco."
                         className="mx-auto rounded-full sm:h-6 sm:w-6 md:h-8 md:w-8 lg:h-8 lg:w-8"/>
@@ -55,6 +55,11 @@ export function Footer(){
                         className="mx-auto rounded-full sm:h-6 sm:w-6 md:h-8 md:w-8 lg:h-8 lg:w-8"/>
                     </a>
 
+                    <a href="https://www.linkedin.com/in/paula-gimenez-backend/">
+                        <img src="https://github.com/pbgv2705.png" title="Paula Gimenez" alt="Mulher branca com cabelo branco, usando jaqueta marrom e cachecol cor laranja clara."
+                        className="mx-auto rounded-full sm:h-6 sm:w-6 md:h-8 md:w-8 lg:h-8 lg:w-8"/>
+                    </a>
+
                     <a href="https://www.linkedin.com/in/nadiduno/">
                         <img src="https://github.com/nadiduno.png" title="Nadi Duno" alt="Mulher parda, usando camisa branca, sorrindo, fundo claro."
                         className="mx-auto rounded-full sm:h-6 sm:w-6 md:h-8 md:w-8 lg:h-8 lg:w-8"/> 
@@ -74,13 +79,10 @@ export function Footer(){
                         <img src="https://github.com/vverdum.png" title="Valdirene Verdum"  alt="Mulher branca, usando oculos, sorrindo."  
                         className="mx-auto rounded-full sm:h-6 sm:w-6 md:h-8 md:w-8 lg:h-8 lg:w-8"/>
                     </a>
-
-
                 </div>
-
                       
                 <div>
-                    <p className="text-sm mx-auto italic font-serif text-center mt-5 mb-0">&copy;{new Date().getFullYear()} Fly. Todos os direitos reservados.</p>
+                    <p className="text-sm mx-auto italic font-serif text-center mt-5 mb-2">&copy;{new Date().getFullYear()} Fly. Todos os direitos reservados.</p>
                 </div>                   
             </div>
         </footer>
