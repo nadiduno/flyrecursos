@@ -7,11 +7,11 @@ interface User {
     photoUrl?: string;
 }
 
-interface NavibarProps {
+interface NavbarProps {
     user?: User;
 }
 
-export function Navibar({ user }: NavibarProps) {
+function Navbar({ user }: NavbarProps) {
     const [isLoggedIn, setIsLoggedIn] = useState<boolean>(false);
     const [showSignupLogin, setShowSignupLogin] = useState<boolean>(true);
     const [searchQuery, setSearchQuery] = useState<string>(""); // Estado para el input de búsqueda
@@ -110,3 +110,5 @@ export function Navibar({ user }: NavibarProps) {
         </div>
     );
 }
+
+export default Navbar; 

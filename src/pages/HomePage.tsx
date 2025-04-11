@@ -1,6 +1,6 @@
 import { Footer } from "../componets/Footer";
 import { HeaderMain } from "../componets/HeaderMain";
-import { Navibar } from "../componets/Navbar";
+import  Navbar from "../componets/Navbar";
 import { Resource} from "../componets/Resource";
 import { TopTen } from "../componets/TopTen";
 
@@ -27,7 +27,7 @@ export function HomePage() {
   return (
     <div className="min-h-screen flex flex-col bg-primary1">
       <nav className="h-[5.375rem] md:h-[7.75rem]shadow-md">
-        <Navibar />
+        <Navbar />
       </nav>
       <header className="bg-white text-black border-b-[3px] border-primary2 sticky top-0 z-20">
         <HeaderMain />
