@@ -25,7 +25,7 @@ export function Navibar({ user }: NavibarProps) {
     const handleLogout = (): void => {
         setIsLoggedIn(false);
         setShowSignupLogin(true);
-        setIsDropdownVisible(false); // Cierra el menú desplegable al cerrar sesión
+        setIsDropdownVisible(false); 
     };
 
     const handleSearch = (): void => {
