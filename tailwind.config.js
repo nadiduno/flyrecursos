@@ -4,7 +4,7 @@ export default {
   theme: {
     extend: {
       screens:{
-xs:'320px'
+        xs:'320px'
       },
       colors: {
         primary1: "#004054",
@@ -18,7 +18,10 @@ xs:'320px'
         },
       },
       fontFamily: {
-        roboto: ['Roboto', 'sans-serif'],
+        'primaryfont': ['Insigne', 'sans-serif'],
+        'secondaryfont': ['Sora', 'sans-serif'],
+        'titlefont': ['Marydale', 'sans-serif'],
+        'roboto': ['Roboto', 'sans-serif'],
       },
     },
   },

@@ -1,58 +1,73 @@
 
-import logo from '../assets/Navi.png'
 export function Footer(){
     return(
-        <footer className= "bg-primary1 text-white p-2">
-            <div className= "container flex flex-col sm:text-center md:grid-cols-5 overscroll-auto p-14 h-14 mt-4">        
-                <div className= "grid mx-auto font-serif sm:grid-cols-1 md:grid-cols-5 gap-3">
-                    
-                    <div className="flex flex-col items-center justify-around mx-auto gap-3">
-                       <img src={logo} alt="Fly Logo" className="h-auto w-16 mx-auto"/> 
-                    
-                    </div> 
-                    <div className="text-sm flex flex-col justify-center gap-3">
+        <footer className= "bg-black text-white w-full">
+                <div className= "grid mx-auto text-center items-center justify-center font-primaryfont sm:grid-cols-1 md:grid-cols-4 lg:grid-cols-4 lg:w-auto gap-3">
+                    <div className="text-md flex flex-col items-center justify-center gap-3 mt-3">
                         <a href="https://www.flyeducacao.org/pol%C3%ADtica-de-cookies" 
-                        className="mb-2 hover:underline">Documentos instituitivos</a> 
+                        className="hover:opacity-70 sm:gap-3 md:gap-5 lg:gap-6">Documentos instituitivos</a> 
                     </div>    
-                    <div className="text-sm flex flex-col justify-center gap-3">
+                    <div className="text-md flex flex-col items-center justify-center gap-3 mt-3">
                         <a href="https://www.flyeducacao.org/_files/ugd/d7a054_0474e31120564b9c88eae7d082eefa5b.pdf"
-                        className="mb-2 hover:underline">Diretores e conselheiros eleitos</a>
+                        className="hover:opacity-70 sm:gap-3 md:gap-5 lg:gap-6">Diretores e Conselheiros eleitos</a>
                     </div>          
-                    <div className="text-sm flex flex-col justify-center gap-3">     
+                    <div className="text-md flex flex-col justify-center items-center gap-3 mt-3">     
                         <a href="https://www.flyeducacao.org/_files/ugd/d7a054_74634e815830462abdd26398f5833ee8.pdf"
-                        className="mb-2 hover:underline">Cartão CNPJ</a> 
+                        className="hover:opacity-70 sm:gap-3 md:gap-5 lg:gap-6">Cartão CNPJ</a> 
                     </div>
-                    <div className="text-sm flex flex-col justify-center gap-3">
+                    <div className="text-md flex flex-col justify-center items-center gap-3 mt-3">
                         <a href="https://www.flyeducacao.org/_files/ugd/d7a054_6db0f6de01a941ef9c8d6aea847bebd3.pdf" 
-                        className="mb-2 hover:underline">Estatuto Social</a>
+                        className="hover:opacity-70 sm:gap-3 md:gap-5 lg:gap-6">Estatuto Social</a>
                     </div>
 
-                </div>        
-                    <div className="mx-auto flex items-center justify-center mt-4">
-                        <p className="text-sm flex font-serif">Colaboradores do site:</p>       
-                    </div> 
-                    <div className="mx-auto flex items-center justify-center h-auto w-10 gap-2">
-                        <img src="https://github.com/nadiduno.png" alt="Mulher parda, usando camisa branca, sorrindo, fundo claro."
-                        className="mx-auto rounded-full h-5 w-5 border-spacing-3"/> 
-                        <img src="https://github.com/ravelos.png" alt="Homem pardo, fundo branco."
-                        className="mx-auto rounded-full h-5 w-5"/> 
-                        <img src="https://github.com/LdeAlejandro.png" alt="Homem branco, cabelo longo, fundo amarelo."
-                        className="mx-auto rounded-full h-5 w-5"/> 
-                        <img src="https://github.com/daysibel1175.png" alt="Mulher parda, usando oculos de grau, fundo claro."
-                        className="mx-auto rounded-full h-5 w-5"/> 
-                        <img src="https://github.com/isaac-kapela.png" alt="Homem preto, usando tranças, fundo escuro."
-                        className="mx-auto rounded-full h-5 w-5"/> 
-                        <img src="https://github.com/jexaez.png" alt="Mulher..."
-                        className="mx-auto rounded-full h-5 w-5"/>
-                        <img src="https://github.com/adrianaessa.png" alt="Mulher branca, com cabelo cacheado, sorrindo, fundo branco"
-                         className="mx-auto rounded-full h-5 w-5"/>           
-                    </div>
+                </div>    
 
+                <div className="mx-auto flex items-center justify-center mt-6 mb-2">
+                        <p className="text-sm flex font-serif pb-1">Colaboradores do site:</p>       
+                </div> 
+            
+                <div className="mx-auto flex items-center justify-center text-center sm:grid-cols-1 sm:gap-2 md:gap-4 mt-2 mb-2">
+                     <a href="www.linkedin.com/in/adrianacamposguevara">
+                        <img src="https://github.com/adrianaessa.png" title="Adriana Guevara" alt="Mulher branca, com cabelo cacheado, sorrindo, fundo branco."
+                        className="mx-auto rounded-full sm:h-6 sm:w-6 md:h-8 md:w-8 lg:h-8 lg:w-8"/>
+                    </a> 
+                    <a href="https://www.linkedin.com/in/alejandro-amoroso/?locale=pt_BR">
+                        <img src="https://github.com/LdeAlejandro.png" title= "Alejandro Amoroso" alt="Homem branco, cabelo longo, fundo amarelo."
+                        className="mx-auto rounded-full sm:h-6 sm:w-6 md:h-8 md:w-8 lg:h-8 lg:w-8"/> 
+                    </a>
+                    <a href="https://www.linkedin.com/in/daysibelcotizpitter?utm_source=share&utm_campaign=share_via&utm_content=profile&utm_medium=android_app">
+                        <img src="https://github.com/daysibel1175.png" title="Daysibel Pitter" alt="Mulher parda, usando oculos de grau, fundo claro."
+                        className="mx-auto rounded-full sm:h-6 sm:w-6 md:h-8 md:w-8 lg:h-8 lg:w-8"/> 
+                    </a>
+                    <a href="https://www.linkedin.com/in/jexaez/">
+                        <img src="https://github.com/jexaez.png" title="Jani Exaez" alt="Mulher branca, usando óculos e camisa branca com desenhos de cor azul."
+                        className="mx-auto rounded-full sm:h-6 sm:w-6 md:h-8 md:w-8 lg:h-8 lg:w-8"/>
+                    </a>
+                    <a href="https://www.linkedin.com/in/paula-gimenez-backend/">
+                        <img src="https://github.com/pbgv2705.png" title="Paula Gimenez" alt="Mulher branca com cabelo branco, usando jaqueta marrom e cachecol cor laranja clara."
+                        className="mx-auto rounded-full sm:h-6 sm:w-6 md:h-8 md:w-8 lg:h-8 lg:w-8"/>
+                    </a>
+                    <a href="https://www.linkedin.com/in/nadiduno/">
+                        <img src="https://github.com/nadiduno.png" title="Nadi Duno" alt="Mulher parda, usando camisa branca, sorrindo, fundo claro."
+                        className="mx-auto rounded-full sm:h-6 sm:w-6 md:h-8 md:w-8 lg:h-8 lg:w-8"/> 
+                    </a>
+                    <a href="https://www.linkedin.com/in/raveloswaldo/">
+                        <img src="https://github.com/ravelos.png" title="Oswaldo Ravelo" alt="Homem pardo, fundo branco."
+                        className="mx-auto rounded-full sm:h-6 sm:w-6 md:h-8 md:w-8 lg:h-8 lg:w-8"/> 
+                    </a>
+                    <a href="https://www.linkedin.com/in/thatiane-vasconcelos-790761156/">
+                        <img src="https://github.com/vasconcelos3011.png" title="Thatiane Vasconcelos" alt="Mulher branca, com cabelo cumprido, sorrindo, fundo cinza."
+                        className="mx-auto rounded-full sm:h-6 sm:w-6 md:h-8 md:w-8 lg:h-8 lg:w-8"/>       
+                    </a>
+                    <a href="https://www.linkedin.com/in/dev-vverdum/">
+                        <img src="https://github.com/vverdum.png" title="Valdirene Verdum"  alt="Mulher branca, usando oculos, sorrindo."  
+                        className="mx-auto rounded-full sm:h-6 sm:w-6 md:h-8 md:w-8 lg:h-8 lg:w-8"/>
+                    </a>
+                </div>
                       
                 <div>
-                    <p className="text-sm italic font-serif text-center mt-5 mb-2">&copy;{new Date().getFullYear()} Fly. Todos os direitos reservados.</p>
+                    <p className="text-sm mx-auto italic font-serif text-center mt-5 mb-2">&copy;{new Date().getFullYear()} Fly. Todos os direitos reservados.</p>
                 </div>                   
-            </div>
         </footer>
     )
 }

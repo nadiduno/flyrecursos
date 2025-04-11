@@ -2,6 +2,27 @@
 @tailwind components;
 @tailwind utilities;
 
+@font-face {
+  font-family: 'Insigne';
+  src: url('./assets/fonts/Insigne.otf') format('opentype');
+  font-weight: normal;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'Marydale';
+  src: url('./assets/fonts/Marydale.ttf') format('truetype');
+  font-weight: normal;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'Sora';
+  src: url('./assets/fonts/Sora.otf') format('opentype');
+  font-weight: normal;
+  font-style: normal;
+}
+
 *{
   margin: 0;
   padding: 0;
@@ -9,14 +30,35 @@
 }
 
 :root {
-  font-family: Roboto, Arial, sans-serif;
+  font-family: 'Sora', Arial, sans-serif;
   line-height: 1.5;
   font-weight: 400;
   text-rendering: optimizeLegibility;
   -webkit-font-smoothing: antialiased;
+  
 }
 
 body {
   background-color: #004054;
   color:#FFFFFF;
+  font-family: 'Sora', sans-serif;
+}
+
+h1, h2, h3, h4, h5, h6 {
+  font-family: 'Marydale', sans-serif;
+}
+
+#top-ten,
+section {
+  scroll-margin-top: 28rem;
+}
+@media  only screen and (min-width: 768px) {
+  :root {
+    display: flex;
+    justify-content: center;
+  }
+  body{
+    max-width: 1400px;
+    background: #0f0f0f;
+  }
 }
