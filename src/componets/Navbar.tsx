@@ -9,11 +9,11 @@ interface User {
     photoUrl?: string;
 }
 
-interface NavibarProps {
+interface NavbarProps {
     user?: User;
 }
 
-export function Navibar({ user }: NavibarProps) {
+export function Navbar({ user }: NavbarProps) {
     const {isAuthenticated, isAdmin} = useAuth(); // Hook personalizado para autenticação
     const showSignupLogin = !isAuthenticated;  
     const isLoggedIn = isAuthenticated;    
@@ -23,10 +23,11 @@ export function Navibar({ user }: NavibarProps) {
     const [searchQuery, setSearchQuery] = useState<string>(""); // Estado para el input de búsqueda
     const [isDropdownVisible, setIsDropdownVisible] = useState<boolean>(false); // Controla la visibilidad del menú desplegable
 
-    
+   
     const handleCreateAccount = (): void => {
         setShowCreateAccount(true);
     };
+
 
     // const handleLogin = (): void => {
     //     setIsLoggedIn(true);
