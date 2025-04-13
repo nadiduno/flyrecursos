@@ -1,3 +1,5 @@
+import { useEffect, useState } from "react";
+
 interface VideoProps {
   id?: number
   title?: string;
@@ -8,23 +10,32 @@ interface VideoProps {
 
 
 export function Video(props: VideoProps) {
+  const [scrolled, setScrolled] = useState(false);
 
+  useEffect(() => {
+    const onScroll = () => {
+      setScrolled(window.scrollY > 0);
+    };
+    window.addEventListener("scroll", onScroll);
+    return () => window.removeEventListener("scroll", onScroll);
+  }, []);
   return (
     <div
-      className="fixed w-full h-[25rem] max-h-[28rem] overflow-hidden md:h-[28rem] lg:h-[28rem] top-0 left-0 z-10"
+      className="fixed w-full h-[25rem] max-h-[28rem] overflow-hidden md:h-[28rem] lg:h-[28rem] top-0 left-0 z-[999]"
       style={{
         background: `url(${props.thumbnail}) right center no-repeat, white`,
-        opacity: 1
+        opacity: 1,
+        top: scrolled ? "0px" : "85px"
       }}
     >
       <button
         onClick={props.onClose}
-        className="absolute top-4 right-4 text-[30px] text-black"
+        className="z-[11] absolute top-4 right-4 text-[30px] text-black"
         aria-label="Fechar"
       >
         &times;
       </button>
-      <div className="flex items-center justify-center w-full h-[calc(100%-40px)] pt-10 box-border bg-white"
+      <div className="relative z-[10] flex items-center justify-center w-full h-[calc(100%-40px)] pt-10 box-border bg-white"
         style={{
           backgroundColor: 'rgba(255, 255, 255, 0.7)'
         }}

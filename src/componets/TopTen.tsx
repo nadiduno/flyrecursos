@@ -1,15 +1,26 @@
 import { useRef, useState, useEffect } from 'react';
 import { GoChevronLeft, GoChevronRight } from 'react-icons/go';
 // import { CardVideoType } from "./CardVideo";
-import { CardVideo } from "./CardVideo";
+import { CardVideo, CardVideoType } from "./CardVideo";
 import { cardVideos } from "./ResourseData";
+import { Video }from './Video';
 
 export function TopTen() {
   const carouselRef = useRef<HTMLDivElement>(null);
   const [scrollAmount, setScrollAmount] = useState<number>(0);
   const [isAtStart, setIsAtStart] = useState<boolean>(true);
   const [isAtEnd, setIsAtEnd] = useState<boolean>(false);
+  const [selectedVideo, setSelectedVideo] = useState<CardVideoType | null>(null);
+  
   const scrollPerClick = 400;
+
+  const handleVideoClick = (video: CardVideoType) => {
+    setSelectedVideo(video);
+  };
+
+  const closeVideo = () => {
+    setSelectedVideo(null);
+  };
 
   useEffect(() => {
     const handleScroll = () => {
@@ -69,6 +80,7 @@ export function TopTen() {
           <div
             key={cardVideo.id}
             className={`transition-all duration-300 hover:shadow-lg text-primary2 relative`}
+            onClick={() => handleVideoClick(cardVideo)}
           >
         
             <div className="relative cursor-pointer hover:scale-[1.4] transition-transform duration-500 hover:z-10">
@@ -99,6 +111,16 @@ export function TopTen() {
       >
         <GoChevronRight size={24} />
       </button>
+
+      {selectedVideo && (
+        <Video
+          id={selectedVideo.id}
+          title={selectedVideo.title}
+          src={selectedVideo.videoUrl}
+          thumbnail={selectedVideo.imageUrl}
+          onClose={closeVideo}
+        />
+      )}
     </div>
   );
 }
