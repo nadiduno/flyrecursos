@@ -2,6 +2,8 @@ import { useState } from "react";
 import { AiOutlineSearch } from "react-icons/ai";
 import logo from "../assets/Navi.png";
 import { Link } from "react-router-dom";
+import { CreateAccount } from "./CreateAccount";
+import { useAuth } from "../context/AuthContext";
 
 interface User {
     photoUrl?: string;
@@ -12,21 +14,30 @@ interface NavibarProps {
 }
 
 export function Navibar({ user }: NavibarProps) {
-    const [isLoggedIn, setIsLoggedIn] = useState<boolean>(false);
-    const [showSignupLogin, setShowSignupLogin] = useState<boolean>(true);
+    const {isAuthenticated, isAdmin} = useAuth(); // Hook personalizado para autenticação
+    const showSignupLogin = !isAuthenticated;  
+    const isLoggedIn = isAuthenticated;    
+    const [showCreateAccount, setShowCreateAccount] = useState(false); 
+    // const [isLoggedIn, setIsLoggedIn] = useState<boolean>(false);
+    // const [showSignupLogin, setShowSignupLogin] = useState<boolean>(true);
     const [searchQuery, setSearchQuery] = useState<string>(""); // Estado para el input de búsqueda
     const [isDropdownVisible, setIsDropdownVisible] = useState<boolean>(false); // Controla la visibilidad del menú desplegable
 
-    const handleLogin = (): void => {
-        setIsLoggedIn(true);
-        setShowSignupLogin(false);
+    
+    const handleCreateAccount = (): void => {
+        setShowCreateAccount(true);
     };
 
-    const handleLogout = (): void => {
-        setIsLoggedIn(false);
-        setShowSignupLogin(true);
-        setIsDropdownVisible(false); // Cierra el menú desplegable al cerrar sesión
-    };
+    // const handleLogin = (): void => {
+    //     setIsLoggedIn(true);
+    //     setShowSignupLogin(false);
+    // };
+
+    // const handleLogout = (): void => {
+    //     setIsLoggedIn(false);
+    //     setShowSignupLogin(true);
+    //     setIsDropdownVisible(false); // Cierra el menú desplegable al cerrar sesión
+    // };
 
     const handleSearch = (): void => {
         if (searchQuery.trim() !== "") {
@@ -49,20 +60,24 @@ export function Navibar({ user }: NavibarProps) {
                 />
             </div>
             <div className="flex justify-end lg:w-[40%] gap-3 items-center sm:w-[85%] md:w-[60%] xs:w-[80%]">
+ {isAdmin}
+            {isAdmin && (
+                <button
+                    className="border-4 border-white px-8 py-2 rounded-3xl text-white font-bold hover:bg-yellow hover:border-yellow hover:text-black transition duration-300 sm:px-6 sm:py-2 sm:text-base"
+                    onClick={handleCreateAccount}
+                > Criar Conta    
+                        </button> 
+                    )}
+                        {showCreateAccount && (
+                            <CreateAccount isVisible={showCreateAccount} setIsVisible={setShowCreateAccount} />
+                        )}
+                   
                 {showSignupLogin ? (
                     <>
-                        <button
-                            className="border-4 border-white px-8 py-2 rounded-3xl text-white font-bold hover:bg-yellow hover:border-yellow hover:text-black transition duration-300 sm:px-6 sm:py-2 sm:text-base"
-                            onClick={() => setShowSignupLogin(false)}
-                        >
-                             <Link to="/criarconta" className="block w-full h-full">
-        Criar conta
-    </Link>
-
-                        </button>
+                
                         <button
                             className="border-4 border-white px-8 py-2 rounded-3xl text-white font-bold hover:bg-yellow hover:border-yellow hover:text-black transition duration-300 sm:text-base"
-                            onClick={handleLogin}
+                            // onClick={handleLogin}
                         >
                             <Link to="/login" className="block w-full h-full">
         Entrar
@@ -97,7 +112,7 @@ export function Navibar({ user }: NavibarProps) {
                                 <div className="absolute right-0 mt-2 bg-white shadow-lg rounded-lg p-4 z-50">
                                     <button
                                         className="bg-red-500 px-4 py-2 text-white rounded-lg"
-                                        onClick={handleLogout}
+                                        // onClick={handleLogout}
                                     >
                                         Logout
                                     </button>
