@@ -22,6 +22,7 @@ export default {
         'secondaryfont': ['Sora', 'sans-serif'],
         'titlefont': ['Marydale', 'sans-serif'],
         'roboto': ['Roboto', 'sans-serif'],
+        'mrsdelafield': ['"Mrs Saint Delafield"', 'cursive'],
       },
     },
   },
