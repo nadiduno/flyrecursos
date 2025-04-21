@@ -5,6 +5,7 @@ interface VideoProps {
   title?: string;
   src?: string;
   thumbnail?: string;
+  imageUrlLarge?: string;
   onClose: () => void;
 }
 
@@ -20,7 +21,7 @@ export function Video(props: VideoProps) {
   }, []);
   return (
     <div
-      className="fixed w-full md:w-[87.5rem] ml:w-[87.5rem] h-[22.5rem] max-h-[33.5rem] md:h-[33.5rem] lg:h-[33.5rem] overflow-hidden top-0 z-20  flex items-center justify-center bg-white/90"
+      className="w-full h-[17rem] max-h-[28rem] overflow-hidden md:h-[28rem] lg:h-[28rem] top-0 z-20  flex items-center justify-center"
       style={{
         backgroundImage: `url(${props.thumbnail})`,
         backgroundPosition: "right center",
@@ -31,19 +32,18 @@ export function Video(props: VideoProps) {
     >
       <button
         onClick={props.onClose}
-        className="z-[11] absolute top-4 right-4 text-[30px] text-black"
-        aria-label="Fechar"
+        className="z-[11] absolute top-4 right-4 text-[30px] text-black opacity-50 hover:opacity-100 transition-all duration-300"
+        aria-label="Fechar video"
+        title="Fechar video"
       >
         &times;
       </button>
 
-      <div className="z-10 w-1/2 h-full">
-        <div className="flex items-center justify-center w-full h-full md:h-[calc(100%-40px)] ml:md:h-[calc(100%-40px)] md:pt-10 ml:pt-10 box-border bg-white/70">
-          <div className="z-10 md:w-1/2  ml:w-1/2 md:h-full ml:h-full">
-            {/* <video className="w-full h-[calc(100%-88px)]" controls>
-            <source src={props.src} type="video/mp4" />
-          </video> */}
-            <div className="w-full md:h-[calc(100%-88px)] ml:h-[calc(100%-88px)]">
+      <div className="z-10 w-full h-full">
+        <div 
+        className="flex items-center justify-center w-full h-full md:h-full ml:h-full box-border bg-white/70">
+          <div className="z-10 md:w-[80%]  ml:w-[80%] md:h-full ml:h-full">
+            <div className="w-full md:h-[calc(100%-4.5rem)] ml:h-[calc(100%-4.5rem)]">
               <iframe
                 width="100%"
                 height="100%"
@@ -54,9 +54,9 @@ export function Video(props: VideoProps) {
               ></iframe>
             </div>
 
-            <div className="w-full bg-primary1">
-              <div className="ml-[29px]">
-                <p className="pt-[15px] text-primary2">{props.title}</p>
+            <div className="w-full h-full bg-primary1">
+              <div className="ml-[1.25rem] md:ml-[2rem] ml:ml-[2rem] ">
+                <p className="pt-[0.5rem] md:pt-[1rem] ml:pt-[1rem] text-primary2">{props.title}</p>
                 <p className="text-white pb-[25px]">Outros detalhes do video</p>
               </div>
             </div>
