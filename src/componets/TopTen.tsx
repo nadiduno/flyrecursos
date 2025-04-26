@@ -1,26 +1,19 @@
 import { useRef, useState, useEffect } from 'react';
 import { GoChevronLeft, GoChevronRight } from 'react-icons/go';
-// import { CardVideoType } from "./CardVideo";
 import { CardVideo, CardVideoType } from "./CardVideo";
 import { cardVideos } from "./ResourseData";
-import { Video }from './Video';
 
-export function TopTen() {
+interface TopTenProps {
+  onVideoSelect: (video: CardVideoType) => void; // Recebe a prop onVideoSelect
+}
+
+export function TopTen({ onVideoSelect }: TopTenProps) { 
   const carouselRef = useRef<HTMLDivElement>(null);
   const [scrollAmount, setScrollAmount] = useState<number>(0);
   const [isAtStart, setIsAtStart] = useState<boolean>(true);
   const [isAtEnd, setIsAtEnd] = useState<boolean>(false);
-  const [selectedVideo, setSelectedVideo] = useState<CardVideoType | null>(null);
-  
+
   const scrollPerClick = 400;
-
-  const handleVideoClick = (video: CardVideoType) => {
-    setSelectedVideo(video);
-  };
-
-  const closeVideo = () => {
-    setSelectedVideo(null);
-  };
 
   useEffect(() => {
     const handleScroll = () => {
@@ -69,7 +62,7 @@ export function TopTen() {
 
   return (
     <div className="w-[90%] relative mx-auto">
-      <h2 className="text-3xl pt-[0.5rem] md:pt-[1rem] md:px-1 md:text-5xl transform -rotate-3 text-yellow-500">
+      <h2 className="text-3xl pt-[0.125rem] md:pt-[0.5rem] md:px-1 md:text-5xl transform -rotate-3">
         Top 10
       </h2>
       <div
@@ -79,10 +72,10 @@ export function TopTen() {
         {cardVideos.map((cardVideo) => (
           <div
             key={cardVideo.id}
-            className={`transition-all duration-300 hover:shadow-lg text-primary2 relative`}
-            onClick={() => handleVideoClick(cardVideo)}
+            className={`transition-all duration-300 hover:shadow-lg text-primary2 relative cursor-pointer`}
+            onClick={() => onVideoSelect(cardVideo)} // Chame a prop onVideoSelect
           >
-        
+
             <div className="relative cursor-pointer hover:scale-[1.4] transition-transform duration-500 hover:z-10">
               <CardVideo key={cardVideo.id} cardVideo={cardVideo} />
                 <div className="absolute top-0 left-0 text-[9rem] md:text-[12rem] ml:text-[12rem] font-bold text-white/75 leading-none tracking-[-0.358px] transform translate-x-[-40%] translate-y-[-8%] z-10">
@@ -111,16 +104,6 @@ export function TopTen() {
       >
         <GoChevronRight size={24} />
       </button>
-
-      {selectedVideo && (
-        <Video
-          id={selectedVideo.id}
-          title={selectedVideo.title}
-          src={selectedVideo.videoUrl}
-          thumbnail={selectedVideo.imageUrl}
-          onClose={closeVideo}
-        />
-      )}
     </div>
   );
 }
