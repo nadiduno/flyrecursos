@@ -66,7 +66,7 @@ export function Footer(){
                 </div>
                       
                 <div>
-                    <p className="text-sm mx-auto italic font-serif text-center mt-5 mb-2">&copy;{new Date().getFullYear()} Fly. Todos os direitos reservados.</p>
+                    <p className="text-sm mx-auto italic font-serif text-center mt-5 mb-2 pb-2">&copy;{new Date().getFullYear()} Fly. Todos os direitos reservados.</p>
                 </div>                   
         </footer>
     )
