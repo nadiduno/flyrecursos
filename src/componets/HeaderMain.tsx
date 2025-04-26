@@ -1,6 +1,5 @@
-import desktopImage from '../assets/large.jpg';
-import mobileImage from '../assets/small.jpg';
 import { CardVideoType } from './CardVideo';
+import { ImagemBanner } from './ImagemBanner';
 import { Video } from './Video';
 
 interface MenuItem {
@@ -38,17 +37,7 @@ export function HeaderMain({ selectedVideo, onCloseVideo }: HeaderMainProps) {
       ) : (
         // Senão renderiza o conteúdo principal
         <div className='relative w-full h-[17rem] max-h-[28rem] overflow-hidden md:h-[28rem] lg:h-[28rem]'>
-          <img
-            src={mobileImage}
-            alt='Banner mobile'
-            className="w-full h-full object-cover object-center top-0 left-0 block md:hidden"
-          />
-          <img
-            src={desktopImage}
-            alt='Banner principal'
-            className="w-full h-full object-cover absolute top-0 left-0 hidden md:block"
-          />
-
+          <ImagemBanner />
           <div className='absolute top-0 left-0 w-full h-full flex flex-col md:flex-row items-start md:items-center px-[1rem] md:px-[5rem] ld:px-[5rem] py-4 md:py-0'>
             <nav className="rounded-md z-20 w-full md:w-[220px] lg:w-[400px] mb-4 md:mb-0">
               <ul className="list-none p-0 m-0 flex flex-col gap-2">
