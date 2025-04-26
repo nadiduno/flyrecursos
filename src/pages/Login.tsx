@@ -41,12 +41,13 @@ export default function Login() {
         // Unauthorized error (401) indicates invalid credentials
         setLoginError("E-mail ou senha inválidos. Tente novamente.");
       } else {
-        const err = await response.json();
-        setLoginError(err.message);
+        //const err = await response.json();
+        setLoginError("Problema ao fazer login. Tente novamente.");
       }
     } catch (error) {
       console.error("Error:", error);
-      setLoginError(error instanceof Error ? error.message : String(error));
+      //setLoginError(error instanceof Error ? error.message : String(error));
+      setLoginError("Problema ao fazer login. Tente novamente.");
     }
   };
 
@@ -67,21 +68,23 @@ export default function Login() {
             </div>
           </div>
         </header>
-        <div className="fixed mt-[100px] left-1/2 transform -translate-x-1/2 z-50 flex justify-between items-start gap-10 max-w-[1400px] w-full px-10">
-          <div className="max-w-[699px]">
-            <h1 className="pt-12 font-mrsdelafield text-[64px] text-[#13C0DD] mt-[20px] min-h-[189.61px] text-6xl  rotate-[-8.02deg] transform inline-block">
+        <div className="md:fixed md:mt-[100px] md:left-1/2 md:transform md:-translate-x-1/2 md:z-50 md:flex md:justify-between md:items-start md:gap-10 md:max-w-[1400px] md:w-full md:px-10 
+          
+        ">
+          <div className="hidden md:block md:max-w-[699px]">
+            <h1 className="pt-12 font-mrsdelafield text-[64px] text-[#13C0DD] xl:mt-[20px] md:mt-[140px] min-h-[189.61px] text-6xl  rotate-[-8.02deg] transform md:inline-block">
             Aprenda Mais com Nossos Recursos
             </h1>
-            <p className="text-left text-[#060606BF] text-[24px]">
+            <p className="text-left xl:text-[#060606BF] xl:text-[24px]">
             Amplie seus horizontes educacionais! Nesta seção, você encontrará uma rica coleção de vídeos explicativos, artigos relevantes e aulas gravadas, cuidadosamente selecionados para enriquecer o processo de ensino e aprendizagem.
             </p>
           </div>
           <div
             className="flex flex-col items-center 
-              justify-center w-[500px] h-[550px] "
+              justify-center  max-w-[400x] xl:min-w-[500px] xl:h-[550px]  "
           >
             {/*Componente Login*/}
-            <div className="bg-[#004054] rounded-t-md w-full h-full  ">
+            <div className=" bg-[#004054] rounded-t-md w-full h-full  ">
               <h2 className="mt-[50px] mb-[49px] w-[236px] h-[35px] text-3xl mx-auto text-center font-bold font-roboto ">
                 FAÇA SEU LOGIN
               </h2>
@@ -142,7 +145,7 @@ export default function Login() {
           </div>
         </div>
 
-        <footer className="h-[5.375rem] md:h-[7.75rem]">
+        <footer className="h-[2.375rem] md:h-[7.75rem]">
           <Footer />
         </footer>
       </div>
