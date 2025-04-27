@@ -51,7 +51,7 @@ export function HeaderDashboard() {
               
             ) : (
               <p className="w-full h-full rounded-lg ">
-                DASHBOARD DO ADMINISTRADOR
+                <Count />
               </p>
             )}
           </div>

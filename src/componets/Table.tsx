@@ -44,10 +44,20 @@ export function Table() {
               </td>
               <td className="whitespace-nowrap text-right flex flex-row gap-4 py-2 px-2 justify-end">
                 <a href="#" className="">
-                  <GrEdit size={18} />
+                  <GrEdit 
+                    size={18}
+                    className=" opacity-90 hover:opacity-100 hover:text-yellow cursor-pointer transition-transform duration-500"
+                    title="Editar"
+                    aria-label="Editar"
+                  />
                 </a>
                 <a href="#" className="">
-                  <RiDeleteBin6Line size={18} />
+                  <RiDeleteBin6Line 
+                  size={18}
+                  className=" opacity-90 hover:opacity-100 hover:text-red-500 cursor-pointer transition-transform duration-500"
+                  title="Eliminar"
+                  aria-label="Eliminar" 
+                />
                 </a>
               </td>
             </tr>
