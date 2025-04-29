@@ -105,10 +105,10 @@ export const CreateAccount: React.FC<CreateAccountProps> = ({ isVisible: propIsV
    
     <div className="fixed inset-0  flex items-center justify-center bg-[#FFFFFFB2] z-50">
       
-      <div className="text-xl mt-[360px] font-bold mb-4 bg-[#004054] text-white  w-[942px] h-[549px] rounded-[10px] mb-[400px]">
-        <h1 className="mt-[50px] mb-[49px] w-[236px] h-[35px] text-3xl mx-auto text-center font-bold font-roboto ">
+      <div className="text-xl mt-[360px] font-bold bg-[#004054] text-white  w-[942px] h-[549px] rounded-[10px] mb-[400px]">
+        <p className="mt-[50px] mb-[49px] w-[236px] h-[35px] text-xl md:text-3xl lg:text-3xl mx-auto text-center font-bold font-roboto ">
           CRIAR CONTA
-        </h1>
+        </p>
         <form action="" onSubmit={handleSubmit(onSubmit)} onChange={() => {setMessage(null); setCreationError(null);}}>
           <div className="flex flex-row place-content-around gap-1">
             <div>
@@ -118,7 +118,7 @@ export const CreateAccount: React.FC<CreateAccountProps> = ({ isVisible: propIsV
               </label>
               <input
                 {...register("nome", { required: true })}
-                className="w-[400px] min-h-[50px] bg-[#EBEBF5] rounded-[5px] pl-[16px] font-normal text-black text-lg font-normal placeholder:h-[21px] border-[#0000001A] shadow-[0px_4px_4px_0px_rgba(0,0,0,0.2)] 
+                className="w-[400px] min-h-[50px] bg-[#EBEBF5] rounded-[5px] pl-[16px] text-black text-lg font-normal placeholder:h-[21px] border-[#0000001A] shadow-[0px_4px_4px_0px_rgba(0,0,0,0.2)] 
                  placeholder:text-[#8D8686]"
                 type="text"
                 placeholder="Digite seu nome completo"
@@ -134,7 +134,7 @@ export const CreateAccount: React.FC<CreateAccountProps> = ({ isVisible: propIsV
                 E-mail
               </label>
               <input
-                className="w-[400px] min-h-[50px] bg-[#EBEBF5] rounded-[5px] pl-[16px] font-normal text-black text-lg font-normal placeholder:h-[21px] border-[#0000001A] shadow-[0px_4px_4px_0px_rgba(0,0,0,0.2)] 
+                className="w-[400px] min-h-[50px] bg-[#EBEBF5] rounded-[5px] pl-[16px] text-black text-lg font-normal placeholder:h-[21px] border-[#0000001A] shadow-[0px_4px_4px_0px_rgba(0,0,0,0.2)] 
                  placeholder:text-[#8D8686]"
                 {...register("email", { required: true},)}
                 type="email"
@@ -148,7 +148,7 @@ export const CreateAccount: React.FC<CreateAccountProps> = ({ isVisible: propIsV
                 CPF
               </label>
               <input
-                className="w-[400px] min-h-[50px] bg-[#EBEBF5] rounded-[5px] pl-[16px] font-normal text-black text-lg font-normal placeholder:h-[21px] border-[#0000001A] shadow-[0px_4px_4px_0px_rgba(0,0,0,0.2)] 
+                className="w-[400px] min-h-[50px] bg-[#EBEBF5] rounded-[5px] pl-[16px] text-black text-lg font-normal placeholder:h-[21px] border-[#0000001A] shadow-[0px_4px_4px_0px_rgba(0,0,0,0.2)] 
                  placeholder:text-[#8D8686]"
                 {...register("cpf", { required: true},)}
                 type="text"
@@ -162,7 +162,7 @@ export const CreateAccount: React.FC<CreateAccountProps> = ({ isVisible: propIsV
               Data de nascimento
               </label>
               <input
-                className="w-[400px] min-h-[50px] bg-[#EBEBF5] rounded-[5px] pl-[16px] font-normal text-black text-lg font-normal placeholder:h-[21px] border-[#0000001A] shadow-[0px_4px_4px_0px_rgba(0,0,0,0.2)] 
+                className="w-[400px] min-h-[50px] bg-[#EBEBF5] rounded-[5px] pl-[16px] text-black text-lg font-normal placeholder:h-[21px] border-[#0000001A] shadow-[0px_4px_4px_0px_rgba(0,0,0,0.2)] 
                  placeholder:text-[#8D8686]"
                 {...register("dataNascimento", { required: true,})}
                 max={
@@ -182,7 +182,7 @@ export const CreateAccount: React.FC<CreateAccountProps> = ({ isVisible: propIsV
                 Perfil da conta
               </label>
               <select
-                className="w-[400px] min-h-[50px] bg-[#EBEBF5] rounded-[5px] pl-[16px] font-normal text-black text-lg font-normal placeholder:h-[21px] border-[#0000001A] shadow-[0px_4px_4px_0px_rgba(0,0,0,0.2)] 
+                className="w-[400px] min-h-[50px] bg-[#EBEBF5] rounded-[5px] pl-[16px] text-black text-lg font-normal placeholder:h-[21px] border-[#0000001A] shadow-[0px_4px_4px_0px_rgba(0,0,0,0.2)] 
                  placeholder:text-[#8D8686]"
                 {...register("perfil", { required: true},)}
                 defaultValue={"ALUNO"}
@@ -197,7 +197,7 @@ export const CreateAccount: React.FC<CreateAccountProps> = ({ isVisible: propIsV
                 Perfil do aluno
               </label>
               <select
-                className="w-[400px] min-h-[50px] bg-[#EBEBF5] rounded-[5px] pl-[16px] font-normal text-black text-lg font-normal placeholder:h-[21px] border-[#0000001A] shadow-[0px_4px_4px_0px_rgba(0,0,0,0.2)] 
+                className="w-[400px] min-h-[50px] bg-[#EBEBF5] rounded-[5px] pl-[16px] text-black text-lg font-normal placeholder:h-[21px] border-[#0000001A] shadow-[0px_4px_4px_0px_rgba(0,0,0,0.2)] 
                  placeholder:text-[#8D8686]"
                 {...register("perfilAluno", { required: true},)}
                 defaultValue={"MERCADO"}
@@ -218,7 +218,7 @@ export const CreateAccount: React.FC<CreateAccountProps> = ({ isVisible: propIsV
               </label>
               <input
                 {...register("senha", { required: true })}
-                className="w-[400px] min-h-[50px] bg-[#EBEBF5] rounded-[5px] pl-[16px] font-normal text-black text-lg font-normal placeholder:h-[21px] border-[#0000001A] shadow-[0px_4px_4px_0px_rgba(0,0,0,0.2)] 
+                className="w-[400px] min-h-[50px] bg-[#EBEBF5] rounded-[5px] pl-[16px] text-black text-lg font-normal placeholder:h-[21px] border-[#0000001A] shadow-[0px_4px_4px_0px_rgba(0,0,0,0.2)] 
                  placeholder:text-[#8D8686]"
                 type="password"
                 placeholder="Digite sua senha"
@@ -235,7 +235,7 @@ export const CreateAccount: React.FC<CreateAccountProps> = ({ isVisible: propIsV
                   validate: (value) =>
                     value === watch("senha") || "As senhas não coincidem",
                 })}
-                className="w-[400px] min-h-[50px] bg-[#EBEBF5] rounded-[5px] pl-[16px] font-normal text-black text-lg font-normal placeholder:h-[21px] border-[#0000001A] shadow-[0px_4px_4px_0px_rgba(0,0,0,0.2)] 
+                className="w-[400px] min-h-[50px] bg-[#EBEBF5] rounded-[5px] pl-[16px] text-black text-lg font-normal placeholder:h-[21px] border-[#0000001A] shadow-[0px_4px_4px_0px_rgba(0,0,0,0.2)] 
                  placeholder:text-[#8D8686]"
                 type="password"
                 placeholder="Digite sua senha novamente"
