@@ -23,7 +23,7 @@ export function Footer(){
                 </div>    
 
                 <div className="mx-auto flex items-center justify-center mt-6 mb-2">
-                        <p className="text-sm flex font-serif pb-1">Colaboradores do site:</p>       
+                        <p className="text-sm flex pb-1">Colaboradores do site:</p>       
                 </div> 
             
                 <div className="mx-auto flex items-center justify-center text-center sm:grid-cols-1 sm:gap-2 md:gap-4 mt-2 mb-2">
@@ -66,7 +66,7 @@ export function Footer(){
                 </div>
                       
                 <div>
-                    <p className="text-sm mx-auto italic font-serif text-center mt-5 mb-2 pb-2">&copy;{new Date().getFullYear()} Fly. Todos os direitos reservados.</p>
+                    <p className="text-sm mx-auto italic text-center mt-5 mb-2 pb-6">&copy;{new Date().getFullYear()} Fly. Todos os direitos reservados.</p>
                 </div>                   
         </footer>
     )
