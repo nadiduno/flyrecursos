@@ -60,7 +60,7 @@ export const CreateAccount: React.FC<CreateAccountProps> = ({ isVisible: propIsV
       console.error('Error:', error);
       console.log('catch:', error);
 
-      setCreationError(error instanceof Error ? error.message : String(error));
+      setCreationError('Erro ao criar usuário');
       setMessage(null);
     }
 
@@ -105,12 +105,13 @@ export const CreateAccount: React.FC<CreateAccountProps> = ({ isVisible: propIsV
    
     <div className="fixed inset-0  flex items-center justify-center bg-[#FFFFFFB2] z-50">
       
-      <div className="text-xl mt-[200px] font-bold mb-4 bg-[#004054] text-white  w-[500px] h-[1000px] rounded-[10px] mb-[400px]">
+      <div className="text-xl mt-[360px] font-bold mb-4 bg-[#004054] text-white  w-[942px] h-[549px] rounded-[10px] mb-[400px]">
         <h1 className="mt-[50px] mb-[49px] w-[236px] h-[35px] text-3xl mx-auto text-center font-bold font-roboto ">
-          CRIE SUA CONTA
+          CRIAR CONTA
         </h1>
         <form action="" onSubmit={handleSubmit(onSubmit)} onChange={() => {setMessage(null); setCreationError(null);}}>
-          <div className="ml-[57px]">
+          <div className="flex flex-row place-content-around gap-1">
+            <div>
             <div className="flex flex-col w-[400px] h-[73px] mb-[24px]">
               <label className="block h-[21px] text-lg font-normal mb-[4px] text-left">
                 Nome completo
@@ -174,7 +175,8 @@ export const CreateAccount: React.FC<CreateAccountProps> = ({ isVisible: propIsV
               />
               {errors.dataNascimento && <p className="text-red-500 text-xs mt-1">A data esta errada</p>}
             </div>
-
+            </div>
+                <div>
             <div className="flex flex-col w-[400px] h-[73px] mb-[24px]">
               <label className="block h-[21px] text-lg font-normal mb-[4px] text-left">
                 Perfil da conta
@@ -243,8 +245,9 @@ export const CreateAccount: React.FC<CreateAccountProps> = ({ isVisible: propIsV
               {message && <p className="text-green-500 text-xs mt-1">{message}</p>}
             </div>
           </div>
+          </div>
           
-          <div className="w-[500px] h-[152px] bt-[5px] rounded-b-[5px] bg-[#FFFFFF] flex justify-center items-center space-x-4">
+          <div className="w-[942px] h-[152px] bt-[5px] rounded-b-[5px] bg-[#FFFFFF] flex justify-center items-center space-x-4">
           
             <button
               className="w-[400px] min-h-[50px]  rounded-[50px] bg-[#00CAFE] shadow-[0px_4px_4px_0px_rgba(0,0,0,0.2)]"
