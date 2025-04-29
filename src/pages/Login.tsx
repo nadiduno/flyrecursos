@@ -49,7 +49,6 @@ export default function Login() {
       console.error("Error:", error);
       //setLoginError(error instanceof Error ? error.message : String(error));
       setLoginError("Problema ao fazer login. Tente novamente.");
-      navigate("/dashboard");
     }
   };
 
