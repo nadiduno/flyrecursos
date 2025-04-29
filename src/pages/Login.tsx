@@ -1,9 +1,10 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { useAuth } from "../context/AuthContext";
-import { NavbarLoginPage } from "../componets/NavbarLoginPage";
+import { NavbarLoginPage } from "../componets/NavBarLoginPage";
 import desktopImage from "../assets/LoginPage/large.jpg";
 import { Footer } from "../componets/Footer";
+
 
 export default function Login() {
   // Initialize navigate
@@ -68,15 +69,20 @@ export default function Login() {
             </div>
           </div>
         </header>
-        <div className="md:fixed md:mt-[100px] md:left-1/2 md:transform md:-translate-x-1/2 md:z-50 md:flex md:justify-between md:items-start md:gap-10 md:max-w-[1400px] md:w-full md:px-10 
+        <div
+          className="md:fixed md:mt-[100px] md:left-1/2 md:transform md:-translate-x-1/2 md:z-50 md:flex md:justify-between md:items-start md:gap-10 md:max-w-[1400px] md:w-full md:px-10 
           
-        ">
+        "
+        >
           <div className="hidden md:block md:max-w-[699px]">
-            <h1 className="pt-12 font-mrsdelafield text-[64px] text-[#13C0DD] xl:mt-[20px] md:mt-[140px] min-h-[189.61px] text-6xl  rotate-[-8.02deg] transform md:inline-block">
-            Aprenda Mais com Nossos Recursos
+            <h1 className="pt-12 text-2xl text-primary2 xl:mt-[20px] md:mt-[140px] min-h-[189.61px] md:text-6xl  rotate-[-8.02deg] transform md:inline-block">
+              Aprenda Mais <br /> com Nossos Recursos
             </h1>
-            <p className="text-left xl:text-[#060606BF] xl:text-[24px]">
-            Amplie seus horizontes educacionais! Nesta seção, você encontrará uma rica coleção de vídeos explicativos, artigos relevantes e aulas gravadas, cuidadosamente selecionados para enriquecer o processo de ensino e aprendizagem.
+            <p className="text-left xl:text-[#060606BF] xl:text-[24px] pt-5">
+              Amplie seus horizontes educacionais! Nesta seção, você encontrará
+              uma rica coleção de vídeos explicativos, artigos relevantes e
+              aulas gravadas, cuidadosamente selecionados para enriquecer o
+              processo de ensino e aprendizagem.
             </p>
           </div>
           <div
@@ -85,9 +91,9 @@ export default function Login() {
           >
             {/*Componente Login*/}
             <div className=" bg-[#004054] rounded-t-md w-full h-full  ">
-              <h2 className="mt-[50px] mb-[49px] w-[236px] h-[35px] text-3xl mx-auto text-center font-bold font-roboto ">
+              <p className="mt-[50px] mb-[49px] w-[236px] h-[35px] text-2xl mx-auto text-center font-bold font-roboto ">
                 FAÇA SEU LOGIN
-              </h2>
+              </p>
               <div className="flex flex-col items-center">
                 <div className="w-[400px] text-left">
                   <label className="w-[50px] h-[21px] text-lg font-normal">
