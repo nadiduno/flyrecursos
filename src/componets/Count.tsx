@@ -1,5 +1,5 @@
 import { CiSearch } from "react-icons/ci";
-import { Table } from "./Table";
+import { TableCRUDCount } from "./TableCRUDCount";
 
 
 export function Count() {
@@ -35,7 +35,7 @@ export function Count() {
         </div>
       </div>
       <div className="h-[13rem] md:h-[19rem] lg:h-[19rem] rounded-lg border border-primary2 overflow-auto">
-        <Table />
+        <TableCRUDCount />
       </div>
     </div>
   );
