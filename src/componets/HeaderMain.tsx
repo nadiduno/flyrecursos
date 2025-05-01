@@ -46,9 +46,10 @@ export function HeaderMain({ selectedVideo, onCloseVideo }: HeaderMainProps) {
                   <li
                     key={index}
                     className='leading-5 py-2 px-3 rounded-md ease-in-out cursor-pointer opacity-90  bg-gray-100 hover:bg-primary1 hover:text-primary2 hover:translate-x-1 hover:opacity-100 transition-all duration-500 md:text-lg'
-                    >
-                    <a href={item.href}>{item.label}</a>  
+                    > 
+                    <a href={item.href}className="block w-full h-full">{item.label}</a>
                   </li>
+                  
                   
                 ))}
               </ul>
