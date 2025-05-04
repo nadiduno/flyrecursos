@@ -13,6 +13,11 @@ export function Count() {
     setShowCreateAccount(true);
 };
 
+const handleDelete = () => {
+  // Lógica para deletar o usuário (ex: chamada à API)
+  console.log('Usuário deletado!');
+};
+
   return (
     <div className="w-full flex-row text-xs mt-2 md:p-3 lg:p-3">
       <div className="h-[3rem] md:h-[6rem] lg:h-[6rem] rounded-lg border border-primary2">
@@ -45,7 +50,7 @@ export function Count() {
         </div>
       </div>
       <div className="h-[13rem] md:h-[19rem] lg:h-[19rem] rounded-lg border border-primary2 overflow-auto">
-        <TableCRUDCount />
+        <TableCRUDCount onDelete={handleDelete} />
       </div>
 
       <div className="">

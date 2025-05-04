@@ -1,3 +1,4 @@
+import { useState } from "react";
 import { GrEdit } from "react-icons/gr";
 import { RiDeleteBin6Line } from "react-icons/ri";
 
@@ -13,7 +14,22 @@ const data: TableRowData[] = [
   { name: "Jõa Galvão", email: "email4@fly.com" },
 ];
 
-export function TableCRUDCount() {
+
+interface DeleteUserProps {
+  onDelete: () => void; // função para executar a exclusão real
+}
+
+export function TableCRUDCount({ onDelete }:DeleteUserProps) {
+
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  
+  const openModal = () => setIsModalOpen(true);
+  const closeModal = () => setIsModalOpen(false);
+
+  const confirmDelete = () => {
+    onDelete();
+    closeModal();
+  };
   return (
     <div className="overflow-x-auto flex justify-center p-1">
       <table className="min-w-[95%]">
@@ -51,19 +67,44 @@ export function TableCRUDCount() {
                     aria-label="Editar"
                   />
                 </a>
-                <a href="#" className="">
+                <button onClick={openModal}>
                   <RiDeleteBin6Line 
-                  size={18}
-                  className=" opacity-90 hover:opacity-100 hover:text-red-500 cursor-pointer transition-transform duration-500"
-                  title="Eliminar"
-                  aria-label="Eliminar" 
-                />
-                </a>
+                    size={18}
+                    className=" opacity-90 hover:opacity-100 hover:text-red-500 cursor-pointer transition-transform duration-500"
+                    title="Eliminar"
+                    aria-label="Eliminar" 
+                  />
+                </button>
               </td>
             </tr>
           ))}
         </tbody>
       </table>
+
+      {isModalOpen && (
+        <div className="fixed inset-0 bg-[#FFFFFFB2] bg-opacity-50 flex items-center justify-center z-50">
+
+          <div className="bg-[#004054] p-6 rounded-[10px] shadow-md w-full max-w-md">
+            <p className="text-xl text-center font-normal font-roboto mb-10">
+              Tem certeza que deseja deletar o usuário?
+            </p>
+            <div className="flex justify-end space-x-4">
+              <button
+                onClick={closeModal}
+                className="px-4 py-2 text-black  bg-gray-200 rounded hover:bg-gray-400"
+              >
+                Cancelar
+              </button>
+              <button
+                onClick={confirmDelete}
+                className="px-4 py-2 bg-red-600 text-white rounded hover:bg-red-700"
+              >
+                Confirmar
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 }
