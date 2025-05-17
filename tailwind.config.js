@@ -19,7 +19,8 @@ export default {
       },
       fontFamily: {
         'primaryfont': ['Sora', 'sans-serif'],
-        'titlefont': ['Marydale', 'sans-serif'],
+        'titlefont': ['Sora', 'sans-serif'],
+        // 'titlefont': ['Marydale', 'sans-serif'],
         'secondaryfont': ['Sora', 'sans-serif'],
         // 'roboto': ['Roboto', 'sans-serif'],
         // 'mrsdelafield': ['"Mrs Saint Delafield"', 'cursive'],

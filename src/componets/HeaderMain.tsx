@@ -57,8 +57,8 @@ export function HeaderMain({ selectedVideo, onCloseVideo }: HeaderMainProps) {
 
             <div className='rounded-md p-[0.25rem] md:p-[3rem] z-20 h-fit w-full md:max-w-[380px] lg:max-w-[620px] text-xs'>
               <div className='hidden lg:block'>
-                <h1 className='text-2xl font-bold text-primary2 md:text-6xl transform -rotate-3 pb-8'>
-                  Aprenda Mais com Nossos Recursos
+                <h1 className='text-2xl font-bold text-black md:text-5xl pb-8'>
+                  Aprenda mais com <h1 className='text-primary2'>nossos Recursos</h1>
                 </h1>
                 <p className='text-sm leading-relaxed text-black mt-3 md:text-base'>
                   Amplie seus horizontes educacionais! Nesta seção, você encontrará uma rica coleção de vídeos explicativos, artigos relevantes e aulas gravadas, cuidadosamente selecionados para enriquecer o processo de ensino e aprendizagem.
