@@ -4,6 +4,7 @@ import { useAuth } from "../context/AuthContext";
 import { NavbarLoginPage } from "../componets/NavBarLoginPage";
 import desktopImage from "../assets/LoginPage/large.jpg";
 import { Footer } from "../componets/Footer";
+import { post } from '../services/api'; 
 
 
 export default function Login() {
@@ -14,28 +15,35 @@ export default function Login() {
   const [password, setPassword] = useState("");
   const [loginError, setLoginError] = useState("");
   const { login } = useAuth();
-  const backendUrl = import.meta.env.VITE_BACKEND_BASE_URL;
+  // const backendUrl = import.meta.env.VITE_BACKEND_BASE_URL;
 
   //login request
   const handleLogin = async () => {
     try {
-      const response = await fetch(`${backendUrl}/login`, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ login: username, senha: password }),
-      });
+      // const response = await fetch(`${backendUrl}/login`, {
+      //   method: "POST",
+      //   headers: {
+      //     "Content-Type": "application/json",
+      //   },
+      //   body: JSON.stringify({ login: username, senha: password }),
+      // });
+
+      //Usando Axios importado do api.ts
+      const response = await post('/login', { login: username, senha: password });
 
       // se login ok atualizar auth context provider para verificar se esta autenticado o usuario
-      if (response.ok) {
+      if (response.status >= 200 && response.status < 300) {
         console.log("Login successful!");
 
-        const result = await response.json();
-        console.log(result);
-        const token = result.accessToken;
-        const expiresIn = result.expiresIn;
-        login(token, expiresIn);
+        // const result = await response.json();
+        // console.log(result);
+        // const token = result.accessToken;
+        // const expiresIn = result.expiresIn;
+        
+        //Desentralizando
+        const { accessToken, expiresIn } = response.data; 
+
+        login(accessToken, expiresIn);
         setLoginError("");
         navigate("/");
       } else if (response.status === 401) {
@@ -45,7 +53,7 @@ export default function Login() {
         //const err = await response.json();
         setLoginError("Problema ao fazer login. Tente novamente.");
       }
-    } catch (error) {
+    } catch (error: any) {
       console.error("Error:", error);
       //setLoginError(error instanceof Error ? error.message : String(error));
       setLoginError("Problema ao fazer login. Tente novamente.");
@@ -76,9 +84,9 @@ export default function Login() {
         >
           <div className="hidden md:block md:max-w-[699px]">
             <h1 className="pt-12 text-2xl text-black xl:mt-[20px] md:mt-[140px] min-h-[189.61px] md:text-6xl  transform md:inline-block">
-              Aprenda mais com <br /> <h1 className='text-primary2'>nossos Recursos</h1>
+              Aprenda mais com <h1 className='text-primary2'>nossos Recursos</h1>
             </h1>
-            <p className="text-left text-black xl:text-[#060606BF] xl:text-[24px] pt-5">
+            <p className="text-left xl:text-[#060606BF] xl:text-[24px] pt-5">
               Amplie seus horizontes educacionais! Nesta seção, você encontrará
               uma rica coleção de vídeos explicativos, artigos relevantes e
               aulas gravadas, cuidadosamente selecionados para enriquecer o

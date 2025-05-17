@@ -6,6 +6,7 @@ import { TopTen } from "../componets/TopTen";
 import { menuItems as headerMenuItems } from "../componets/HeaderMain";
 import { CardVideoType } from "../componets/CardVideo";
 import { useState } from "react";
+import { ExampleAPI } from "../componets/ExampleAPI";
 
 interface ResourceType {
   id: number;
@@ -68,7 +69,7 @@ export function HomePage() {
           </section>
         );
       })}
-
+<ExampleAPI />
       <footer className="h-[5.375rem] md:h-[7.75rem]">
         <Footer />
       </footer>
