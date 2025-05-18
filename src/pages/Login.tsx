@@ -84,7 +84,7 @@ export default function Login() {
         >
           <div className="hidden md:block md:max-w-[699px]">
             <h1 className="pt-12 text-2xl text-black xl:mt-[20px] md:mt-[140px] min-h-[189.61px] md:text-6xl  transform md:inline-block">
-              Aprenda mais com <h1 className='text-primary2'>nossos Recursos</h1>
+              Aprenda mais com <span className='text-primary2'>nossos Recursos</span>
             </h1>
             <p className="text-left xl:text-[#060606BF] xl:text-[24px] pt-5">
               Amplie seus horizontes educacionais! Nesta seção, você encontrará

@@ -1,7 +1,7 @@
 
 export function Footer(){
     return(
-        <footer className= "bg-black text-white w-full">
+        <footer className= "bg-black text-white w-full py-[1.5rem]">
                 <div className= "mx-auto grid text-center ittems-center justify-center font-primaryfont sm:grid-cols-1 md:grid-cols-4 lg:grid-cols-4 lg:w-auto gap-3">
                     <div className="text-md flex flex-col items-center justify-center gap-3 mt-3">
                         <a href="https://www.flyeducacao.org/terms-and-conditions" 

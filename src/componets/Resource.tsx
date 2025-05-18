@@ -70,7 +70,7 @@ export function Resource({ resource, onVideoSelect }: ResourceProps) {
 
   return (
     <div className="w-[90%] relative mx-auto">
-      <h2 className="text-3xl pt-[0.5rem] md:pt-[1rem] md:px-1 md:text-5xl transform -rotate-3">
+      <h2 className="text-3xl pt-[0.5rem] md:px-1 md:text-4xl ">
         {resource.title}
       </h2>
       <div
@@ -86,7 +86,7 @@ export function Resource({ resource, onVideoSelect }: ResourceProps) {
             <div className="relative cursor-pointer hover:scale-[1.4] transition-transform duration-500 hover:z-10">
               <CardVideo key={cardVideo.id} cardVideo={cardVideo} />
               <div className="absolute inset-0 flex flex-col items-center justify-end text-white opacity-0 hover:opacity-100 transition-opacity duration-700">
-                <div className="text-base mt-2 text-center">
+                <div className="mt-2 text-center">
                   {cardVideo.title}
                 </div>
               </div>
@@ -96,14 +96,14 @@ export function Resource({ resource, onVideoSelect }: ResourceProps) {
       </div>
       <button
         onClick={sliderScrollLeft}
-        className={`absolute left-[-10%] top-[60%] transform -translate-y-1/2 bg-gray-400 text-white rounded-full w-[34px] h-[34px] flex items-center justify-center opacity-70 hover:opacity-100 transition-opacity duration-300 ${isAtStart ? 'hidden' : ''} md:left-[-50px] ml:left-[-50px]`}
+        className={`absolute left-[-5%] top-[60%] transform -translate-y-1/2 bg-gray-400 text-white rounded-full w-[34px] h-[34px] flex items-center justify-center opacity-70 hover:opacity-100 transition-opacity duration-300 ${isAtStart ? 'hidden' : ''} md:left-[-50px] ml:left-[-50px]`}
         disabled={isAtStart}
       >
         <GoChevronLeft size={24}/>
       </button>
       <button
         onClick={slideScrollRight}
-        className={`absolute right-[-10%] top-[60%] transform -translate-y-1/2 bg-gray-400 text-white rounded-full w-[34px] h-[34px] flex items-center justify-center opacity-70 hover:opacity-100 transition-opacity duration-300 ${isAtEnd ? 'hidden' : ''} md:right-[-50px] ml:right-[-50px]`}
+        className={`absolute right-[-5%] top-[60%] transform -translate-y-1/2 bg-gray-400 text-white rounded-full w-[34px] h-[34px] flex items-center justify-center opacity-70 hover:opacity-100 transition-opacity duration-300 ${isAtEnd ? 'hidden' : ''} md:right-[-50px] ml:right-[-50px]`}
         disabled={isAtEnd}
       >
         <GoChevronRight size={24}/>

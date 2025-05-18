@@ -1,8 +1,8 @@
 import React from "react";
 import { useAuth } from "../context/AuthContext";
 import { useEffect, useState } from "react";
-import { get} from "../services/api";
-import { AxiosResponse } from 'axios';
+import { get } from "../services/api";
+import { AxiosResponse } from "axios";
 
 interface Curso {
   id: number;
@@ -16,20 +16,6 @@ interface Curso {
 
 interface ApiResponse {
   content: Curso[];
-  pageable: any;
-  totalPages: number;
-  totalElements: number;
-  last: boolean;
-  first: boolean;
-  number: number;
-  numberOfElements: number;
-  size: number;
-  sort: {
-    empty: boolean;
-    sorted: boolean;
-    unsorted: boolean;
-  };
-  empty: boolean;
 }
 
 export function ExampleAPI() {
@@ -38,39 +24,43 @@ export function ExampleAPI() {
   const [error, setError] = useState("");
   const [loading, setLoading] = useState<boolean>(true);
 
-   useEffect(() => {
-        const fetchCursos = async () => {
-            if (isAuthenticated) {
-                try {
-                    const response: AxiosResponse<ApiResponse> = await get('/api/cursos'); 
-            
-                    if (response.status >= 200 && response.status < 300) {
-                        console.log("Request successful!");
-                        console.log(response.data);
-                        setCursos(response.data.content);
-                        setError("");
-                    }
-                    else{
-                        setError(
-                            `Erro ao buscar cursos: ${
-                            response.status && response.statusText
-                            }`
-                        );
-                        setCursos([]);
-                        return;
-                    }
-                }  catch (error: any) {
-                    console.error("Erro ao buscar cursos:", error);
-                    setError(error.message || "Erro ao buscar cursos.");
-                    setCursos([]);
-                } finally {
-                    setLoading(false);
-                }
-            }
-        };
+  useEffect(() => {
+    const fetchCursos = async () => {
+      if (isAuthenticated) {
+        try {
+          const response: AxiosResponse<ApiResponse> = await get("/api/cursos");
 
-        fetchCursos();
-    }, [isAuthenticated]);
+          if (response.status >= 200 && response.status < 300) {
+            console.log("Request successful!");
+            console.log(response.data);
+            setCursos(response.data.content);
+            setError("");
+          } else {
+            // Servidor respondió com erro
+            setError(
+              `Error ao buscar cursos: ${response.status} - ${response.statusText}`
+            );
+            setCursos([]);
+            return;
+          }
+        } catch (error: any) {
+          // Erro na petição
+          console.error("Erro ao buscar cursos:", error);
+          setError(error.message || "Erro ao buscar cursos.");
+          setCursos([]);
+        } finally {
+          setLoading(false);
+        }
+      } else {
+        // Usuario não autenticado
+        setError("Usuario não autenticado");
+        setCursos([]);
+        setLoading(false);
+      }
+    };
+
+    fetchCursos();
+  }, [isAuthenticated]);
 
   if (loading) {
     return (
@@ -81,7 +71,7 @@ export function ExampleAPI() {
   }
 
   if (error) {
-    return <p className="text-red-600 text-lg">{error}</p>;
+    return <p className="text-red-600 text-lg">Erro ao buscar cursos</p>;
   }
 
   return (
