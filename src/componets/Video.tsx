@@ -55,9 +55,8 @@ export function Video(props: VideoProps) {
             </div>
 
             <div className="w-full h-full bg-primary1">
-              <div className="ml-[1.25rem] md:ml-[2rem] ml:ml-[2rem] ">
-                <p className="pt-[0.5rem] md:pt-[1rem] ml:pt-[1rem] text-primary2">{props.title}</p>
-                <p className="text-white pb-[25px]">Outros detalhes do video</p>
+              <div className="ml-[1.25rem] md:ml-[2rem] ml:ml-[2rem]">
+                <p className="pt-[0.5rem] md:pt-[1rem] ml:pt-[1rem] text-white text-xl">{props.title}</p>
               </div>
             </div>
           </div>

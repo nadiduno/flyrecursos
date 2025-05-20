@@ -13,11 +13,7 @@ interface HeaderMainProps {
 }
 
 export const menuItems: MenuItem[] = [
-  { label: 'Mercado', href: '#mercado' },
-  { label: 'Tecnologia', href: '#tecnologia' },
-  { label: 'Marketing e Empreendedorismo', href: '#marketing-e-empreendedorismo' },
-  { label: 'SuperProfs', href: '#superprofs' },
-  { label: 'Colorindo', href: '#colorindo' },
+  { label: 'Modulo', href: '#modulo' },
 ];
 
 export function HeaderMain({ selectedVideo, onCloseVideo }: HeaderMainProps) {
@@ -28,9 +24,9 @@ export function HeaderMain({ selectedVideo, onCloseVideo }: HeaderMainProps) {
         <div className="relative w-full h-full overflow-hidden z-30"> 
           <Video
             id={selectedVideo.id}
-            title={selectedVideo.title}
-            src={selectedVideo.videoUrl}
-            thumbnail={selectedVideo.imageUrl}
+            title={selectedVideo.titulo}
+            src={selectedVideo.linkConteudo}
+            thumbnail={selectedVideo.imagemCapa}
             onClose={onCloseVideo}
           />
         </div>
