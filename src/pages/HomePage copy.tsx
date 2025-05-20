@@ -47,11 +47,47 @@ export function HomePage() {
           sectionContent = (
             <Resource
               key={1}
-              resource={resourcesData.find((r) => r.title === "Modulo")!}
+              resource={resourcesData.find((r) => r.title === "Mercado")!}
               onVideoSelect={handleVideoSelect}
             />
           );
-        } 
+        } else if (sectionId === "tecnologia") {
+          sectionContent = (
+            <Resource
+              key={2}
+              resource={resourcesData.find((r) => r.title === "Tecnologia")!}
+              onVideoSelect={handleVideoSelect}
+            />
+          );
+        } else if (sectionId === "marketing-e-empreendedorismo") {
+          sectionContent = (
+            <Resource
+              key={3}
+              resource={
+                resourcesData.find(
+                  (r) => r.title === "Marketing e Empreendedorismo"
+                )!
+              }
+              onVideoSelect={handleVideoSelect}
+            />
+          );
+        } else if (sectionId === "superprofs") {
+          sectionContent = (
+            <Resource
+              key={4}
+              resource={resourcesData.find((r) => r.title === "SuperProfs")!}
+              onVideoSelect={handleVideoSelect}
+            />
+          );
+        } else if (sectionId === "colorindo") {
+          sectionContent = (
+            <Resource
+              key={5}
+              resource={resourcesData.find((r) => r.title === "Colorindo")!}
+              onVideoSelect={handleVideoSelect}
+            />
+          );
+        }
 
         return (
           <section
