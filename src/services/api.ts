@@ -1,12 +1,11 @@
 import axios from 'axios';
 
-const backendUrl = "https://flyeducation-backend-local-repo-deploy.onrender.com";
-
 export const api = axios.create({
-  baseURL: backendUrl,
+  baseURL: import.meta.env.VITE_BACKEND_BASE_URL,
   headers: {
     'Content-Type': 'application/json',
   },
+  timeout: 1000,
 });
 
 // Interceptor para agregar el token a las peticiones
@@ -19,6 +18,17 @@ api.interceptors.request.use(
     return config;
   },
   (error) => {
+    return Promise.reject(error);
+  }
+);
+
+// Interceptor de respuestas para manejar errores globalmente
+api.interceptors.response.use(
+  (response) => response,
+  (error) => {
+    if (error.code === 'ERR_NETWORK') {
+      console.error('Erro de conexão - API não disponível ou problema de rede');
+    }
     return Promise.reject(error);
   }
 );
