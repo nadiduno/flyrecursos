@@ -57,7 +57,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
         }
         else {
             // caso o token nao exista ou seja inválido, redirecionar para a tela de login
-            // redirectToLogin();
+            redirectToLogin();
         }
     },[]);
 
