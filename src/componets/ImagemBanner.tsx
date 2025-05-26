@@ -7,12 +7,12 @@ export function ImagemBanner() {
       <img
         src={mobileImage}
         alt="Banner mobile"
-        className="w-full h-full object-cover object-center top-0 left-0 block md:hidden"
+        className="w-full h-full object-cover object-center md:hidden"
       />
       <img
         src={desktopImage}
         alt="Banner principal"
-        className="w-full h-full object-cover absolute top-0 left-0 hidden md:block"
+        className="w-full h-full object-cover hidden md:block md:object-left lg:object-center"
       />
     </>
   );

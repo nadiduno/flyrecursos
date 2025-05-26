@@ -1,32 +1,42 @@
 import { useNavigate } from "react-router-dom";
 import { useState } from "react";
-import { Category } from "./Category";
 import { Count } from "./Count";
+import { Course } from "./Course";
+import { Module } from "./Module";
+import { Lesson } from "./Lesson";
 
 export const menuItemsConfig = [
-  { label: "CONTA", action: "CONTA" },
-  { label: "CATEGORIA", action: "CATEGORIA" },
-  { label: "VER RECURSOS", action: "RECURSOS" },
+  { label: "Conta", action: "Conta" },
+  { label: "Curso", action: "Curso" },
+  { label: "Módulo", action: "Modulo" },
+  { label: "Aula", action: "Aula" },
+  { label: "Ver recursos", action: "Recursos" },
 ];
 
 export function HeaderDashboard() {
   const navigate = useNavigate();
-  const [conteudoHeader, setConteudoHeader] = useState<React.ReactNode | null>(null);
+  const [conteudoHeader, setConteudoHeader] = useState<React.ReactNode | null>(
+    null
+  );
 
   const handleMenuClick = (action: string) => {
-    if (action === "RECURSOS") {
+    if (action === "Recursos") {
       navigate("/");
-    } else if (action === "CONTA") {
+    } else if (action === "Conta") {
       setConteudoHeader(<Count />); // Renderize o componente Count
-    } else if (action === "CATEGORIA") {
-      setConteudoHeader(<Category />); // Renderize o componente Category
+    } else if (action === "Curso") {
+      setConteudoHeader(<Course />);
+    } else if (action === "Modulo") {
+      setConteudoHeader(<Module />);
+    } else if (action === "Aula") {
+      setConteudoHeader(<Lesson />);
     } else {
       setConteudoHeader(null);
     }
   };
 
   return (
-    <div className="w-full md:w-[87.5rem] lg:w-[87.5rem]">
+    <div className="w-full">
       <div>
         <div className="flex  flex-col md:flex-row lg:md:flex-row items-start justify-center gap-1 md:gap-7 lg:gap-7 p-3">
           <nav className="rounded-md z-20 w-full md:w-[220px] lg:w-[400px] md:mb-0">
@@ -34,7 +44,17 @@ export function HeaderDashboard() {
               {menuItemsConfig.map((item, index) => (
                 <li
                   key={index}
-                  className="leading-5 py-2 px-3 rounded-md ease-in-out cursor-pointer opacity-90 text-black bg-gray-100 hover:bg-primary1 hover:text-primary2 hover:translate-x-1 hover:opacity-100 transition-all duration-500 md:text-lg"
+                  className={`
+                    leading-5 py-2 px-3 rounded-md ease-in-out cursor-pointer 
+                    opacity-90 text-black bg-gray-100 hover:bg-primary1 
+                  hover:text-white hover:translate-x-1 hover:opacity-100 
+                    transition-all duration-500 md:text-lg
+                    ${
+                      index === menuItemsConfig.length - 1
+                      ? "mb-4 md:mt-16"
+                      : ""
+                    }
+                  `}
                   onClick={() => handleMenuClick(item.action)}
                 >
                   <a>{item.label}</a>
@@ -43,12 +63,11 @@ export function HeaderDashboard() {
             </ul>
           </nav>
 
-          <div className="bg-primary1 rounded-t-md w-full h-[20rem] md:h-[35rem] lg:h-[35rem] flex items-start justify-center font-bold md:text-2xl">
+          <div className="bg-primary1 w-full h-[22rem] md:h-[35rem] lg:h-[35rem] flex items-start justify-center font-bold md:text-2xl rounded-2xl">
             {conteudoHeader ? (
               <div className="w-full h-full rounded-lg flex items-center p-1 md:p-4 lg:p-4">
                 {conteudoHeader}
               </div>
-              
             ) : (
               <p className="w-full h-full rounded-lg ">
                 <Count />

@@ -12,9 +12,7 @@ interface ResourceType {
   quantity?: number;
 }
 
-const resourcesData: ResourceType[] = [
-  { id: 1, title: "Modulo" },
-];
+const resourcesData: ResourceType[] = [{ id: 1, title: "Modulo" }];
 
 export function HomePage() {
   const [selectedVideo, setSelectedVideo] = useState<CardVideoType | null>(
@@ -30,45 +28,47 @@ export function HomePage() {
   };
 
   return (
-    <div className="min-h-screen flex flex-col bg-primary1">
-      <nav className="h-[5.375rem] md:h-[7.75rem]shadow-md">
-        <Navbar />
-      </nav>
-      <header className="bg-white text-black border-b-[3px] border-primary2 sticky top-0 z-20">
-        <HeaderMain selectedVideo={selectedVideo} onCloseVideo={closeVideo} />
-      </header>
-      {/* <section id="top-ten" className="text-primary2 py-10">
+    <div className="w-full mx-auto min-h-screen">
+      <div className="w-[95%] mx-auto">
+        <nav className="h-[3.375rem] md:h-[5.75rem] flex items-center justify-center rounded-2xl">
+          <Navbar />
+        </nav>
+        <header className="bg-white text-black border-b-[3px] border-primary2 sticky top-0 z-20 rounded-2xl">
+          <HeaderMain selectedVideo={selectedVideo} onCloseVideo={closeVideo} />
+        </header>
+        {/* <section id="top-ten" className="text-primary2 py-10">
         <TopTen onVideoSelect={handleVideoSelect} /> 
       </section> */}
-      {headerMenuItems.map((item, index) => {
-        const sectionId = item.label.toLowerCase().replace(/ /g, "-");
-        let sectionContent = null;
-        if (sectionId === "modulo") {
-          sectionContent = (
-            <Resource
-              key={1}
-              resource={resourcesData.find((r) => r.title === "Modulo")!}
-              onVideoSelect={handleVideoSelect}
-            />
+        {headerMenuItems.map((item, index) => {
+          const sectionId = item.label.toLowerCase().replace(/ /g, "-");
+          let sectionContent = null;
+          if (sectionId === "modulo") {
+            sectionContent = (
+              <Resource
+                key={1}
+                resource={resourcesData.find((r) => r.title === "Modulo")!}
+                onVideoSelect={handleVideoSelect}
+              />
+            );
+          }
+
+          return (
+            <section
+              key={index}
+              id={sectionId}
+              className={`py-1 border-t-[3px] border-primary2 ${
+                index % 2 === 0 ? "bg-white" : "odd:bg-primary1 text-white"
+              } transition-all duration-300 hover:shadow-lg text-primary2 my-[1.5rem] rounded-2xl`}
+            >
+              {sectionContent}
+            </section>
           );
-        } 
+        })}
 
-        return (
-          <section
-            key={index}
-            id={sectionId}
-            className={`py-1 border-t-[3px] border-primary2 ${
-              index % 2 === 0 ? "bg-white" : "odd:bg-primary1 text-white"
-            } transition-all duration-300 hover:shadow-lg text-primary2`}
-          >
-            {sectionContent}
-          </section>
-        );
-      })}
-
-      <footer className="h-[5.375rem] md:h-[7.75rem]">
-        <Footer />
-      </footer>
+        <footer className="h-[5.375rem] md:h-[7.75rem]">
+          <Footer />
+        </footer>
+      </div>
     </div>
   );
 }

@@ -145,15 +145,15 @@ export function Resource({ resource, onVideoSelect }: ResourceProps) {
     };
 
     if (loading) {
-        return <div>Carregando recursos...</div>;
+        return <div className="m-3 p-3 text-gray-400 my-[1.5rem] bg-primary1 rounded-2xl">Carregando recursos...</div>;
     }
 
     if (error) {
-        return <div>Erro ao carregar recursos: {error}</div>;
+        return <div className="m-3 p-3 text-gray-400 my-[1rem] bg-primary1 rounded-2xl">Erro ao carregar recursos: {error}</div>;
     }
 
     return (
-        <div className="w-[90%] relative mx-auto">
+        <div className="w-[90%] relative mx-auto rounded-2xl">
             <h2 className="text-3xl pt-[0.5rem] md:px-1 md:text-4xl ">
                 {/* {resource.title} */}
                 {resource.titulo}

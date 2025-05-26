@@ -1,4 +1,3 @@
-
 import logo from "../assets/Navi.png";
 
 
@@ -14,7 +13,6 @@ export function NavbarLoginPage() {
                     alt="fly logo"
                 />
             </div>
-        
         </div>
     );
 }
