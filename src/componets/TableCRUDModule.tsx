@@ -4,14 +4,10 @@ import { RiDeleteBin6Line } from "react-icons/ri";
 
 interface TableRowData {
   name: string;
-  email: string;
 }
 
 const data: TableRowData[] = [
-  { name: "Rosa Nascimento", email: "email1@fly.com" },
-  { name: "Ana Paula Lopes", email: "email2@fly.com" },
-  { name: "Josefina Simoões", email: "email3@fly.com" },
-  { name: "Jõa Galvão", email: "email4@fly.com" },
+  { name: "Módulo 1" },
 ];
 
 
@@ -19,7 +15,7 @@ interface DeleteUserProps {
   onDelete: () => void; // função para executar a exclusão real
 }
 
-export function TableCRUDCount({ onDelete }:DeleteUserProps) {
+export function TableCRUDModule({ onDelete }:DeleteUserProps) {
 
   const [isModalOpen, setIsModalOpen] = useState(false);
   
@@ -41,10 +37,7 @@ export function TableCRUDCount({ onDelete }:DeleteUserProps) {
         <thead  className="border-b border-secondary">
           <tr className="px-6 py-4 text-left font-medium  tracking-wider text-yellow md:text-[17px]">
             <th scope="col" className="py-3">
-              Nome Completo
-            </th>
-            <th scope="col" className="py-3 hidden md:table-cell lg:table-cell">
-              E-mail
+              Módulo
             </th>
             <th scope="col" className="flex justify-end py-3 px-2">
               Ações
@@ -55,9 +48,6 @@ export function TableCRUDCount({ onDelete }:DeleteUserProps) {
           {data.map((row, index) => (
             <tr key={index}>
               <td className="whitespace-nowrap py-2">{row.name}</td>
-              <td className="whitespace-nowrap py-2 hidden md:table-cell lg:table-cell">
-                {row.email}
-              </td>
               <td className="whitespace-nowrap text-right flex flex-row gap-4 py-2 px-2 justify-end">
                 <a href="#" className="">
                   <GrEdit 

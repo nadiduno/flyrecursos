@@ -10,6 +10,9 @@ export default {
         primary1: "#004054",
         primary2: "#00CBFE",
         secondary: "#D3CFC9",
+        secondary2: "#F8F5F5",
+        secondary3: "#222221",
+        secondary4: "#B3EAFD",
         yellow:"#F7E135", 
         neutral: {                    
           white: '#ffffff',

@@ -1,0 +1,18 @@
+export function TextMain() {
+  return (
+    <div className="rounded-md p-[0.25rem] md:p-[3rem] z-20 h-fit w-full md:max-w-[620px] text-xs">
+      <div className="hidden md:block">
+        <h1 className="text-2xl font-bold text-black md:text-2xl lg:text-3xl pb-8">
+          Aprenda mais com{" "}
+          <span className="text-primary2">nossos Recursos</span>
+        </h1>
+        <p className="text-sm leading-relaxed text-gray-800 md:text-[17px] mt-3">
+          Amplie seus horizontes educacionais! Nesta seção, você encontrará uma
+          rica coleção de <span className="text-primary2"> vídeos </span>{" "}
+          explicativos, artigos relevantes e aulas gravadas, cuidadosamente
+          selecionados para enriquecer o processo de ensino e aprendizagem.
+        </p>
+      </div>
+    </div>
+  );
+}
