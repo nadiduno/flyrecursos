@@ -7,60 +7,82 @@ import { post } from "../services/api";
 import { ImagemBanner } from "../componets/ImagemBanner";
 import { TextMain } from "../componets/TextMain";
 import { ButtonFly } from "../componets/ButtonFly";
+import { IoEye, IoEyeOff } from "react-icons/io5";
+
+import { useForm, SubmitHandler } from "react-hook-form";
+import { z } from "zod";
+import { zodResolver } from "@hookform/resolvers/zod";
+
+const createFormDataSchema = z.object({
+  // Validação com zod
+  email: z
+    .string()
+    .nonempty("O e-mail é obrigatório.")
+    .email("Formato de e-mail inválido.")
+    .min(5, "O e-mail deve ter no mínimo 5 caracteres.")
+    .max(50, "O e-mail deve ter no máximo 50 caracteres.")
+    .transform((val) => val.toLowerCase()),
+  password: z
+    .string()
+    .nonempty("A senha é obrigatória.")
+    .min(8, "A senha deve ter no mínimo 8 caracteres.")
+    .max(15, "A senha deve ter no máximo 15 caracteres.")
+    .regex(/[A-Z]/, "A senha deve conter pelo menos uma letra maiúscula."),
+});
+
+type FormData = z.infer<typeof createFormDataSchema>;
 
 export default function Login() {
   // Initialize navigate
   const navigate = useNavigate();
 
-  const [username, setUsername] = useState("");
-  const [password, setPassword] = useState("");
   const [loginError, setLoginError] = useState("");
+  const [showPassword, setShowPassword] = useState(false);
+
   const { login } = useAuth();
-  // const backendUrl = import.meta.env.VITE_BACKEND_BASE_URL;
 
-  //login request
-  const handleLogin = async () => {
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm<FormData>({
+    resolver: zodResolver(createFormDataSchema),
+  });
+
+  // Submissão do formulário
+  const onSubmit: SubmitHandler<FormData> = async (data) => {
+    setLoginError("");
     try {
-      // const response = await fetch(`${backendUrl}/login`, {
-      //   method: "POST",
-      //   headers: {
-      //     "Content-Type": "application/json",
-      //   },
-      //   body: JSON.stringify({ login: username, senha: password }),
-      // });
-
       //Usando Axios importado do api.ts
       const response = await post("/login", {
-        login: username,
-        senha: password,
+        login: data.email,
+        senha: data.password,
       });
 
       // se login ok atualizar auth context provider para verificar se esta autenticado o usuario
       if (response.status >= 200 && response.status < 300) {
         console.log("Login successful!");
-
-        // const result = await response.json();
-        // console.log(result);
-        // const token = result.accessToken;
-        // const expiresIn = result.expiresIn;
-
-        //Desentralizando
         const { accessToken, expiresIn } = response.data;
-
         login(accessToken, expiresIn);
-        setLoginError("");
         navigate("/");
       } else if (response.status === 401) {
-        // Unauthorized error (401) indicates invalid credentials
         setLoginError("E-mail ou senha inválidos. Tente novamente.");
       } else {
-        //const err = await response.json();
         setLoginError("Problema ao fazer login. Tente novamente.");
       }
     } catch (error: any) {
       console.error("Error:", error);
-      //setLoginError(error instanceof Error ? error.message : String(error));
       setLoginError("Problema ao fazer login. Tente novamente.");
+    }
+  };
+
+  const togglePasswordVisibility = () => {
+    setShowPassword((prev) => !prev);
+  };
+
+  const handleInputChange = () => {
+    if (loginError) { // Só limpa se houver um erro de login exibido
+      setLoginError("");
     }
   };
 
@@ -77,47 +99,136 @@ export default function Login() {
               <div className="absolute top-0 left-0 w-full h-full flex flex-col md:flex-row items-start md:items-center px-[1rem] md:px-[5rem] ld:px-[5rem] py-4 md:py-0">
                 <TextMain />
 
-                <div className="rounded-xl w-full h-[200rem] md:h-[95%] bg-primary1 py-[0.5rem] md:py-[2rem] px-6 md:px-8 lg:px-20 flex flex-col items-start justify-start gap-3 text-white text-[14px] md:text-[17px]">
+                <div className="rounded-xl w-full h-[200rem] md:h-[95%] bg-primary1 py-[0.5rem] md:py-[1rem] px-6 md:px-8 lg:px-20 flex flex-col items-start justify-start text-white text-[14px] md:text-[17px]">
                   <p className="w-full md:text-xl mx-auto text-center font-bold text-primary2">
                     Faça seu Login
                   </p>
-                  <div className="w-full flex flex-col ">
+                  <form
+                    onSubmit={handleSubmit(onSubmit)}
+                    className="w-full flex flex-col"
+                    aria-label="Formulário de Login"
+                  >
+                    {/* E-mail*/}
                     <div className="w-full text-left">
-                      <label className="">E-mail</label>
+                      <label htmlFor="email" className="">
+                        E-mail
+                      </label>
                     </div>
                     <input
+                      id="email"
                       type="text"
                       placeholder="Digite seu e-mail"
-                      value={username}
-                      onChange={(e) => setUsername(e.target.value)}
-                      className="w-full h-[2rem] text-gray-600 p-1 border rounded-md mb-6"
+                      {...register("email", { onChange: handleInputChange })}
+                      className="w-full h-[2rem] text-gray-600 p-1 border rounded-md mb-2"
+                      aria-required="true"
+                      aria-invalid={errors.email ? "true" : "false"}
+                      aria-describedby="email-error"
                     />
+                    {/* Erro para o e-mail*/}
+                    {errors.email && (
+                      <p
+                        id="email-error"
+                        className="text-red-500 text-[0.6rem] md:text-sm transition-all duration-20 mb-2"
+                      >
+                        {errors.email.message}
+                      </p>
+                    )}
+                    {/* Espaçamento para manter o layout*/}
+                    {!errors.email && <div className="h-[1.5rem] mb-2"></div>}
+
+                    {/* Senha*/}
                     <div className="w-full text-left">
-                      <label className="">Senha</label>
+                      <label htmlFor="password" className="">
+                        Senha
+                      </label>
                     </div>
-                    <input
-                      type="password"
-                      placeholder="Digite sua senha"
-                      value={password}
-                      onChange={(e) => setPassword(e.target.value)}
-                      className="w-full h-[2rem] text-gray-600 p-1 border rounded-md mb-6"
-                    />
-                    <div className="min-h-[1rem] mb-[0.5] mt-[-1rem] md:mt-[0.25rem] md:mb-2 text-[0.75rem] md:text-sm transition-all duration-200">
+                    <div className="relative w-full">
+                      <input
+                        id="password"
+                        type={showPassword ? "text" : "password"}
+                        placeholder="Digite sua senha"
+                        {...register("password", { onChange: handleInputChange })} 
+                        className="w-full h-[2rem] text-gray-600 p-1 border rounded-md pr-10 mb-2"
+                        aria-required="true"
+                        aria-invalid={errors.password ? "true" : "false"}
+                        aria-describedby="password-error"
+                      />
+                      <button
+                        type="button"
+                        onClick={togglePasswordVisibility}
+                        className="absolute inset-y-0 right-0 pr-3 flex items-center text-sm leading-5 text-gray-600 cursor-pointer"
+                        aria-label={
+                          showPassword ? "Esconder senha" : "Mostrar senha"
+                        }
+                      >
+                        {showPassword ? (
+                          <span
+                            role="img"
+                            className="mb-1 hover:bg-secondary hover:bg-opacity-70 hover:rounded-lg transition-transform duration-500"
+                          >
+                            <IoEye
+                              size={18}
+                              className=" opacity-90 hover:opacity-100 hover:text-primary1 cursor-pointer transition-transform duration-500"
+                              title="Esconder senha"
+                              aria-label="Olho aberto"
+                            />
+                          </span>
+                        ) : (
+                          <span
+                            role="img"
+                            className="mb-1 hover:bg-secondary hover:bg-opacity-70 hover:rounded-lg transition-transform duration-500"
+                          >
+                            <IoEyeOff
+                              size={18}
+                              className=" opacity-90 hover:opacity-100 hover:text-primary1 cursor-pointer transition-transform duration-500"
+                              title="Mostrar senha"
+                              aria-label="Olho fechado"
+                            />
+                          </span>
+                        )}
+                      </button>
+                    </div>
+                    {/* Erro para a senha */}
+                    {errors.password && (
+                      <p
+                        id="password-error"
+                        className="text-red-500 text-[0.6rem] md:text-sm transition-all duration-20 mb-2"
+                      >
+                        {errors.password.message}
+                      </p>
+                    )}
+                    {/* Espaçamento para manter o layout */}
+                    {!errors.password && (
+                      <div className="h-[1.5rem] mb-2"></div>
+                    )}
+
+                    <div className="min-h-[1rem] text-[0.6rem] md:text-sm transition-all duration-200">
+                      {/* Erro do login */}
                       {loginError && (
-                        <p className="text-red-500 ">{loginError}</p>
+                        <p
+                          className="text-red-500 h-[1rem] mb-[-1rem] md:mb-[0.125rem] mt-[-1rem] md:mt-[-0.5rem]"
+                          aria-live="polite"
+                        >
+                          {loginError}
+                        </p>
+                      )}
+                      {/* Espaçamento para manter o layout */}
+                      {!errors.password && (
+                        <div className="h-[1rem] mb-[-1rem] md:mb-[0.125rem] mt-[-1rem] md:mt-[-0.5rem]"></div>
                       )}
                     </div>
-                    <div className="w-full flex justify-end pt-2">
+
+                    <div className="w-full flex justify-end m-[-1rem] md:m-[0.125rem]">
                       <Link to="/recuperar-senha" className="hover:underline">
                         Esqueci minha senha?{" "}
                       </Link>
                     </div>
 
-                    <div className="w-full text-center pt-[1rem] md:pt-[2rem] pb-[1rem]">
+                    <div className="w-full text-center pt-[1rem] md:pt-[2rem] pb-[1rem] ">
                       <p>Só para estudantes da Fly</p>
                     </div>
-                    <ButtonFly text="Entrar" onClick={handleLogin} />
-                  </div>
+                    <ButtonFly text="Entrar" type="submit" />
+                  </form>
                 </div>
               </div>
             </div>
