@@ -25,9 +25,9 @@ export const ButtonFly: React.FC<ButtonFlyProps> = ({
     w-[9rem] md:w-[15rem] h-[1.5rem] md:h-[2.5rem] rounded-[50px] 
     text-white bg-primary2 gap-2
     flex justify-center items-center
-    hover:bg-secondary4 
+    hover:bg-secondary4 hover:text-black
     shadow-[0px_4px_4px_rgba(0,0,0,0.25)] 
-    text-center font-light text-[14px]
+    text-center font-bold text-[1rem]
     transition-colors duration-200
     ${disabled ? "opacity-50 cursor-not-allowed" : "cursor-pointer"}
     ${className}
