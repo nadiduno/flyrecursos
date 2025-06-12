@@ -5,7 +5,7 @@ export const api = axios.create({
   headers: {
     'Content-Type': 'application/json',
   },
-  timeout: 1000,
+  timeout: 10000,
 });
 
 // Interceptor para agregar el token a las peticiones
@@ -26,8 +26,14 @@ api.interceptors.request.use(
 api.interceptors.response.use(
   (response) => response,
   (error) => {
-    if (error.code === 'ERR_NETWORK') {
-      console.error('Erro de conexão - API não disponível ou problema de rede');
+    if (error.response) {
+      console.error('Erro detalhado:', {status: error.response.status, data: error.response.data, headers: error.response.headers});
+      
+      if (error.response.status === 401) {
+        console.error('Token inválido/expirado');
+        localStorage.removeItem('accessToken');
+        // window.location.href = '/login';
+      }
     }
     return Promise.reject(error);
   }
