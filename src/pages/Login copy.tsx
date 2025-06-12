@@ -29,7 +29,7 @@ export default function Login() {
       // });
 
       //Usando Axios importado do api.ts
-      const response = await post('/login', { login: username, senha: password });
+      const response = await post('/auth/login', { login: username, senha: password });
 
       // se login ok atualizar auth context provider para verificar se esta autenticado o usuario
       if (response.status >= 200 && response.status < 300) {
@@ -48,15 +48,15 @@ export default function Login() {
         navigate("/");
       } else if (response.status === 401) {
         // Unauthorized error (401) indicates invalid credentials
-        setLoginError("E-mail ou senha inválidos. Tente novamente.");
+        setLoginError("E-mail ou senha inválidos. Tente novamente 1.");
       } else {
         //const err = await response.json();
-        setLoginError("Problema ao fazer login. Tente novamente.");
+        setLoginError("Problema ao fazer login. Tente novamente 2.");
       }
     } catch (error: any) {
       console.error("Error:", error);
       //setLoginError(error instanceof Error ? error.message : String(error));
-      setLoginError("Problema ao fazer login. Tente novamente.");
+      setLoginError("Problema ao fazer login. Tente novamente 3.");
     }
   };
 
@@ -107,7 +107,7 @@ export default function Login() {
               <div className="flex flex-col items-center">
                 <div className="w-[400px] text-left">
                   <label className="w-[50px] h-[21px] text-lg font-normal">
-                    E-mail
+                    ff E-mail
                   </label>
                 </div>
                 <input

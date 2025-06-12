@@ -22,7 +22,7 @@ const createFormDataSchema = z.object({
     .min(5, "O e-mail deve ter no mínimo 5 caracteres.")
     .max(50, "O e-mail deve ter no máximo 50 caracteres.")
     .transform((val) => val.toLowerCase()),
-  password: z
+  senha: z
     .string()
     .nonempty("A senha é obrigatória.")
     .min(8, "A senha deve ter no mínimo 8 caracteres.")
@@ -54,34 +54,37 @@ export default function Login() {
     setLoginError("");
     try {
       //Usando Axios importado do api.ts
-      const response = await post("/login", {
-        login: data.email,
-        senha: data.password,
+      const response = await post("/auth/login", {
+        email: data.email,
+        senha: data.senha,
       });
 
+      // console.log("Resposta completa:", response);
+
       // se login ok atualizar auth context provider para verificar se esta autenticado o usuario
-      if (response.status >= 200 && response.status < 300) {
-        console.log("Login successful!");
-        const { accessToken, expiresIn } = response.data;
-        login(accessToken, expiresIn);
-        navigate("/");
-      } else if (response.status === 401) {
-        setLoginError("E-mail ou senha inválidos. Tente novamente.");
+      if (response.data?.accessToken) {
+        login(response.data.accessToken, response.data.expiresIn);
+        navigate("/dashboard");
       } else {
-        setLoginError("Problema ao fazer login. Tente novamente.");
+        setLoginError(response?.data || "Credenciais inválidas");
       }
     } catch (error: any) {
-      console.error("Error:", error);
-      setLoginError("Problema ao fazer login. Tente novamente.");
+      if (error.response?.status === 401) {
+        setLoginError(error.response?.data || "E-mail ou senha incorretos");
+      } else if (error.code === "ECONNABORTED") {
+        setLoginError("Tempo de conexão esgotado. Tente novamente.");
+      } else {
+        setLoginError("Erro ao conectar com o servidor.");
+      }
     }
   };
-
   const togglePasswordVisibility = () => {
     setShowPassword((prev) => !prev);
   };
 
   const handleInputChange = () => {
-    if (loginError) { // Só limpa se houver um erro de login exibido
+    if (loginError) {
+      // Só limpa se houver um erro de login exibido
       setLoginError("");
     }
   };
@@ -138,20 +141,22 @@ export default function Login() {
 
                     {/* Senha*/}
                     <div className="w-full text-left">
-                      <label htmlFor="password" className="">
+                      <label htmlFor="senha" className="">
                         Senha
                       </label>
                     </div>
                     <div className="relative w-full">
                       <input
-                        id="password"
-                        type={showPassword ? "text" : "password"}
+                        id="senha"
+                        type={showPassword ? "text" : "senha"}
                         placeholder="Digite sua senha"
-                        {...register("password", { onChange: handleInputChange })} 
+                        {...register("senha", {
+                          onChange: handleInputChange,
+                        })}
                         className="w-full h-[2rem] text-gray-600 p-1 border rounded-md pr-10 mb-2"
                         aria-required="true"
-                        aria-invalid={errors.password ? "true" : "false"}
-                        aria-describedby="password-error"
+                        aria-invalid={errors.senha ? "true" : "false"}
+                        aria-describedby="senha-error"
                       />
                       <button
                         type="button"
@@ -189,18 +194,16 @@ export default function Login() {
                       </button>
                     </div>
                     {/* Erro para a senha */}
-                    {errors.password && (
+                    {errors.senha && (
                       <p
-                        id="password-error"
+                        id="senha-error"
                         className="text-red-500 text-[0.6rem] md:text-sm transition-all duration-20 mb-2"
                       >
-                        {errors.password.message}
+                        {errors.senha.message}
                       </p>
                     )}
                     {/* Espaçamento para manter o layout */}
-                    {!errors.password && (
-                      <div className="h-[1.5rem] mb-2"></div>
-                    )}
+                    {!errors.senha && <div className="h-[1.5rem] mb-2"></div>}
 
                     <div className="min-h-[1rem] text-[0.6rem] md:text-sm transition-all duration-200">
                       {/* Erro do login */}
@@ -213,7 +216,7 @@ export default function Login() {
                         </p>
                       )}
                       {/* Espaçamento para manter o layout */}
-                      {!errors.password && (
+                      {!errors.senha && (
                         <div className="h-[1rem] mb-[-1rem] md:mb-[0.125rem] mt-[-1rem] md:mt-[-0.5rem]"></div>
                       )}
                     </div>
