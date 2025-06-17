@@ -1,4 +1,4 @@
-import axios from 'axios';
+import axios, { AxiosError, AxiosRequestConfig, AxiosResponse } from 'axios';
 
 export const api = axios.create({
   baseURL: import.meta.env.VITE_BACKEND_BASE_URL,
@@ -8,7 +8,7 @@ export const api = axios.create({
   timeout: 10000,
 });
 
-// Interceptor para agregar el token a las peticiones
+// Interceptor para agregar token
 api.interceptors.request.use(
   (config) => {
     const token = localStorage.getItem('accessToken');
@@ -17,18 +17,20 @@ api.interceptors.request.use(
     }
     return config;
   },
-  (error) => {
-    return Promise.reject(error);
-  }
+  (error) => Promise.reject(error)
 );
 
-// Interceptor de respuestas para manejar errores globalmente
+// Interceptor de respuesta global
 api.interceptors.response.use(
   (response) => response,
   (error) => {
     if (error.response) {
-      console.error('Erro detalhado:', {status: error.response.status, data: error.response.data, headers: error.response.headers});
-      
+      console.error('Erro detalhado:', {
+        status: error.response.status,
+        data: error.response.data,
+        headers: error.response.headers,
+      });
+
       if (error.response.status === 401) {
         console.error('Token inválido/expirado');
         localStorage.removeItem('accessToken');
@@ -39,42 +41,36 @@ api.interceptors.response.use(
   }
 );
 
-//Métodos para as requisições
-
-export const post = async (url: string, data?: any, config?: any) => {
+// 👉 Centraliza el manejo de errores
+const handleRequest = async (request: Promise<AxiosResponse>) => {
   try {
-    const response = await api.post(url, data, config);
-    return response;
-  } catch (error: any) {
-    throw error;
+    return await request;
+  } catch (err) {
+    const error = err as AxiosError;
+
+    const statusCode = error.response?.status ?? 'sem status';
+    const url = error.config?.url ?? 'URL desconhecida';
+
+    const fallbackError = `Erro ao acessar ${url} (status: ${statusCode})`;
+    console.error('❌ Erro de requisição:', {
+      url,
+      status: statusCode,
+      data: error.response?.data,
+    });
+
+    throw new Error(fallbackError);
   }
 };
 
-export const get = async (url: string, config?: any) => {
-    try {
-        const response = await api.get(url, config);
-        return response;
-    } catch (error: any) {
-        throw error;
-    }
-};
+// Métodos seguros
+export const post = (url: string, data?: unknown, config?: AxiosRequestConfig) =>
+  handleRequest(api.post(url, data, config));
 
-export const put = async (url: string, data?: any, config?: any) => {
-  try {
-    const response = await api.put(url, data, config);
-    return response;
-  } catch (error: any) {
-    throw error;
-  }
-};
+export const get = (url: string, config?: AxiosRequestConfig) =>
+  handleRequest(api.get(url, config));
 
-export const del = async (url: string, config?: any) => {
-  try {
-    const response = await api.delete(url, config);
-    return response;
-  } catch (error: any) {
-    throw error;
-  }
-};
+export const put = (url: string, data?: unknown, config?: AxiosRequestConfig) =>
+  handleRequest(api.put(url, data, config));
 
-
+export const del = (url: string, config?: AxiosRequestConfig) =>
+  handleRequest(api.delete(url, config));
