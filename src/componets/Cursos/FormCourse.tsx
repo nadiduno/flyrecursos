@@ -96,10 +96,8 @@ const FormCourse: React.FC<FormCourseProps> = ({
               className="w-[400px] min-h-[50px] bg-[#EBEBF5] rounded-[5px] pl-[16px] text-black text-lg font-normal placeholder:h-[21px] border-[#0000001A] shadow-[0px_4px_4px_0px_rgba(0,0,0,0.2)] 
                  placeholder:text-[#8D8686]"
               {...register("autorID", { required: true })}
-              max={
-                new Date(Date.now() - 86400000).toISOString().split("T")[0] // → "2022-01-17"
-              } // não pode ser maior que a data atual
-              type="date"
+             
+              type="text"
               placeholder=""
             />
             {errors.autorID && (
