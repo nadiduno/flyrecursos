@@ -1,5 +1,5 @@
 import { CiSearch } from "react-icons/ci";
-import { CreateAccount } from "./CreateAccount";
+import { CreateAccount } from "./cadastro/CreateAccount";
 import { useState } from "react";
 import { ButtonFly } from "./ButtonFly";
 import { CgAdd } from "react-icons/cg";

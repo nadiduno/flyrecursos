@@ -1,14 +1,13 @@
-import React, { useState } from 'react';
-import { CreateAccount } from './CreateAccount';
+import React, { useState } from "react";
+import { CreateAccount } from "./cadastro/CreateAccount";
 
 const LoginPage: React.FC = () => {
-  const [username, setUsername] = useState('');
-  const [password, setPassword] = useState('');
+  const [username, setUsername] = useState("");
+  const [password, setPassword] = useState("");
   const [showCreateAccount, setShowCreateAccount] = useState(false);
 
   const handleLogin = () => {
-    console.log('Login attempt:', { username, password });
-   
+    console.log("Login attempt:", { username, password });
   };
 
   return (
@@ -57,7 +56,10 @@ const LoginPage: React.FC = () => {
       </div>
 
       {showCreateAccount && (
-        <CreateAccount isVisible={showCreateAccount} setIsVisible={setShowCreateAccount} />
+        <CreateAccount
+          isVisible={showCreateAccount}
+          setIsVisible={setShowCreateAccount}
+        />
       )}
     </div>
   );
