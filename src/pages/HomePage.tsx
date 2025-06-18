@@ -6,13 +6,30 @@ import { menuItems as headerMenuItems } from "../componets/HeaderMain";
 import { CardVideoType } from "../componets/CardVideo";
 import { useState } from "react";
 
-interface ResourceType {
+interface Aula {
   id: number;
-  title: string;
-  quantity?: number;
+  titulo: string;
+  duracaoEstimada: number;
+  linkConteudo: string;
+  moduloId: number;
+  ordem: number;
+  tipo: string;
+  imagemCapa?: string;
+  modulo?: string;
 }
 
-const resourcesData: ResourceType[] = [{ id: 1, title: "Modulo" }];
+const resourcesData: Aula[] = [
+  {
+    id: 1,
+    titulo: "Modulo Inicial",
+    duracaoEstimada: 30,
+    linkConteudo: "#",
+    moduloId: 1,
+    ordem: 1,
+    tipo: "video",
+    imagemCapa: "/default-image.jpg",
+  },
+];
 
 export function HomePage() {
   const [selectedVideo, setSelectedVideo] = useState<CardVideoType | null>(
@@ -36,9 +53,6 @@ export function HomePage() {
         <header className="bg-white text-black border-b-[3px] border-primary2 sticky top-0 z-20 rounded-2xl">
           <HeaderMain selectedVideo={selectedVideo} onCloseVideo={closeVideo} />
         </header>
-        {/* <section id="top-ten" className="text-primary2 py-10">
-        <TopTen onVideoSelect={handleVideoSelect} /> 
-      </section> */}
         {headerMenuItems.map((item, index) => {
           const sectionId = item.label.toLowerCase().replace(/ /g, "-");
           let sectionContent = null;
@@ -46,7 +60,7 @@ export function HomePage() {
             sectionContent = (
               <Resource
                 key={1}
-                resource={resourcesData.find((r) => r.title === "Modulo")!}
+                resource={resourcesData[0]} 
                 onVideoSelect={handleVideoSelect}
               />
             );
