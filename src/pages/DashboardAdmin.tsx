@@ -1,8 +1,8 @@
 // import desktopImage from "../assets/LoginPage/large.jpg";
 import { Footer } from "../componets/Footer";
-import { HeaderDashboard } from "../componets/HeaderDashboard";
+import { HeaderDashboard } from "../componets/Dashboard/HeaderDashboard";
 // import { HeaderDashboard } from "../componets/HeaderDashboard";
-import { ImagemBanner } from "../componets/ImagemBanner";
+import { ImagemBanner } from "../componets/Dashboard/ImagemBanner";
 import { Navbar } from "../componets/Navbar";
 
 export function DashboardAdmin() {
@@ -18,7 +18,7 @@ export function DashboardAdmin() {
               <ImagemBanner />
               <div className="absolute top-0 left-0 w-full h-full flex flex-col md:flex-row items-start md:items-center px-0 md:px-[1rem] py-0 ">
                 <div className="rounded-xl w-full h-[100%] py-[0.5rem] md:py-[2rem] mdpx-2 flex flex-col items-start justify-start gap-3 text-white text-[14px] md:text-[17px]">
-                  <HeaderDashboard />   
+                  <HeaderDashboard />
                 </div>
               </div>
             </div>

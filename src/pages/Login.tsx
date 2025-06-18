@@ -4,7 +4,7 @@ import { useAuth } from "../context/AuthContext";
 import { NavbarLoginPage } from "../componets/NavBarLoginPage";
 import { Footer } from "../componets/Footer";
 import { post } from "../services/api";
-import { ImagemBanner } from "../componets/ImagemBanner";
+import { ImagemBanner } from "../componets/Dashboard/ImagemBanner";
 import { TextMain } from "../componets/TextMain";
 import { ButtonFly } from "../componets/ButtonFly";
 import { IoEye, IoEyeOff } from "react-icons/io5";
@@ -233,7 +233,11 @@ export default function Login() {
                     <div className="w-full text-center pt-[1rem] md:pt-[2rem] pb-[1rem] ">
                       <p>Só para estudantes da Fly</p>
                     </div>
-                    <ButtonFly text="Entrar" type="submit" aria-label="Entrar na plataforma" />
+                    <ButtonFly
+                      text="Entrar"
+                      type="submit"
+                      aria-label="Entrar na plataforma"
+                    />
                   </form>
                 </div>
               </div>
