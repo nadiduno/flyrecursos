@@ -118,6 +118,7 @@ export default function Login() {
                       </label>
                     </div>
                     <input
+                      autoFocus
                       id="email"
                       type="text"
                       placeholder="Digite seu e-mail"
@@ -147,8 +148,9 @@ export default function Login() {
                     </div>
                     <div className="relative w-full">
                       <input
+                        autoComplete="off"
                         id="senha"
-                        type={showPassword ? "text" : "senha"}
+                        type={showPassword ? "text" : "password"}
                         placeholder="Digite sua senha"
                         {...register("senha", {
                           onChange: handleInputChange,
@@ -161,10 +163,11 @@ export default function Login() {
                       <button
                         type="button"
                         onClick={togglePasswordVisibility}
-                        className="absolute inset-y-0 right-0 pr-3 flex items-center text-sm leading-5 text-gray-600 cursor-pointer"
+                        className="absolute inset-y-0 right-0 pr-3 flex items-center text-sm leading-5 text-gray-600 cursor-pointer transition-all duration-200 transform hover:scale-110"
                         aria-label={
                           showPassword ? "Esconder senha" : "Mostrar senha"
                         }
+                        aria-controls="senha"
                       >
                         {showPassword ? (
                           <span
@@ -230,7 +233,7 @@ export default function Login() {
                     <div className="w-full text-center pt-[1rem] md:pt-[2rem] pb-[1rem] ">
                       <p>Só para estudantes da Fly</p>
                     </div>
-                    <ButtonFly text="Entrar" type="submit" />
+                    <ButtonFly text="Entrar" type="submit" aria-label="Entrar na plataforma" />
                   </form>
                 </div>
               </div>
