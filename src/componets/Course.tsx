@@ -1,9 +1,9 @@
 import { CiSearch } from "react-icons/ci";
-import { CreateAccount } from "./cadastro/CreateAccount";
 import { useState } from "react";
 import { ButtonFly } from "./ButtonFly";
 import { CgAdd } from "react-icons/cg";
 import { TableCRUDCourse } from "./TableCRUDCourse";
+import CourseCreate from "./Cursos/CourseCreate";
 
 export function Course() {
   const [showCreateAccount, setShowCreateAccount] = useState(false);
@@ -55,7 +55,7 @@ export function Course() {
 
       <div className="">
         {showCreateAccount && (
-          <CreateAccount
+          <CourseCreate
             isVisible={showCreateAccount}
             setIsVisible={setShowCreateAccount}
           />

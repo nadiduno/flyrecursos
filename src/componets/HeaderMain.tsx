@@ -1,5 +1,5 @@
 import { CardVideoType } from "./CardVideo";
-import { ImagemBanner } from "./ImagemBanner";
+import { ImagemBanner } from "./Dashboard/ImagemBanner";
 import { TextMain } from "./TextMain";
 import { Video } from "./Video";
 

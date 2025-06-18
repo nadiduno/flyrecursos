@@ -1,42 +1,36 @@
 import React, { useState, useEffect } from "react";
-import AccountForm from "./AccountForm";
-import { post } from "../../services/api"; 
+import FormCourse from "./FormCourse";
+import { post } from "../../services/api";
 
-type FormData = {
-  nome: string;
-  email: string;
-  cpf: string;
-  dataNascimento: string;
-  perfil: string;
-  perfilAluno: string;
-  senha: string;
-  senha2?: string;
-};
-
-interface CreateAccountProps {
+interface CourseCreateProps {
   isVisible: boolean;
   setIsVisible: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
-export const CreateAccount: React.FC<CreateAccountProps> = ({
-  isVisible: propIsVisible,
+// Asegúrate de que este type coincida con lo que espera tu backend:
+type FormData = {
+  titulo: string;
+  descripcao: string;
+  modulosID: string[];
+  autorID: string;
+};
+
+ const CourseCreate: React.FC<CourseCreateProps> = ({
+  isVisible,
   setIsVisible,
 }) => {
   const [message, setMessage] = useState<string | null>(null);
   const [creationError, setCreationError] = useState<string | null>(null);
 
   const onSubmit = async (formData: FormData) => {
-    const data = { ...formData };
-    delete data.senha2;
-
     try {
-      await post("/alunos", data);
-      setMessage("Usuário criado com sucesso!");
+      await post("/cursos", formData); // Cambia esta ruta si es diferente
+      setMessage("Curso criado com sucesso!");
       setCreationError(null);
     } catch (error) {
       console.error(error);
       setCreationError(
-        error instanceof Error ? error.message : "Erro ao criar usuário"
+        error instanceof Error ? error.message : "Erro ao criar curso"
       );
       setMessage(null);
     }
@@ -59,17 +53,17 @@ export const CreateAccount: React.FC<CreateAccountProps> = ({
     };
   }, []);
 
-  if (!propIsVisible) return null;
+  if (!isVisible) return null;
 
   return (
     <div className="fixed inset-0 flex items-center justify-center bg-[#FFFFFFB2] z-50">
       <div className="text-xl mt-[360px] font-bold bg-[#004054] text-white w-[942px] h-[549px] rounded-[10px] mb-[400px]">
-        <p className="mt-[50px] mb-[49px] w-[236px] h-[35px] text-xl md:text-3xl lg:text-3xl mx-auto text-center font-bold font-roboto">
-          CRIAR CONTA
-        </p>
+        <h2 className="mt-[50px] mb-[49px] w-[236px] h-[35px] text-xl md:text-3xl lg:text-3xl mx-auto text-center font-bold font-roboto">
+          CRIAR CURSO
+        </h2>
 
         <div className="px-10">
-          <AccountForm
+          <FormCourse
             onSubmit={onSubmit}
             setMessage={setMessage}
             setCreationError={setCreationError}
@@ -81,3 +75,5 @@ export const CreateAccount: React.FC<CreateAccountProps> = ({
     </div>
   );
 };
+
+export default CourseCreate;

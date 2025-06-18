@@ -1,9 +1,9 @@
 import { useNavigate } from "react-router-dom";
 import { useState } from "react";
-import { Count } from "./Count";
-import { Course } from "./Course";
-import { Module } from "./Module";
-import { Lesson } from "./Lesson";
+import { Count } from "../Count";
+import { Course } from "../Course";
+import { Module } from "../Module";
+import { Lesson } from "../Lesson";
 
 export const menuItemsConfig = [
   { label: "Conta", action: "Conta" },
@@ -51,8 +51,8 @@ export function HeaderDashboard() {
                     transition-all duration-500 md:text-lg
                     ${
                       index === menuItemsConfig.length - 1
-                      ? "mb-4 md:mt-16"
-                      : ""
+                        ? "mb-4 md:mt-16"
+                        : ""
                     }
                   `}
                   onClick={() => handleMenuClick(item.action)}
