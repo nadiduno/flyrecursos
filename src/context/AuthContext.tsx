@@ -92,7 +92,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
     }
 
     const redirectToLogin = () => {
-        navigate('/login'); 
+        navigate('/'); 
     }
 
       return (<AuthContext.Provider value = {{...authState, login, logout, redirectToLogin}}>
