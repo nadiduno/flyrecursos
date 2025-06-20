@@ -69,9 +69,9 @@ export function HeaderDashboard() {
                 {conteudoHeader}
               </div>
             ) : (
-              <p className="w-full h-full rounded-lg ">
+              <div className="w-full h-full rounded-lg ">
                 <Count />
-              </p>
+              </div>
             )}
           </div>
         </div>
