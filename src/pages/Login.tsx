@@ -59,7 +59,7 @@ export default function Login() {
         senha: data.senha,
       });
 
-      // console.log("Resposta completa:", response);
+      console.log("Resposta completa:", response);
 
       // se login ok atualizar auth context provider para verificar se esta autenticado o usuario
       if (response.data?.accessToken) {
