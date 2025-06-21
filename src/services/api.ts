@@ -1,14 +1,25 @@
-import axios, { AxiosError, AxiosRequestConfig, AxiosResponse } from 'axios';
+import axios, {
+  AxiosError,
+  AxiosRequestConfig,
+  AxiosResponse
+} from 'axios';
+
+type RespostaBackend<T> = AxiosResponse<T>;
+
+interface ErroBackend {
+  error?: string;
+  message?: string;
+  [key: string]: unknown;
+}
 
 export const api = axios.create({
   baseURL: import.meta.env.VITE_BACKEND_BASE_URL,
   headers: {
-    'Content-Type': 'application/json',
+    'Content-Type': 'application/json'
   },
-  timeout: 10000,
+  timeout: 10000
 });
 
-// Interceptor para agregar token
 api.interceptors.request.use(
   (config) => {
     const token = localStorage.getItem('accessToken');
@@ -20,57 +31,56 @@ api.interceptors.request.use(
   (error) => Promise.reject(error)
 );
 
-// Interceptor de respuesta global
 api.interceptors.response.use(
   (response) => response,
-  (error) => {
-    if (error.response) {
-      console.error('Erro detalhado:', {
-        status: error.response.status,
-        data: error.response.data,
-        headers: error.response.headers,
-      });
-
-      if (error.response.status === 401) {
-        console.error('Token inválido/expirado');
-        localStorage.removeItem('accessToken');
-        // window.location.href = '/login';
-      }
+  (error: AxiosError<ErroBackend>) => {
+    if (error.response?.status === 401) {
+      console.warn('Token expirado ou inválido');
+      localStorage.removeItem('accessToken');
     }
     return Promise.reject(error);
   }
 );
 
-// 👉 Centraliza el manejo de errores
-const handleRequest = async (request: Promise<AxiosResponse>) => {
+const handleRequest = async <T>(
+  request: Promise<RespostaBackend<T>>
+):  Promise<RespostaBackend<T>> => {
   try {
-    return await request;
+    const response = await request;
+    return response;
   } catch (err) {
-    const error = err as AxiosError;
+    const error = err as AxiosError<ErroBackend>;
 
-    const statusCode = error.response?.status ?? 'sem status';
-    const url = error.config?.url ?? 'URL desconhecida';
+    if (import.meta.env.DEV) {
+      console.error('❌ Erro de requisição:', {
+        url: error.config?.url ?? 'URL desconhecida',
+        status: error.response?.status ?? 'sem status',
+        data: error.response?.data
+      });
+    }
 
-    const fallbackError = `Erro ao acessar ${url} (status: ${statusCode})`;
-    console.error('❌ Erro de requisição:', {
-      url,
-      status: statusCode,
-      data: error.response?.data,
-    });
-
-    throw new Error(fallbackError);
+    throw error; 
   }
 };
 
-// Métodos seguros
-export const post = (url: string, data?: unknown, config?: AxiosRequestConfig) =>
-  handleRequest(api.post(url, data, config));
+export const post = <T = unknown>(
+  url: string,
+  data?: unknown,
+  config?: AxiosRequestConfig
+) => handleRequest<T>(api.post<T>(url, data, config));
 
-export const get = (url: string, config?: AxiosRequestConfig) =>
-  handleRequest(api.get(url, config));
+export const get = <T = unknown>(
+  url: string,
+  config?: AxiosRequestConfig
+) => handleRequest<T>(api.get<T>(url, config));
 
-export const put = (url: string, data?: unknown, config?: AxiosRequestConfig) =>
-  handleRequest(api.put(url, data, config));
+export const put = <T = unknown>(
+  url: string,
+  data?: unknown,
+  config?: AxiosRequestConfig
+) => handleRequest<T>(api.put<T>(url, data, config));
 
-export const del = (url: string, config?: AxiosRequestConfig) =>
-  handleRequest(api.delete(url, config));
+export const del = <T = unknown>(
+  url: string,
+  config?: AxiosRequestConfig
+) => handleRequest<T>(api.delete<T>(url, config));
