@@ -1,108 +1,139 @@
-import { createContext, useContext, useState, useEffect } from "react";
+// src/context/AuthContext.tsx
+import { createContext, useContext, useState, useEffect, useCallback } from "react";
 import { useNavigate } from "react-router-dom";
-import {jwtDecode} from 'jwt-decode';
+import { jwtDecode } from 'jwt-decode';
 
-interface AuthContextType{
+interface DecodedTokenPayload {
+    sub: string;
+    exp: number;
+    iat: number;
+    iss: string;
+    authorities?: string[];
+}
+
+interface AuthContextType {
     isAuthenticated: boolean;
     isAdmin: boolean;
-    allowedCategories: string;
-    login: (token: string, expiresIn: number) => void;
+    userAuthorities: string[];
+    // allowedCategories: string; 
+    login: (token: string, expiresIn: number) => boolean;
     logout: () => void;
     redirectToLogin: () => void;
+    refreshToken: () => Promise<boolean>;
 }
 
 //context
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
 export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
+    const navigate = useNavigate();
 
-    const navigate = useNavigate(); // Initialize navigate
-    // const para verificar se o usuario esta autenticado
     const [authState, setAuthState] = useState<{
-        isAuthenticated: boolean; 
-        isAdmin: boolean; 
-        allowedCategories: string;
-    }> ({
-        isAuthenticated: false, 
-        isAdmin: false, 
-        allowedCategories: ''
-    }); 
+        isAuthenticated: boolean;
+        isAdmin: boolean;
+        userAuthorities: string[];
+        // allowedCategories: string;
+    }>({
+        isAuthenticated: false,
+        isAdmin: false,
+        userAuthorities: []
+        // allowedCategories: '' 
+    });
 
-    // verificar token no localStorage e se o token é válido
-    // se o token for válido, atualizar o estado de autenticação
-    useEffect(()=>{
-        // obter token do localStorage
-        const token = localStorage.getItem('accessToken');
-        // caso o token exista
-        if(token){
-            // verificar se o token é valido para uso ainda
-            const experationTime = localStorage.getItem('expirationTime');
-            if(experationTime && Date.now() < parseInt(experationTime)){
-                // decodificar o token para obter os dados do usuário
-                const {scope, allowedCategories} = jwtDecode<{
-                    scope: string; // ver 'admin' ou 'aluno'
-                    allowedCategories: string; // categorias permitidas dos cursos
-                }>(token);
-                //setIsAuthenticated(true);
-
-                // atualizar o estado de autenticação com os dados do token
-                setAuthState({
-                    isAuthenticated: true,
-                    isAdmin: scope === 'ADMIN', // Verifica se o usuário é admin
-                    allowedCategories: allowedCategories
-                })
-            } else{
-                logout(); 
-            }
-        }
-        else {
-            // caso o token nao exista ou seja inválido, redirecionar para a tela de login
-            redirectToLogin();
-        }
-    },[]);
-
-    const login = (token: string, expiresIn: number) => {
-        const expirationTime = Date.now() + expiresIn * 1000; // expiresIn is in seconds, convert to ms
-        localStorage.setItem('accessToken', token);
-        localStorage.setItem('expirationTime', String(expirationTime));
-        
-        // decodificar o token para obter os dados do usuário
-        const {scope, allowedCategories} = jwtDecode<{
-            scope: string;
-            allowedCategories: string;
-        }>(token);
-
-        setAuthState({
-            isAuthenticated: true,
-            isAdmin: scope === 'ADMIN', // Verifica se o usuário é admin
-            allowedCategories: allowedCategories
-        })
-
-    }
-
-    const logout = () =>{
+    // 1. Defina `logout` PRIMEIRO com useCallback
+    const logout = useCallback(() => {
         localStorage.removeItem('accessToken');
         localStorage.removeItem('expirationTime');
         setAuthState({
             isAuthenticated: false,
             isAdmin: false,
-            allowedCategories: "",
-          });
-    
-    }
+            userAuthorities: [] 
+            // allowedCategories: "",
+        });
+        navigate('/');
+    }, [navigate]); 
 
-    const redirectToLogin = () => {
-        navigate('/'); 
-    }
+    // 2. Defina `redirectToLogin` com useCallback (depende de navigate)
+    const redirectToLogin = useCallback(() => {
+        navigate('/');
+    }, [navigate]);
 
-      return (<AuthContext.Provider value = {{...authState, login, logout, redirectToLogin}}>
+    // 3. Defina `decodeAndSetAuthState` com useCallback (depende de logout)
+    const decodeAndSetAuthState = useCallback((token: string): boolean => {
+        try {
+            const decoded = jwtDecode<DecodedTokenPayload>(token);
+            // console.log("Token decodificado no AuthContext:", decoded);
+
+            const isAdminUser = decoded.authorities?.includes('ROLE_ADMIN') || false;
+            const authoritiesFromToken = decoded.authorities || [];
+
+            setAuthState({
+                isAuthenticated: true,
+                isAdmin: isAdminUser,
+                userAuthorities: authoritiesFromToken,
+                // allowedCategories: "",
+            });
+            return isAdminUser; 
+        } catch (error) {
+            console.error("Erro ao decodificar token JWT:", error);
+            logout(); 
+            return false;
+        }
+    }, [logout]); 
+
+    // 4. Defina `login` com useCallback (depende de decodeAndSetAuthState)
+    const login = useCallback((token: string, expiresIn: number): boolean => {
+        const expirationTime = Date.now() + expiresIn * 1000;
+        localStorage.setItem('accessToken', token);
+        localStorage.setItem('expirationTime', String(expirationTime));
+
+        const isUserAdmin = decodeAndSetAuthState(token);
+        return isUserAdmin;
+    }, [decodeAndSetAuthState]); 
+
+    // 5. O `useEffect` para verificar o token inicial (depende de decodeAndSetAuthState e logout)
+    useEffect(() => {
+        const token = localStorage.getItem('accessToken');
+        if (token) {
+            const expirationTime = localStorage.getItem('expirationTime');
+            // Verifica se o token ainda é válido
+            if (expirationTime && Date.now() < parseInt(expirationTime)) {
+                decodeAndSetAuthState(token);
+            } else {
+                // Se expirado, faz logout
+                logout();
+            }
+        } 
+    }, [decodeAndSetAuthState, logout, redirectToLogin]); 
+
+    const refreshToken = useCallback(async (): Promise<boolean> => {
+        // console.warn("Função refreshToken não implementada.");
+        // try {
+        //     const response = await post('/auth/refresh-token', { refreshToken: localStorage.getItem('refreshToken') });
+        //     if (response.data?.accessToken) {
+        //         login(response.data.accessToken, response.data.expiresIn);
+        //         return true;
+        //     }
+        //     logout();
+        //     return false;
+        // } catch (error) {
+        //     console.error("Erro ao refrescar token:", error);
+        //     logout();
+        //     return false;
+        // }
+        return false;
+    }, [login, logout]);
+
+    return (
+        <AuthContext.Provider value={{ ...authState, login, logout, redirectToLogin, refreshToken }}>
             {children}
-      </AuthContext.Provider>)
-}
+        </AuthContext.Provider>
+    );
+};
 
 // Hook personalizado para uso
 export const useAuth = () => {
     const context = useContext(AuthContext);
     if (!context) throw new Error("useAuth must be used within AuthProvider");
     return context;
-  };
+};

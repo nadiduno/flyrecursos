@@ -31,7 +31,7 @@ const resourcesData: Aula[] = [
   },
 ];
 
-export function HomePage() {
+export function LessonsPage() {
   const [selectedVideo, setSelectedVideo] = useState<CardVideoType | null>(
     null
   );
