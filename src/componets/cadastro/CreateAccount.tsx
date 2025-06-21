@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import AccountForm from "./AccountForm";
 import { post } from "../../services/api"; 
 import FormData from "../../types/typeFormData";
-
+import { formatarMensagemErro} from "../../utils/formatarErrors";
 
 interface CreateAccountProps {
   isVisible: boolean;
@@ -18,20 +18,24 @@ export const CreateAccount: React.FC<CreateAccountProps> = ({
 
   const onSubmit = async (formData: FormData) => {
     const data = { ...formData };
+    
+console.log("Payload:", data);
    if(data.perfil === "ALUNO"){
     try {
+      console.log("Enviando para:", import.meta.env.VITE_BACKEND_BASE_URL + "/alunos");
       await post("/alunos", data);
       setMessage("Usuário criado com sucesso!");
       setCreationError(null);
     } catch (error) {
-      console.error(error);
-      setCreationError(
-        error instanceof Error ? error.message : "Erro ao criar usuário"
-      );
-      setMessage(null);
-    }
-  } if(data.perfil === "ADMIN"){
+  console.error("Erro na criação:", error);
+ setCreationError(formatarMensagemErro(error));
+
+
+  setMessage(null);
+
+  } }if(data.perfil === "ADMIN"){
 try{
+  console.log("Enviando para:", import.meta.env.VITE_BACKEND_BASE_URL + "/admin");
    await post("/admin", data);
    setMessage("Usuario criado com sucesso!");
    setCreationError(null);
@@ -69,10 +73,14 @@ try{
   return (
     <div className="fixed inset-0 flex items-center justify-center bg-[#FFFFFFB2] z-50">
       <div className="text-xl mt-[360px] font-bold bg-[#004054] text-white w-[942px] h-[549px] rounded-[10px] mb-[400px]">
-        <p className="mt-[50px] mb-[49px] w-[236px] h-[35px] text-xl md:text-3xl lg:text-3xl mx-auto text-center font-bold font-roboto">
-          CRIAR CONTA
+        <p className="mt-[50px] mb-[49px] w-[236px] h-[50px] text-xl md:text-3xl lg:text-3xl mx-auto text-center font-bold font-roboto">
+          CRIAR CONTA {creationError?.includes("Email") && (
+  <p className="text-red-500 mt-4 text-center text-xl">
+    {creationError}
+  </p>
+)}
         </p>
-
+   
         <div className="px-10">
           <AccountForm
             onSubmit={onSubmit}
@@ -81,6 +89,7 @@ try{
             message={message}
             creationError={creationError}
           />
+      
         </div>
       </div>
     </div>
