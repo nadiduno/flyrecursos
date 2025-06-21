@@ -21,7 +21,7 @@ const AccountForm: React.FC<AccountFormProps> = ({
     handleSubmit,
     formState: { errors },
   } = useForm<FormData>();
-  
+
 const perfilSelecionado = watch("perfil")
   return (
     <form
@@ -32,7 +32,7 @@ const perfilSelecionado = watch("perfil")
         setCreationError(null);
       }}
     >
-      <div className="grid grid-cols-2 place-content-around gap-5">
+      <div className="grid grid-cols-2 place-content-around gap-5 min-h-[300px]">
         
            <div className="flex flex-col w-[400px] h-[73px] mb-[24px]">
             <label className="block h-[21px] text-lg font-normal mb-[4px] text-left">
