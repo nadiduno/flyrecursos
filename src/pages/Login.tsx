@@ -27,7 +27,7 @@ const createFormDataSchema = z.object({
     .nonempty("A senha é obrigatória.")
     .min(8, "A senha deve ter no mínimo 8 caracteres.")
     .max(15, "A senha deve ter no máximo 15 caracteres.")
-    .regex(/[A-Z]/, "A senha deve conter pelo menos uma letra maiúscula."),
+    // .regex(/[A-Z]/, "A senha deve conter pelo menos uma letra maiúscula."),
 });
 
 type FormData = z.infer<typeof createFormDataSchema>;
@@ -39,7 +39,7 @@ export default function Login() {
   const [loginError, setLoginError] = useState("");
   const [showPassword, setShowPassword] = useState(false);
 
-  const { login } = useAuth();
+  const { login} = useAuth();
 
   const {
     register,
@@ -54,23 +54,36 @@ export default function Login() {
     setLoginError("");
     try {
       //Usando Axios importado do api.ts
-      const response = await post("/auth/login", {
-        email: data.email,
-        senha: data.senha,
-      });
+      const response = await post("/auth/login", data);
 
-      console.log("Resposta completa:", response);
+      // console.log("Resposta completa:", response);
 
       // se login ok atualizar auth context provider para verificar se esta autenticado o usuario
       if (response.data?.accessToken) {
-        login(response.data.accessToken, response.data.expiresIn);
-        navigate("/dashboard");
+        const isUserAdmin = login(
+          response.data.accessToken,
+          response.data.expiresIn
+        );
+
+        // Perfil condicional
+        navigate(isUserAdmin ? "/dashboard" : "/aulas");
+
       } else {
-        setLoginError(response?.data || "Credenciais inválidas");
+        setLoginError(
+          response?.data?.message || response?.data || "Credenciais inválidas"
+        );
       }
     } catch (error: any) {
+      console.error(
+        "Erro na requisição de login:",
+        error.response?.data || error.message || error
+      );
       if (error.response?.status === 401) {
-        setLoginError(error.response?.data || "E-mail ou senha incorretos");
+        setLoginError(
+          error.response?.data?.message ||
+            error.response?.data ||
+            "E-mail ou senha incorretos"
+        );
       } else if (error.code === "ECONNABORTED") {
         setLoginError("Tempo de conexão esgotado. Tente novamente.");
       } else {
@@ -84,7 +97,6 @@ export default function Login() {
 
   const handleInputChange = () => {
     if (loginError) {
-      // Só limpa se houver um erro de login exibido
       setLoginError("");
     }
   };

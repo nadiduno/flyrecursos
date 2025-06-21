@@ -1,23 +1,23 @@
 import { Routes, Route } from "react-router-dom";
-import { HomePage } from "./pages/HomePage";
 import Login from "./pages/Login";
+import { LessonsPage } from "./pages/LessonsPage";
 import { DashboardAdmin } from "./pages/DashboardAdmin";
+
 import { ProtectedRoute } from "./ProtectedRoute";
+import { Unauthorized } from "./pages/Unauthorized ";
 
 export function Router() {
   return (
     <Routes>
       <Route path="/" element={<Login />} />
       <Route path="/login" element={<Login />} />
-      {/* <Route element={<ProtectedRoute allowedRoles={["ADMIN"]} />}>
-        console.log("É Admin")
+      <Route element={<ProtectedRoute allowedRoles={["ADMIN"]} />}>
         <Route path="/dashboard" element={<DashboardAdmin />} />
-      </Route> */}
-      <Route element={<ProtectedRoute />}>
-      <Route path="/dashboard" element={<DashboardAdmin />} />
-        <Route path="/dashboard" element={<DashboardAdmin />} />
-        <Route path="/aulas" element={<HomePage />} />
       </Route>
+      <Route element={<ProtectedRoute />}>
+        <Route path="/aulas" element={<LessonsPage />} />
+      </Route>
+      <Route path="/naoautorizado" element={<Unauthorized  />} />
     </Routes>
   );
 }
