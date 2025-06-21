@@ -1,17 +1,8 @@
 import React, { useState, useEffect } from "react";
 import AccountForm from "./AccountForm";
 import { post } from "../../services/api"; 
+import FormData from "../../types/typeFormData";
 
-type FormData = {
-  nome: string;
-  email: string;
-  cpf: string;
-  dataNascimento: string;
-  perfil: string;
-  perfilAluno: string;
-  senha: string;
-  senha2?: string;
-};
 
 interface CreateAccountProps {
   isVisible: boolean;
@@ -27,8 +18,7 @@ export const CreateAccount: React.FC<CreateAccountProps> = ({
 
   const onSubmit = async (formData: FormData) => {
     const data = { ...formData };
-    delete data.senha2;
-
+   if(data.perfil === "ALUNO"){
     try {
       await post("/alunos", data);
       setMessage("Usuário criado com sucesso!");
@@ -40,8 +30,23 @@ export const CreateAccount: React.FC<CreateAccountProps> = ({
       );
       setMessage(null);
     }
-  };
-
+  } if(data.perfil === "ADMIN"){
+try{
+   await post("/admin", data);
+   setMessage("Usuario criado com sucesso!");
+   setCreationError(null);
+}catch(error){
+ console.log(error);
+   setCreationError(
+        error instanceof Error ? error.message : "Erro ao criar usuário"
+      );
+      setMessage(null);
+}
+  }else{
+    console.log("error al criar usuario")
+  }
+   }
+    
   const handleEscape = (event: KeyboardEvent): void => {
     if (event.key === "Escape") setIsVisible(false);
   };
