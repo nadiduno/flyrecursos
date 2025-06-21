@@ -20,37 +20,39 @@ export const CreateAccount: React.FC<CreateAccountProps> = ({
     const data = { ...formData };
     
 console.log("Payload:", data);
-   if(data.perfil === "ALUNO"){
-    try {
-      console.log("Enviando para:", import.meta.env.VITE_BACKEND_BASE_URL + "/alunos");
-      await post("/alunos", data);
-      setMessage("Usuário criado com sucesso!");
-      setCreationError(null);
-    } catch (error) {
-  console.error("Erro na criação:", error);
- setCreationError(formatarMensagemErro(error));
-
-
-  setMessage(null);
-
-  } }if(data.perfil === "ADMIN"){
-try{
-  console.log("Enviando para:", import.meta.env.VITE_BACKEND_BASE_URL + "/admin");
-   await post("/admin", data);
-   setMessage("Usuario criado com sucesso!");
-   setCreationError(null);
-}catch(error){
- console.log(error);
-   setCreationError(
-        error instanceof Error ? error.message : "Erro ao criar usuário"
-      );
-      setMessage(null);
-}
-  }else{
-    console.log("error al criar usuario")
-  }
-   }
+ if (data.perfil === "ALUNO") {
+  try {
+    console.log("Enviando para:", import.meta.env.VITE_BACKEND_BASE_URL + "/alunos");
+    await post("/alunos", data);
+    setMessage("Usuário criado com sucesso!");
+    setCreationError(null);
+    setTimeout(() => {
+      setIsVisible(false)
+    }, 3000);
     
+  } catch (error) {
+    console.error("Erro na criação:", error);
+    setCreationError(formatarMensagemErro(error));
+    setMessage(null);
+  }
+} else if (data.perfil === "ADMIN") {
+  try {
+    console.log("Enviando para:", import.meta.env.VITE_BACKEND_BASE_URL + "/admin");
+    await post("/admin", data);
+    setMessage("Usuário criado com sucesso!");
+    setCreationError(null);
+    setIsVisible(false)
+  } catch (error) {
+    console.log(error);
+    setCreationError(
+      error instanceof Error ? error.message : "Erro ao criar usuário"
+    );
+    setMessage(null);
+  }
+} else {
+  console.log("Perfil inválido. Não foi possível criar o usuário.");
+}
+} 
   const handleEscape = (event: KeyboardEvent): void => {
     if (event.key === "Escape") setIsVisible(false);
   };
@@ -73,10 +75,15 @@ try{
   return (
     <div className="fixed inset-0 flex items-center justify-center bg-[#FFFFFFB2] z-50">
       <div className="text-xl mt-[360px] font-bold bg-[#004054] text-white w-[942px] h-[549px] rounded-[10px] mb-[400px]">
-        <p className="mt-[50px] mb-[49px] w-[236px] h-[50px] text-xl md:text-3xl lg:text-3xl mx-auto text-center font-bold font-roboto">
-          CRIAR CONTA {creationError?.includes("Email") && (
-  <p className="text-red-500 mt-4 text-center text-xl">
+        <p className="mt-[50px] mb-[49px] w-[300px] h-[50px] text-xl md:text-3xl lg:text-3xl mx-auto text-center font-bold font-roboto">
+          CRIAR CONTA {creationError && (
+  <p className="text-red-500 mt-3 text-center text-xl">
     {creationError}
+  </p>
+)}
+    {message && (
+  <p className="text-green-500 mt-3 text-center sm:text-xl md:text-xl">
+    {message}
   </p>
 )}
         </p>
@@ -89,7 +96,7 @@ try{
             message={message}
             creationError={creationError}
           />
-      
+  
         </div>
       </div>
     </div>
