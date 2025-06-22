@@ -48,7 +48,7 @@ const handleDelete = async (id: number) => {
       setError(null);
       const response = await get<{ content: Aluno[] }>("/alunos");
       const fetchedData = response.data.content;
-      console.log("Resposta do backend:", response);
+      // console.log("Resposta do backend:", response);
 
       setStudents(fetchedData);
       setFilteredStudents(fetchedData);
