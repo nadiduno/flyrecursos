@@ -2,7 +2,7 @@ import { CiSearch } from "react-icons/ci";
 import { useState } from "react";
 import { ButtonFly } from "./ButtonFly";
 import { CgAdd } from "react-icons/cg";
-import { TableCRUDCourse } from "./TableCRUDCourse";
+import { TableCRUDCourse } from "./tabelas/TableCRUDCourse";
 import CourseCreate from "./Cursos/CourseCreate";
 
 export function Course() {

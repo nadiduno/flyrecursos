@@ -3,7 +3,7 @@ import { CreateAccount } from "./cadastro/CreateAccount";
 import { useState } from "react";
 import { ButtonFly } from "./ButtonFly";
 import { CgAdd } from "react-icons/cg";
-import { TableCRUDModule } from "./TableCRUDModule";
+import { TableCRUDModule } from "./tabelas/TableCRUDModule";
 
 export function Module() {
   const [showCreateAccount, setShowCreateAccount] = useState(false);
