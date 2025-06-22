@@ -1,10 +1,10 @@
 import { CiSearch } from "react-icons/ci";
-import { TableCRUDCount } from "./TableCRUDCount";
+import { TableCRUDCount } from "./tabelas/TableCRUDCount";
 import { CreateAccount } from "./cadastro/CreateAccount";
 import { useState, useEffect } from "react"; // Importar useEffect
 import { ButtonFly } from "./ButtonFly";
 import { CgAdd } from "react-icons/cg";
-import { get } from "../services/api";
+import { del, get } from "../services/api";
 
 interface TableRowData {
   id: number;
@@ -12,6 +12,12 @@ interface TableRowData {
   email?: string; 
 }
 
+type Aluno = {
+  id: number;
+  nome: string; 
+  email: string; 
+  ativo: boolean 
+};
 export function Count() {
   const [showCreateAccount, setShowCreateAccount] = useState(false);
   const [students, setStudents] = useState<TableRowData[]>([]);
@@ -23,20 +29,27 @@ export function Count() {
   const handleCreateAccount = (): void => {
     setShowCreateAccount(true);
   };
-
-  const handleDelete = () => {
-    // Lógica para deletar o usuário (ex: chamada à API)
-    console.log("Usuário deletado!");
-    // fetchStudents();
-  };
+const handleDelete = async (id: number) => {
+  try {
+    await del(`/alunos/${id}`);
+    setStudents((prev) => prev.filter((student) => student.id !== id));
+    setFilteredStudents((prev) => prev.filter((student) => student.id !== id));
+    console.log("usuario deletado:" + id )
+  } catch (err) {
+    console.error("Erro ao deletar aluno:", err);
+    setError("Não foi possível deletar o aluno.");
+  }
+};
 
   // Ler data API - students
   const fetchStudents = async () => {
     try {
       setLoading(true);
       setError(null);
-      const response = await get("/alunos");
+      const response = await get<{ content: Aluno[] }>("/alunos");
       const fetchedData = response.data.content;
+      console.log("Resposta do backend:", response);
+
       setStudents(fetchedData);
       setFilteredStudents(fetchedData);
     } catch (err) {
@@ -106,12 +119,16 @@ export function Count() {
         </div>
       </div>
       <div className="h-[13rem] md:h-[19rem] lg:h-[19rem] rounded-lg border border-primary2 overflow-auto">
-        <TableCRUDCount
-          onDelete={handleDelete}
-          students={filteredStudents}
-          loading={loading}
-          error={error}
-        />
+       {error ? (
+  <div className="p-4 text-red-600 text-center">{error}</div>
+) : (
+  <TableCRUDCount
+    onDelete={handleDelete}
+    students={filteredStudents}
+    loading={loading}
+    error={null}
+  />
+)}
       </div>
 
       <div className="">
