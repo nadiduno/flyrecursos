@@ -3,6 +3,7 @@ import { useState } from "react";
 import logo from "../assets/Navi.png";
 import { CreateAccount } from "./cadastro/CreateAccount";
 import { useAuth } from "../context/AuthContext";
+import { useNavigate } from "react-router-dom";
 
 interface User {
   photoUrl?: string;
@@ -13,6 +14,8 @@ interface NavbarProps {
 }
 
 export function Navbar({ user }: NavbarProps) {
+  const navigate = useNavigate();
+
   const { isAuthenticated} = useAuth();
   const showSignupLogin = !isAuthenticated;
   const isLoggedIn = isAuthenticated;
@@ -24,7 +27,7 @@ export function Navbar({ user }: NavbarProps) {
   //   setShowCreateAccount(true);
   // };
 
-  const { logout } = useAuth();
+  const {  isAdmin, logout } = useAuth();
 
   // const handleLogin = (): void => {
   //     setIsLoggedIn(true);
@@ -45,6 +48,10 @@ export function Navbar({ user }: NavbarProps) {
   //   }
   // };
 
+  const handleDashboard = ()  => {
+    navigate("/dashboard");
+  }
+
   const toggleDropdown = (): void => {
     setIsDropdownVisible((prevState) => !prevState); // Alterna la visibilidad del menú desplegable
   };
@@ -59,16 +66,15 @@ export function Navbar({ user }: NavbarProps) {
         />
       </div>
       <div className="flex justify-end lg:w-[40%] gap-3 items-center sm:w-[85%] md:w-[60%] xs:w-[80%]">
-        {/* {isAdmin}
         {isAdmin && (
           <button
-            className="border-4 border-white px-8 py-2 rounded-3xl text-white font-bold hover:bg-yellow hover:border-yellow hover:text-black transition duration-300 sm:px-6 sm:py-2 sm:text-base"
-            onClick={handleCreateAccount}
+            className="border-2 border-secondary px-8 py-2 rounded-3xl text-primary1 font-bold hover:bg-yellow hover:border-yellow hover:text-black transition duration-300 sm:px-6 sm:py-2 sm:text-base"
+            onClick={handleDashboard}
           >
             {" "}
-            Criar Conta
+            Panel do Administrador
           </button>
-        )} */}
+        )}
         {showCreateAccount && (
           <CreateAccount
             isVisible={showCreateAccount}

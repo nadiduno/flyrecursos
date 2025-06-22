@@ -14,7 +14,7 @@ export function Router() {
       <Route element={<ProtectedRoute allowedRoles={["ADMIN"]} />}>
         <Route path="/dashboard" element={<DashboardAdmin />} />
       </Route>
-      <Route element={<ProtectedRoute />}>
+       <Route element={<ProtectedRoute allowedRoles={["ADMIN", "ALUNO"]} />}>
         <Route path="/aulas" element={<LessonsPage />} />
       </Route>
       <Route path="/naoautorizado" element={<Unauthorized  />} />

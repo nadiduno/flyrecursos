@@ -21,7 +21,7 @@ export function HeaderDashboard() {
 
   const handleMenuClick = (action: string) => {
     if (action === "Recursos") {
-      navigate("/");
+      navigate("/aulas");
     } else if (action === "Conta") {
       setConteudoHeader(<Count />); // Renderize o componente Count
     } else if (action === "Curso") {
