@@ -37,11 +37,15 @@ console.log("Payload:", data);
   }
 } else if (data.perfil === "ADMIN") {
   try {
+   // eslint-disable-next-line @typescript-eslint/no-unused-vars
+   const { dataNascimento, ...adminData } = data;
     console.log("Enviando para:", import.meta.env.VITE_BACKEND_BASE_URL + "/admin");
-    await post("/admin", data);
+    await post("/admin", adminData);
     setMessage("Usuário criado com sucesso!");
     setCreationError(null);
-    setIsVisible(false)
+     setTimeout(() => {
+      setIsVisible(false)
+    }, 3000);
   } catch (error) {
     console.log(error);
     setCreationError(
