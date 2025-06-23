@@ -197,7 +197,7 @@ const ResourceComponent = ({ resource, onVideoSelect }: ResourceProps) => {
     return (
       <div className="flex flex-col items-center justify-center h-[250px] w-full bg-white rounded-2xl mx-auto my-3">
         <div className="w-12 h-12 border-4 border-secondary border-t-transparent rounded-full animate-spin"></div>
-        <span className="text-prinary2 pt-2">Preparando o conteúdo pra você...</span>
+        <span className="text-primary2 pt-2">Preparando o conteúdo pra você...</span>
       </div>
     );
   }
