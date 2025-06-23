@@ -143,7 +143,6 @@ const ResourceComponent = ({ resource, onVideoSelect }: ResourceProps) => {
 
   useEffect(() => {
     fetchAllResources();
-    console.log("Renderizando Aula")
   }, [fetchAllResources]);
 
   useEffect(() => {
