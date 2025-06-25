@@ -1,25 +1,27 @@
 import { CiSearch } from "react-icons/ci";
 import { TableCRUDAccount } from "./TableCRUDAccount";
 import { CreateAccount } from "./CreateAccount";
-import { useState, useEffect } from "react"; // Importar useEffect
+import { useState, useEffect } from "react";
 import { ButtonFly } from "../../componets/ButtonFly";
 import { CgAdd } from "react-icons/cg";
 import { del, get } from "../../services/api";
+import toast from "react-hot-toast";
+import { EditAccount } from "./EditAccount";
 
-interface TableRowData {
-  id: number;
-  nome: string;
-  email?: string;
-}
-
-type Aluno = {
+export interface TableRowData {
   id: number;
   nome: string;
   email: string;
   ativo: boolean;
-};
+  dataNascimento: string;
+}
+
 export function Account() {
   const [showCreateAccount, setShowCreateAccount] = useState(false);
+  const [showEditAccount, setShowEditAccount] = useState(false);
+  const [selectedStudent, setSelectedStudent] = useState<TableRowData | null>(
+    null
+  );
   const [students, setStudents] = useState<TableRowData[]>([]);
   const [filteredStudents, setFilteredStudents] = useState<TableRowData[]>([]);
   const [loading, setLoading] = useState(true);
@@ -29,6 +31,8 @@ export function Account() {
   const handleCreateAccount = (): void => {
     setShowCreateAccount(true);
   };
+
+  // Eliminar
   const handleDelete = async (id: number) => {
     try {
       await del(`/alunos/${id}`);
@@ -36,9 +40,11 @@ export function Account() {
       setFilteredStudents((prev) =>
         prev.filter((student) => student.id !== id)
       );
-      console.log("usuario deletado:" + id);
+      toast.success("Usuário eliminado com sucesso!");
+      // console.log("Usuário eliminado com sucesso!:" + id);
     } catch (err) {
-      console.error("Erro ao deletar aluno:", err);
+      toast.error("Erro ao eliminar Usuário");
+      console.error("Erro ao eliminar Usuário:", err);
       setError("Não foi possível deletar o aluno.");
     }
   };
@@ -48,9 +54,9 @@ export function Account() {
     try {
       setLoading(true);
       setError(null);
-      const response = await get<{ content: Aluno[] }>("/alunos");
+      const response = await get<{ content: TableRowData[] }>("/alunos");
       const fetchedData = response.data.content;
-      // console.log("Resposta do backend:", response);
+      // console.log("Resposta do backend:", fetchedData);
 
       setStudents(fetchedData);
       setFilteredStudents(fetchedData);
@@ -85,6 +91,20 @@ export function Account() {
     handleSearch(); // Chama a buscar quando se digita
   }, [searchTerm, students]);
 
+  // Editar
+  const handleEditSuccess = () => {
+    // console.log("Edição bem-sucedida! Recarregando a lista de alunos...");
+    fetchStudents(); 
+    setShowEditAccount(false); 
+    setSelectedStudent(null); 
+  };
+
+  const handleEditAccount = (student: TableRowData): void => {
+    // console.log("Iniciando edição para o aluno:", student.nome);
+    setSelectedStudent(student); 
+    setShowEditAccount(true);
+  };
+
   return (
     <div className="w-full flex-row text-xs m-2 my-3 p-1 md:p-3 lg:p-3">
       <div className="h-[3rem] md:h-[6rem] lg:h-[6rem] rounded-lg border border-primary2">
@@ -115,7 +135,7 @@ export function Account() {
             className=" opacity-90 hover:opacity-100 cursor-pointer transition-transform duration-500"
             title="Buscar"
             aria-label="Buscar"
-            onClick={handleSearch}
+            // onClick={handleSearch}
           />
         </div>
       </div>
@@ -127,7 +147,8 @@ export function Account() {
             onDelete={handleDelete}
             students={filteredStudents}
             loading={loading}
-            error={null}
+            error={error}
+            onEdit={handleEditAccount}
           />
         )}
       </div>
@@ -137,6 +158,15 @@ export function Account() {
           <CreateAccount
             isVisible={showCreateAccount}
             setIsVisible={setShowCreateAccount}
+          />
+        )}
+
+        {showEditAccount && selectedStudent && (
+          <EditAccount
+            isVisible={showEditAccount}
+            setIsVisible={setShowEditAccount}
+            studentData={selectedStudent}
+            onEditSuccess={handleEditSuccess}
           />
         )}
       </div>

@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { CreateAccountForm } from "./CreateAccountForm";
 import { post } from "../../services/api"; 
-import FormData from "../../types/typeFormData";
+import { FormData } from "../../types/typeFormData";
 import { formatarMensagemErro} from "../../utils/formatarErrors";
 
 interface CreateAccountProps {
