@@ -1,18 +1,14 @@
 import { useState } from "react";
 import { GrEdit } from "react-icons/gr";
 import { RiDeleteBin6Line } from "react-icons/ri";
+import { TableRowData } from "./Account";
 
-interface TableRowData {
-  id: number;
-  nome: string;
-  email?: string;
-}
-
-interface TableCRUDCountProps {
+interface TableCRUDAccountProps {
   onDelete: (id: number) => void;
   students: TableRowData[];
   loading: boolean;
   error: string | null;
+  onEdit: (student: TableRowData) => void;
 }
 
 export function TableCRUDAccount({
@@ -20,7 +16,8 @@ export function TableCRUDAccount({
   students,
   loading,
   error,
-}: TableCRUDCountProps) {
+  onEdit,
+}: TableCRUDAccountProps) {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [selectedId, setSelectedId] = useState<number | null>(null);
 
@@ -81,14 +78,14 @@ export function TableCRUDAccount({
                   {row.email}
                 </td>
                 <td className="whitespace-nowrap text-right flex flex-row gap-4 py-2 px-2 justify-end">
-                  <a href="#" className="">
+                  <button onClick={() => onEdit(row)}>
                     <GrEdit
                       size={18}
                       className=" opacity-90 hover:opacity-100 hover:text-yellow cursor-pointer transition-transform duration-500"
                       title="Editar"
                       aria-label="Editar"
                     />
-                  </a>
+                  </button>
                   <button onClick={() => openModal(row.id)}>
                     <RiDeleteBin6Line
                       size={18}

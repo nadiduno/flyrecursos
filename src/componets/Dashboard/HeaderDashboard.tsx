@@ -4,6 +4,7 @@ import { Account } from "../../forms/account/Account";
 import { Course } from "../../forms/course/Course";
 import { Module } from "../../forms/module/Module";
 import { Lesson } from "../../forms/lesson/Lesson";
+import { Toaster } from 'react-hot-toast';
 
 export const menuItemsConfig = [
   { label: "Conta", action: "Conta" },
@@ -76,6 +77,7 @@ export function HeaderDashboard() {
           </div>
         </div>
       </div>
+      <Toaster />
     </div>
   );
 }

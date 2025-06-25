@@ -1,6 +1,6 @@
 import React from "react";
 import { useForm } from "react-hook-form";
-import FormData from "../../types/typeFormData";
+import { FormData } from "../../types/typeFormData";
 
 interface AccountFormProps {
   onSubmit: (data: FormData) => void;
