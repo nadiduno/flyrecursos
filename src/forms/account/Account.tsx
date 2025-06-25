@@ -1,27 +1,27 @@
 import { CiSearch } from "react-icons/ci";
-import { TableCRUDCount } from "./tabelas/TableCRUDCount";
-import { CreateAccount } from "./cadastro/CreateAccount";
+import { TableCRUDAccount } from "./TableCRUDAccount";
+import { CreateAccount } from "./CreateAccount";
 import { useState, useEffect } from "react"; // Importar useEffect
-import { ButtonFly } from "./ButtonFly";
+import { ButtonFly } from "../../componets/ButtonFly";
 import { CgAdd } from "react-icons/cg";
-import { del, get } from "../services/api";
+import { del, get } from "../../services/api";
 
 interface TableRowData {
   id: number;
   nome: string;
-  email?: string; 
+  email?: string;
 }
 
 type Aluno = {
   id: number;
-  nome: string; 
-  email: string; 
-  ativo: boolean 
+  nome: string;
+  email: string;
+  ativo: boolean;
 };
-export function Count() {
+export function Account() {
   const [showCreateAccount, setShowCreateAccount] = useState(false);
   const [students, setStudents] = useState<TableRowData[]>([]);
-  const [filteredStudents, setFilteredStudents] = useState<TableRowData[]>([]); 
+  const [filteredStudents, setFilteredStudents] = useState<TableRowData[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [searchTerm, setSearchTerm] = useState<string>("");
@@ -29,17 +29,19 @@ export function Count() {
   const handleCreateAccount = (): void => {
     setShowCreateAccount(true);
   };
-const handleDelete = async (id: number) => {
-  try {
-    await del(`/alunos/${id}`);
-    setStudents((prev) => prev.filter((student) => student.id !== id));
-    setFilteredStudents((prev) => prev.filter((student) => student.id !== id));
-    console.log("usuario deletado:" + id )
-  } catch (err) {
-    console.error("Erro ao deletar aluno:", err);
-    setError("Não foi possível deletar o aluno.");
-  }
-};
+  const handleDelete = async (id: number) => {
+    try {
+      await del(`/alunos/${id}`);
+      setStudents((prev) => prev.filter((student) => student.id !== id));
+      setFilteredStudents((prev) =>
+        prev.filter((student) => student.id !== id)
+      );
+      console.log("usuario deletado:" + id);
+    } catch (err) {
+      console.error("Erro ao deletar aluno:", err);
+      setError("Não foi possível deletar o aluno.");
+    }
+  };
 
   // Ler data API - students
   const fetchStudents = async () => {
@@ -55,7 +57,7 @@ const handleDelete = async (id: number) => {
     } catch (err) {
       console.error("Erro ao buscar alunos:", err);
       setError("Não foi possível carregar os dados dos alunos.");
-      setStudents([]); 
+      setStudents([]);
       setFilteredStudents([]);
     } finally {
       setLoading(false);
@@ -82,7 +84,6 @@ const handleDelete = async (id: number) => {
   useEffect(() => {
     handleSearch(); // Chama a buscar quando se digita
   }, [searchTerm, students]);
-
 
   return (
     <div className="w-full flex-row text-xs m-2 my-3 p-1 md:p-3 lg:p-3">
@@ -114,21 +115,21 @@ const handleDelete = async (id: number) => {
             className=" opacity-90 hover:opacity-100 cursor-pointer transition-transform duration-500"
             title="Buscar"
             aria-label="Buscar"
-            onClick={handleSearch} 
+            onClick={handleSearch}
           />
         </div>
       </div>
       <div className="h-[13rem] md:h-[19rem] lg:h-[19rem] rounded-lg border border-primary2 overflow-auto">
-       {error ? (
-  <div className="p-4 text-red-600 text-center">{error}</div>
-) : (
-  <TableCRUDCount
-    onDelete={handleDelete}
-    students={filteredStudents}
-    loading={loading}
-    error={null}
-  />
-)}
+        {error ? (
+          <div className="p-4 text-red-600 text-center">{error}</div>
+        ) : (
+          <TableCRUDAccount
+            onDelete={handleDelete}
+            students={filteredStudents}
+            loading={loading}
+            error={null}
+          />
+        )}
       </div>
 
       <div className="">

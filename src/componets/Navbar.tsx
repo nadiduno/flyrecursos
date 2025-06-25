@@ -1,7 +1,7 @@
 import { useState } from "react";
 // import { AiOutlineSearch } from "react-icons/ai";
 import logo from "../assets/Navi.png";
-import { CreateAccount } from "./cadastro/CreateAccount";
+import { CreateAccount } from "../forms/account/CreateAccount";
 import { useAuth } from "../context/AuthContext";
 import { useNavigate } from "react-router-dom";
 

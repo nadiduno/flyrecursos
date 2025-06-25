@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import AccountForm from "./AccountForm";
+import { CreateAccountForm } from "./CreateAccountForm";
 import { post } from "../../services/api"; 
 import FormData from "../../types/typeFormData";
 import { formatarMensagemErro} from "../../utils/formatarErrors";
@@ -93,7 +93,7 @@ console.log("Payload:", data);
         </p>
    
         <div className="px-10">
-          <AccountForm
+          <CreateAccountForm
             onSubmit={onSubmit}
             setMessage={setMessage}
             setCreationError={setCreationError}

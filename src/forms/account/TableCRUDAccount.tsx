@@ -9,28 +9,32 @@ interface TableRowData {
 }
 
 interface TableCRUDCountProps {
-  onDelete: (id:number) => void; 
+  onDelete: (id: number) => void;
   students: TableRowData[];
   loading: boolean;
   error: string | null;
 }
 
-export function TableCRUDCount({ onDelete, students, loading, error }: TableCRUDCountProps) {
+export function TableCRUDAccount({
+  onDelete,
+  students,
+  loading,
+  error,
+}: TableCRUDCountProps) {
   const [isModalOpen, setIsModalOpen] = useState(false);
-const [selectedId, setSelectedId] = useState<number | null>(null);
+  const [selectedId, setSelectedId] = useState<number | null>(null);
 
-const openModal = (id: number) => {
-  setSelectedId(id);
-  setIsModalOpen(true);
-};
+  const openModal = (id: number) => {
+    setSelectedId(id);
+    setIsModalOpen(true);
+  };
   const closeModal = () => setIsModalOpen(false);
 
   const confirmDelete = () => {
     if (selectedId !== null) {
-    onDelete(selectedId);
-    closeModal();
-  }
-
+      onDelete(selectedId);
+      closeModal();
+    }
   };
 
   if (loading) {
@@ -85,14 +89,14 @@ const openModal = (id: number) => {
                       aria-label="Editar"
                     />
                   </a>
-                <button onClick={() => openModal(row.id)}>
-  <RiDeleteBin6Line
-    size={18}
-    className="opacity-90 hover:opacity-100 hover:text-red-500 cursor-pointer transition-transform duration-500"
-    title="Eliminar"
-    aria-label="Eliminar"
-  />
-</button>
+                  <button onClick={() => openModal(row.id)}>
+                    <RiDeleteBin6Line
+                      size={18}
+                      className="opacity-90 hover:opacity-100 hover:text-red-500 cursor-pointer transition-transform duration-500"
+                      title="Eliminar"
+                      aria-label="Eliminar"
+                    />
+                  </button>
                 </td>
               </tr>
             ))

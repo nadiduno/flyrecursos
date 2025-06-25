@@ -1,9 +1,9 @@
 import { CiSearch } from "react-icons/ci";
-import { CreateAccount } from "./cadastro/CreateAccount";
+import { CreateAccount } from "../account/CreateAccount";
 import { useState } from "react";
-import { ButtonFly } from "./ButtonFly";
+import { ButtonFly } from "../../componets/ButtonFly";
 import { CgAdd } from "react-icons/cg";
-import { TableCRUDModule } from "./tabelas/TableCRUDModule";
+import { TableCRUDModule } from "./TableCRUDModule";
 
 export function Module() {
   const [showCreateAccount, setShowCreateAccount] = useState(false);

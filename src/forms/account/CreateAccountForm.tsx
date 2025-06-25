@@ -1,14 +1,8 @@
 import React from "react";
 import { useForm } from "react-hook-form";
+import FormData from "../../types/typeFormData";
 
-type FormData = {
-  titulo: string;
-  descripcao: string;
-  modulosID : string[];
-  autorID: string;
-};
-
-interface FormCourseProps {
+interface AccountFormProps {
   onSubmit: (data: FormData) => void;
   setMessage: (msg: string | null) => void;
   setCreationError: (msg: string | null) => void;
@@ -16,18 +10,19 @@ interface FormCourseProps {
   creationError: string | null;
 }
 
-const FormCourse: React.FC<FormCourseProps> = ({
+export const CreateAccountForm: React.FC<AccountFormProps> = ({
   onSubmit,
   setMessage,
   setCreationError,
-
 }) => {
   const {
     register,
+    watch,
     handleSubmit,
     formState: { errors },
   } = useForm<FormData>();
 
+const perfilSelecionado = watch("perfil")
   return (
     <form
       className="flex flex-col justify-center items-center"
@@ -37,77 +32,93 @@ const FormCourse: React.FC<FormCourseProps> = ({
         setCreationError(null);
       }}
     >
-      <div className="flex flex-row place-content-around gap-1">
-        <div>
-          <div className="flex flex-col w-[400px] h-[73px] mb-[24px]">
+      <div className="grid grid-cols-2 place-content-around gap-5 min-h-[300px]">
+        
+           <div className="flex flex-col w-[400px] h-[73px] mb-[24px]">
             <label className="block h-[21px] text-lg font-normal mb-[4px] text-left">
-              Titulo
+              Nome completo
             </label>
             <input
-              {...register("titulo", { required: true })}
+              {...register("nome", { required: true })}
               className="w-[400px] min-h-[50px] bg-[#EBEBF5] rounded-[5px] pl-[16px] text-black text-lg font-normal placeholder:h-[21px] border-[#0000001A] shadow-[0px_4px_4px_0px_rgba(0,0,0,0.2)] 
                  placeholder:text-[#8D8686]"
               type="text"
-              placeholder=""
+              placeholder="Digite seu nome completo"
             />
-            {errors.titulo && (
-              <p className="text-red-500 text-xs mt-1">O titulo é obrigatório</p>
+            {errors.nome && (
+              <p className="text-red-500 text-xs mt-1">O nome é obrigatório</p>
             )}
           </div>
           <div className="flex flex-col w-[400px] h-[73px] mb-[24px]">
             <label className="block h-[21px] text-lg font-normal mb-[4px] text-left">
-              Descripcao
+              E-mail
             </label>
             <input
               className="w-[400px] min-h-[50px] bg-[#EBEBF5] rounded-[5px] pl-[16px] text-black text-lg font-normal placeholder:h-[21px] border-[#0000001A] shadow-[0px_4px_4px_0px_rgba(0,0,0,0.2)] 
                  placeholder:text-[#8D8686]"
-              {...register("descripcao", { required: true })}
-              type="text"
-              placeholder=""
+              {...register("email", { required: true })}
+              type="email"
+              placeholder="Digite seu email"
             />
-            {errors.descripcao && (
+            {errors.email && (
               <p className="text-red-500 text-xs mt-1">
-                Descripcao é obrigatório
+                O e-mail é obrigatório
               </p>
             )}
           </div>
 
           <div className="flex flex-col w-[400px] h-[73px] mb-[24px]">
             <label className="block h-[21px] text-lg font-normal mb-[4px] text-left">
-              Modulos
+              CPF
             </label>
             <input
               className="w-[400px] min-h-[50px] bg-[#EBEBF5] rounded-[5px] pl-[16px] text-black text-lg font-normal placeholder:h-[21px] border-[#0000001A] shadow-[0px_4px_4px_0px_rgba(0,0,0,0.2)] 
                  placeholder:text-[#8D8686]"
-              {...register("modulosID", { required: true })}
+              {...register("cpf", { required: true })}
               type="text"
-              placeholder=""
+              placeholder="000.000.000-00"
             />
-            {errors.modulosID && (
-              <p className="text-red-500 text-xs mt-1">O modulo é obrigatório</p>
+            {errors.cpf && (
+              <p className="text-red-500 text-xs mt-1">O CPF é obrigatório</p>
             )}
           </div>
 
+        
+        
+        
           <div className="flex flex-col w-[400px] h-[73px] mb-[24px]">
             <label className="block h-[21px] text-lg font-normal mb-[4px] text-left">
-              Autor
+              Perfil da conta
             </label>
-            <input
+            <select
               className="w-[400px] min-h-[50px] bg-[#EBEBF5] rounded-[5px] pl-[16px] text-black text-lg font-normal placeholder:h-[21px] border-[#0000001A] shadow-[0px_4px_4px_0px_rgba(0,0,0,0.2)] 
                  placeholder:text-[#8D8686]"
-              {...register("autorID", { required: true })}
-             
-              type="text"
-              placeholder=""
-            />
-            {errors.autorID && (
-              <p className="text-red-500 text-xs mt-1">Falta autor do curso</p>
-            )}
+              {...register("perfil", { required: true })}
+              defaultValue={"ALUNO"}
+            >
+              <option value="ALUNO">Aluno</option>
+              <option value="ADMIN">Admin</option>
+            </select>
           </div>
+           {perfilSelecionado === "ALUNO" && (
+  <div className="flex flex-col w-[400px] h-[73px] mb-[24px]">
+    <label className="block h-[21px] text-lg font-normal mb-[4px] text-left">
+      Data de nascimento
+    </label>
+    <input
+      className="w-[400px] min-h-[50px] bg-[#EBEBF5] rounded-[5px] pl-[16px] text-black text-lg font-normal placeholder:h-[21px] border-[#0000001A] shadow-[0px_4px_4px_0px_rgba(0,0,0,0.2)] placeholder:text-[#8D8686]"
+      {...register("dataNascimento", { required: perfilSelecionado === "ALUNO" })}
+      max={new Date(Date.now() - 86400000).toISOString().split("T")[0]}
+      type="date"
+      placeholder="Digite sua data de nascimento"
+    />
+    {errors.dataNascimento && (
+      <p className="text-red-500 text-xs mt-1">A data está errada</p>
+    )}
+  </div>
+)}
         </div>
-        <div>
-        </div>
-      </div>
+     
 
       <div className="w-[942px] h-[152px] bt-[5px] rounded-b-[5px] bg-[#FFFFFF] flex justify-center items-center space-x-4">
         <button
@@ -116,7 +127,7 @@ const FormCourse: React.FC<FormCourseProps> = ({
         >
           {" "}
           <p className="h-[23px] leading-tight tracking-normal text-center font-bold text-[20px]">
-            CRIAR CURSO
+            CRIAR CONTA
           </p>
         </button>
       </div>
@@ -124,4 +135,4 @@ const FormCourse: React.FC<FormCourseProps> = ({
   );
 };
 
-export default FormCourse;
+
