@@ -1,8 +1,14 @@
 import React from "react";
 import { useForm } from "react-hook-form";
-import FormData from "../../types/typeFormData";
 
-interface AccountFormProps {
+type FormData = {
+  titulo: string;
+  descripcao: string;
+  modulosID : string[];
+  autorID: string;
+};
+
+interface FormCourseProps {
   onSubmit: (data: FormData) => void;
   setMessage: (msg: string | null) => void;
   setCreationError: (msg: string | null) => void;
@@ -10,19 +16,18 @@ interface AccountFormProps {
   creationError: string | null;
 }
 
-const AccountForm: React.FC<AccountFormProps> = ({
+export const CreateCourseForm: React.FC<FormCourseProps> = ({
   onSubmit,
   setMessage,
   setCreationError,
+
 }) => {
   const {
     register,
-    watch,
     handleSubmit,
     formState: { errors },
   } = useForm<FormData>();
 
-const perfilSelecionado = watch("perfil")
   return (
     <form
       className="flex flex-col justify-center items-center"
@@ -32,93 +37,77 @@ const perfilSelecionado = watch("perfil")
         setCreationError(null);
       }}
     >
-      <div className="grid grid-cols-2 place-content-around gap-5 min-h-[300px]">
-        
-           <div className="flex flex-col w-[400px] h-[73px] mb-[24px]">
+      <div className="flex flex-row place-content-around gap-1">
+        <div>
+          <div className="flex flex-col w-[400px] h-[73px] mb-[24px]">
             <label className="block h-[21px] text-lg font-normal mb-[4px] text-left">
-              Nome completo
+              Titulo
             </label>
             <input
-              {...register("nome", { required: true })}
+              {...register("titulo", { required: true })}
               className="w-[400px] min-h-[50px] bg-[#EBEBF5] rounded-[5px] pl-[16px] text-black text-lg font-normal placeholder:h-[21px] border-[#0000001A] shadow-[0px_4px_4px_0px_rgba(0,0,0,0.2)] 
                  placeholder:text-[#8D8686]"
               type="text"
-              placeholder="Digite seu nome completo"
+              placeholder=""
             />
-            {errors.nome && (
-              <p className="text-red-500 text-xs mt-1">O nome é obrigatório</p>
+            {errors.titulo && (
+              <p className="text-red-500 text-xs mt-1">O titulo é obrigatório</p>
             )}
           </div>
           <div className="flex flex-col w-[400px] h-[73px] mb-[24px]">
             <label className="block h-[21px] text-lg font-normal mb-[4px] text-left">
-              E-mail
+              Descripcao
             </label>
             <input
               className="w-[400px] min-h-[50px] bg-[#EBEBF5] rounded-[5px] pl-[16px] text-black text-lg font-normal placeholder:h-[21px] border-[#0000001A] shadow-[0px_4px_4px_0px_rgba(0,0,0,0.2)] 
                  placeholder:text-[#8D8686]"
-              {...register("email", { required: true })}
-              type="email"
-              placeholder="Digite seu email"
+              {...register("descripcao", { required: true })}
+              type="text"
+              placeholder=""
             />
-            {errors.email && (
+            {errors.descripcao && (
               <p className="text-red-500 text-xs mt-1">
-                O e-mail é obrigatório
+                Descripcao é obrigatório
               </p>
             )}
           </div>
 
           <div className="flex flex-col w-[400px] h-[73px] mb-[24px]">
             <label className="block h-[21px] text-lg font-normal mb-[4px] text-left">
-              CPF
+              Modulos
             </label>
             <input
               className="w-[400px] min-h-[50px] bg-[#EBEBF5] rounded-[5px] pl-[16px] text-black text-lg font-normal placeholder:h-[21px] border-[#0000001A] shadow-[0px_4px_4px_0px_rgba(0,0,0,0.2)] 
                  placeholder:text-[#8D8686]"
-              {...register("cpf", { required: true })}
+              {...register("modulosID", { required: true })}
               type="text"
-              placeholder="000.000.000-00"
+              placeholder=""
             />
-            {errors.cpf && (
-              <p className="text-red-500 text-xs mt-1">O CPF é obrigatório</p>
+            {errors.modulosID && (
+              <p className="text-red-500 text-xs mt-1">O modulo é obrigatório</p>
             )}
           </div>
 
-        
-        
-        
           <div className="flex flex-col w-[400px] h-[73px] mb-[24px]">
             <label className="block h-[21px] text-lg font-normal mb-[4px] text-left">
-              Perfil da conta
+              Autor
             </label>
-            <select
+            <input
               className="w-[400px] min-h-[50px] bg-[#EBEBF5] rounded-[5px] pl-[16px] text-black text-lg font-normal placeholder:h-[21px] border-[#0000001A] shadow-[0px_4px_4px_0px_rgba(0,0,0,0.2)] 
                  placeholder:text-[#8D8686]"
-              {...register("perfil", { required: true })}
-              defaultValue={"ALUNO"}
-            >
-              <option value="ALUNO">Aluno</option>
-              <option value="ADMIN">Admin</option>
-            </select>
+              {...register("autorID", { required: true })}
+             
+              type="text"
+              placeholder=""
+            />
+            {errors.autorID && (
+              <p className="text-red-500 text-xs mt-1">Falta autor do curso</p>
+            )}
           </div>
-           {perfilSelecionado === "ALUNO" && (
-  <div className="flex flex-col w-[400px] h-[73px] mb-[24px]">
-    <label className="block h-[21px] text-lg font-normal mb-[4px] text-left">
-      Data de nascimento
-    </label>
-    <input
-      className="w-[400px] min-h-[50px] bg-[#EBEBF5] rounded-[5px] pl-[16px] text-black text-lg font-normal placeholder:h-[21px] border-[#0000001A] shadow-[0px_4px_4px_0px_rgba(0,0,0,0.2)] placeholder:text-[#8D8686]"
-      {...register("dataNascimento", { required: perfilSelecionado === "ALUNO" })}
-      max={new Date(Date.now() - 86400000).toISOString().split("T")[0]}
-      type="date"
-      placeholder="Digite sua data de nascimento"
-    />
-    {errors.dataNascimento && (
-      <p className="text-red-500 text-xs mt-1">A data está errada</p>
-    )}
-  </div>
-)}
         </div>
-     
+        <div>
+        </div>
+      </div>
 
       <div className="w-[942px] h-[152px] bt-[5px] rounded-b-[5px] bg-[#FFFFFF] flex justify-center items-center space-x-4">
         <button
@@ -127,7 +116,7 @@ const perfilSelecionado = watch("perfil")
         >
           {" "}
           <p className="h-[23px] leading-tight tracking-normal text-center font-bold text-[20px]">
-            CRIAR CONTA
+            CRIAR CURSO
           </p>
         </button>
       </div>
@@ -135,4 +124,3 @@ const perfilSelecionado = watch("perfil")
   );
 };
 
-export default AccountForm;

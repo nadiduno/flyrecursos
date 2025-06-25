@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { CreateAccount } from "./cadastro/CreateAccount";
+import { CreateAccount } from "../forms/account/CreateAccount";
 
 const LoginPage: React.FC = () => {
   const [username, setUsername] = useState("");
