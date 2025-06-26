@@ -9,6 +9,7 @@ interface AccountFormProps {
   message: string | null;
   creationError: string | null;
   defaultData?: FormData;
+  setIsVisible: React.Dispatch<React.SetStateAction<boolean>>; 
 }
 
 export const EditAccountForm: React.FC<AccountFormProps> = ({
@@ -16,23 +17,22 @@ export const EditAccountForm: React.FC<AccountFormProps> = ({
   setMessage,
   setCreationError,
   defaultData,
+  setIsVisible
 }) => {
   const {
     register,
     handleSubmit,
     reset,
     formState: { errors },
-  } = useForm<FormData>({ defaultValues: defaultData }); 
+  } = useForm<FormData>({ defaultValues: defaultData });
 
-
- useEffect(() => {
+  useEffect(() => {
     // console.log("Formulário resetado com os novos dados padrão:", defaultData);
     reset(defaultData);
   }, [defaultData, reset]);
-  
+
   return (
     <form
-      className="flex flex-col justify-center items-center"
       onSubmit={(e) => {
         handleSubmit(onSubmit)(e);
       }}
@@ -41,76 +41,102 @@ export const EditAccountForm: React.FC<AccountFormProps> = ({
         setCreationError(null);
       }}
     >
-      <div className="grid grid-cols-2 place-content-around gap-5 min-h-[300px]">
-        <div className="flex flex-col w-[400px] h-[73px] mb-[24px]">
-          <label className="block h-[21px] text-lg font-normal mb-[4px] text-left">
-            Nome completo
-          </label>
-          <input
-            className="w-[400px] min-h-[50px] bg-[#EBEBF5] rounded-[5px] pl-[16px] text-black text-lg font-normal placeholder:h-[21px] border-[#0000001A] shadow-[0px_4px_4px_0px_rgba(0,0,0,0.2)] 
-            placeholder:text-[#8D8686]"
-            {...register("nome", { required: true })}
-            type="text"
-          />
-          {errors.nome && (
-            <p className="text-red-500 text-xs mt-1">O nome é obrigatório</p>
-          )}
+      <div className="flex flex-col justify-center items-center gap-2">
+        <p className="my-[1rem] md:mt-[3rem] text-m md:text-xl lg:text-xl mx-auto text-center font-bold ">
+          EDITAR CONTA{" "}
+        </p>
+        <div className="w-full grid md:grid-cols-2 min-h-[20rem] gap-2 md:gap-6 px-4 md:px-8 lg:px-12 items-star content-start">
+          {/* Nome */}
+          <div className="w-full flex flex-col md:flex-col">
+            <label className="w-full md:text-m py-[0.5rem] md:py-[2rem] text-left md:text-lg">
+              Nome completo
+            </label>
+            <input
+              className="w-full min-h-[2.5rem] bg-white rounded-[5px] pl-1 text-black md:text-m font-normal border-secondary shadow-[0px_4px_4px_0px_rgba(0,0,0,0.2)] 
+            placeholder:text-secondary md:text-lg"
+              {...register("nome", { required: true })}
+              type="text"
+            />
+            {errors.nome && (
+              <p className="text-red-500 text-xs mt-1">O nome é obrigatório</p>
+            )}
+          </div>
+
+          {/* E-mail */}
+          <div className="w-full flex flex-col md:flex-col">
+            <label className="w-full md:text-m py-[0.5rem] md:py-[2rem] text-left md:text-lg">
+              E-mail
+            </label>
+            <input
+              className="w-full min-h-[2.5rem] bg-white rounded-[5px] pl-1 text-black md:text-m font-normal border-secondary shadow-[0px_4px_4px_0px_rgba(0,0,0,0.2)] 
+            placeholder:text-secondary md:text-lg"
+              {...register("email", { required: true })}
+              type="email"
+            />
+            {errors.email && (
+              <p className="text-red-500 text-xs mt-1">
+                O e-mail é obrigatório
+              </p>
+            )}
+          </div>
+
+          {/* CPF */}
+          <div className="w-full flex flex-col md:flex-col">
+            <label className="w-full md:text-m py-[0.5rem] md:py-[2rem] text-left md:text-lg">
+              CPF
+            </label>
+            <input
+              className="w-full min-h-[2.5rem] bg-white rounded-[5px] pl-1 text-black md:text-m font-normal border-secondary shadow-[0px_4px_4px_0px_rgba(0,0,0,0.2)] 
+            placeholder:text-secondary md:text-lg"
+              {...register("cpf", { required: true })}
+              type="text"
+            />
+            {errors.cpf && (
+              <p className="text-red-500 text-xs mt-1">O CPF é obrigatório</p>
+            )}
+          </div>
+
+          {/* Data de nascimento */}
+          <div className="w-full flex flex-col md:flex-col">
+            <label className="w-full md:text-m py-[0.5rem] md:py-[2rem] text-left md:text-lg">
+              Data de nascimento
+            </label>
+            <input
+              className="w-full min-h-[2.5rem] bg-white rounded-[5px] pl-1 text-black md:text-m font-normal border-secondary shadow-[0px_4px_4px_0px_rgba(0,0,0,0.2)] 
+            placeholder:text-secondary md:text-lg"
+              {...register("dataNascimento", {
+                required: true,
+              })}
+              max={new Date(Date.now() - 86400000).toISOString().split("T")[0]}
+              type="date"
+            />
+            {errors.dataNascimento && (
+              <p className="text-red-500 text-xs mt-1">A data está errada</p>
+            )}
+          </div>
         </div>
-        <div className="flex flex-col w-[400px] h-[73px] mb-[24px]">
-          <label className="block h-[21px] text-lg font-normal mb-[4px] text-left">
-            E-mail
-          </label>
-          <input
-            className="w-[400px] min-h-[50px] bg-[#EBEBF5] rounded-[5px] pl-[16px] text-black text-lg font-normal placeholder:h-[21px] border-[#0000001A] shadow-[0px_4px_4px_0px_rgba(0,0,0,0.2)] 
-            placeholder:text-[#8D8686]"
-            {...register("email", { required: true })}
-            type="email"
-          />
-          {errors.email && (
-            <p className="text-red-500 text-xs mt-1">O e-mail é obrigatório</p>
-          )}
+
+        <div className="w-full h-[7rem] md:h-[9.5rem] rounded-b-[10px] bg-white flex justify-center items-center space-x-4">
+          <button
+            className="w-[8rem] md:w-[15rem] h-[3rem]  rounded-[50px]  border-secondary bg-white shadow-[0px_4px_4px_0px_rgba(0,0,0,0.2)]"
+            type="button"
+            onClick={() => setIsVisible(false)}
+          >
+            {" "}
+            <p className="leading-tight tracking-normal text-center font-bold md:text-[1.25rem] text-secondary3">
+              Canelar
+            </p>
+          </button>
+          <button
+            className="w-[8rem] md:w-[15rem] h-[3rem]  rounded-[50px] bg-primary2 shadow-[0px_4px_4px_0px_rgba(0,0,0,0.2)]"
+            type="submit"
+          >
+            {" "}
+            <p className="leading-tight tracking-normal text-center font-bold md:text-[1.25rem]">
+              Editar
+            </p>
+          </button>
         </div>
-        <div className="flex flex-col w-[400px] h-[73px] mb-[24px]">
-          <label className="block h-[21px] text-lg font-normal mb-[4px] text-left">
-            CPF
-          </label>
-          <input
-            className="w-[400px] min-h-[50px] bg-[#EBEBF5] rounded-[5px] pl-[16px] text-black text-lg font-normal placeholder:h-[21px] border-[#0000001A] shadow-[0px_4px_4px_0px_rgba(0,0,0,0.2)] 
-            placeholder:text-[#8D8686]"
-            {...register("cpf", { required: true })}
-            type="text"
-          />
-          {errors.cpf && (
-            <p className="text-red-500 text-xs mt-1">O CPF é obrigatório</p>
-          )}
-        </div>
-        <div className="flex flex-col w-[400px] h-[73px] mb-[24px]">
-          <label className="block h-[21px] text-lg font-normal mb-[4px] text-left">
-            Data de nascimento
-          </label>
-          <input
-            className="w-[400px] min-h-[50px] bg-[#EBEBF5] rounded-[5px] pl-[16px] text-black text-lg font-normal placeholder:h-[21px] border-[#0000001A] shadow-[0px_4px_4px_0px_rgba(0,0,0,0.2)] placeholder:text-[#8D8686]"
-            {...register("dataNascimento", {
-              required: true,
-            })}
-            max={new Date(Date.now() - 86400000).toISOString().split("T")[0]}
-            type="date"
-          />
-          {errors.dataNascimento && (
-            <p className="text-red-500 text-xs mt-1">A data está errada</p>
-          )}
-        </div>
-      </div>
-      <div className="w-[942px] h-[152px] bt-[5px] rounded-b-[5px] bg-[#FFFFFF] flex justify-center items-center space-x-4">
-        <button
-          className="w-[400px] min-h-[50px]  rounded-[50px] bg-[#00CAFE] shadow-[0px_4px_4px_0px_rgba(0,0,0,0.2)]"
-          type="submit"
-        >
-          {" "}
-          <p className="h-[23px] leading-tight tracking-normal text-center font-bold text-[20px]">
-            EDITAR CONTA
-          </p>
-        </button>
       </div>
     </form>
   );
