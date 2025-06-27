@@ -1,8 +1,46 @@
 import React, { useEffect } from "react";
-import { useForm } from "react-hook-form";
+import { useForm, Controller } from "react-hook-form";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { PatternFormat } from "react-number-format";
 
+//  Algoritmo de Módulo 11 - Algoritmo do dígito verificador (CPF válidos)
+const calculateDigitCPF = (
+  value: string,
+  tamanho: number,
+  pesos: number[]
+): number => {
+  let soma = 0;
+  for (let i = 1; i <= tamanho; i++) {
+    soma += Number.parseInt(value.substring(i - 1, i)) * pesos[i - 1];
+  }
+  const resto = (soma * 10) % 11;
+  return resto === 10 || resto === 11 ? 0 : resto;
+};
+
+const validateCPF = (cpf: string): boolean => {
+  const cleanedCpf: string = cpf.replace(/\D/g, "");
+  if (cleanedCpf.length !== 11) {
+    return false;
+  }
+  if (/^(\d)\1{10}$/.test(cleanedCpf)) {
+    return false;
+  }
+  const digito1 = calculateDigitCPF(
+    cleanedCpf,
+    9,
+    [10, 9, 8, 7, 6, 5, 4, 3, 2]
+  );
+  const digito2 = calculateDigitCPF(
+    cleanedCpf,
+    10,
+    [11, 10, 9, 8, 7, 6, 5, 4, 3, 2]
+  );
+  return (
+    digito1 === Number.parseInt(cleanedCpf.substring(9, 10)) &&
+    digito2 === Number.parseInt(cleanedCpf.substring(10, 11))
+  );
+};
 
 const FormDataSchema = z.object({
   // Validação com zod
@@ -22,25 +60,25 @@ const FormDataSchema = z.object({
     .string()
     .nonempty("Precisamos do CPF")
     .min(11, "O CPF deve ter no mínimo 11 caracteres.")
-    .max(14, "O CPF deve ter no máximo 50 caracteres.")
-    .regex(
-      /^\d{3}\.?\d{3}\.?\d{3}-?\d{2}$/,
-      "Formato de CPF inválido."
-    ),
+    .max(14, "O CPF deve ter no máximo 14 caracteres (com formatação).")
+    .regex(/^\d{3}\.?\d{3}\.?\d{3}-?\d{2}$/, "Formato de CPF inválido.")
+    .refine(validateCPF, {
+      message: "CPF inválido.",
+    }),
   dataNascimento: z
     .string()
     .nonempty("Precisamos do Data de nascimento")
     .refine((dateString) => {
       const today = new Date();
       const birthDate = new Date(dateString);
-      const MIN_YEAR = 1900; 
+      const MIN_YEAR = 1940;
       const MAX_YEAR = today.getFullYear() - 10;
       return (
         birthDate <= today &&
         birthDate.getFullYear() >= MIN_YEAR &&
         birthDate.getFullYear() <= MAX_YEAR
       );
-    },"Data inválida. Deve ser entre 1900 e " + (new Date().getFullYear() - 10)),
+    }, "O usuário precisa ter pelo menos 10 anos"),
 });
 
 type FormData = z.infer<typeof FormDataSchema> & {
@@ -69,10 +107,11 @@ export const EditAccountForm: React.FC<EditAccountFormProps> = ({
     register,
     handleSubmit,
     reset,
+    control,
     formState: { errors },
   } = useForm<FormData>({
     // defaultValues: defaultData,
-    resolver: zodResolver(FormDataSchema), 
+    resolver: zodResolver(FormDataSchema),
     defaultValues: defaultData || {
       nome: "",
       email: "",
@@ -113,7 +152,9 @@ export const EditAccountForm: React.FC<EditAccountFormProps> = ({
               type="text"
             />
             {errors.nome?.message && (
-              <p className="text-red-500 text-xs md:text-[1rem] mt-1 md:mt-5">{errors.nome.message}</p>
+              <p className="text-red-500 text-xs md:text-[1rem] mt-1 md:mt-5">
+                {errors.nome.message}
+              </p>
             )}
           </div>
 
@@ -138,16 +179,27 @@ export const EditAccountForm: React.FC<EditAccountFormProps> = ({
           {/* CPF */}
           <div className="w-full flex flex-col md:flex-col">
             <label className="w-full md:text-m py-[0.5rem] md:pt-[2rem] text-left md:text-lg">
-              CPF
+              CPF -{" "}
+              <span className="text-secondary text-[1rem] font-normal">
+                Ex: 999.999.999-99
+              </span>
             </label>
-            <input
-              className="w-full min-h-[2.5rem] bg-white rounded-[5px] pl-1 text-black md:text-m font-normal border-secondary shadow-[0px_4px_4px_0px_rgba(0,0,0,0.2)] 
-            placeholder:text-secondary md:text-lg"
-              {...register("cpf")}
-              type="text"
+            <Controller
+              name="cpf"
+              control={control}
+              render={({ field }) => (
+                <PatternFormat
+                  format="###.###.###-##"
+                  {...field}
+                  className="w-full min-h-[2.5rem] bg-white rounded-[5px] pl-1 text-black md:text-m font-normal border-secondary shadow-[0px_4px_4px_0px_rgba(0,0,0,0.2)] 
+              placeholder:text-secondary md:text-lg"
+                />
+              )}
             />
             {errors.cpf && (
-              <p className="text-red-500 text-xs md:text-[1rem] mt-1 md:mt-5">{errors.cpf.message}</p>
+              <p className="text-red-500 text-xs md:text-[1rem] mt-1 md:mt-5">
+                {errors.cpf.message}
+              </p>
             )}
           </div>
 
