@@ -52,7 +52,7 @@ export const EditAccount: React.FC<EditAccountProps> = ({
       // console.error("Erro na edição:", error);
       const errorMessage = formatarMensagemErro(error);
       setCreationError(errorMessage);
-      toastCustomEditError(formData.nome || "Aluno");
+      toastCustomEditError(formData.nome || "Aluno", errorMessage);
     }
   };
 
