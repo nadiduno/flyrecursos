@@ -41,7 +41,8 @@ export const toastCustomEditSuccess = (studentName: string): void => {
   ));
 };
 
-export const toastCustomEditError = (studentName: string): void => {
+export const toastCustomEditError = (studentName: string, errorMessage?: string): void => {
+  const displayMessage = errorMessage || "Não editado. Por favor, tente novamente!!!";
   toast.custom((t) => (
     <div
       className={`${
@@ -64,7 +65,7 @@ export const toastCustomEditError = (studentName: string): void => {
               </span>
             </p>
             <p className="mt-1 text-sm text-red-600">
-              Não editado. Por favor, tente novamente!!!
+              {displayMessage}
             </p>
           </div>
         </div>
