@@ -11,6 +11,11 @@ interface TableCRUDAccountProps {
   onEdit: (student: TableRowData) => void;
 }
 
+function formatarData(data: string): string {
+  const [ano, mes, dia] = data.split('-');
+  return `${dia.padStart(2, '0')}/${mes.padStart(2, '0')}/${ano}`;
+}
+
 export function TableCRUDAccount({
   onDelete,
   students,
@@ -58,6 +63,12 @@ export function TableCRUDAccount({
             <th scope="col" className="py-3 hidden md:table-cell lg:table-cell">
               E-mail
             </th>
+            <th scope="col" className="py-3 hidden md:table-cell lg:table-cell">
+              CPF
+            </th>
+            <th scope="col" className="py-3 hidden md:table-cell lg:table-cell">
+              Data de Nasc.
+            </th>
             <th scope="col" className="flex justify-end py-3 px-2">
               Ações
             </th>
@@ -74,9 +85,9 @@ export function TableCRUDAccount({
             students.map((row) => (
               <tr key={row.id}>
                 <td className="whitespace-nowrap py-2">{row.nome}</td>
-                <td className="whitespace-nowrap py-2 hidden md:table-cell lg:table-cell">
-                  {row.email}
-                </td>
+                <td className="whitespace-nowrap py-2 hidden md:table-cell lg:table-cell">{row.email}</td>
+                <td className="whitespace-nowrap py-2 hidden md:table-cell lg:table-cell">{row.cpf}</td>
+                <td className="whitespace-nowrap py-2 hidden md:table-cell lg:table-cell">{formatarData(row.dataNascimento)}</td>
                 <td className="whitespace-nowrap text-right flex flex-row gap-4 py-2 px-2 justify-end">
                   <button onClick={() => onEdit(row)}>
                     <GrEdit

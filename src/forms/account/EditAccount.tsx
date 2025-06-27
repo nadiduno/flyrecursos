@@ -32,7 +32,12 @@ export const EditAccount: React.FC<EditAccountProps> = ({
       return;
     }
 
-    const dataToUpdate = { ...formData, id: studentData.id };
+    // const dataToUpdate = { ...formData, id: studentData.id };
+     const dataToUpdate = { 
+    ...formData, 
+    id: studentData.id,
+    ativo: true // Adiciona o campo ativo com valor true
+  };
 
     try {
       // console.log("Enviando requisição PUT para /alunos com o payload:", dataToUpdate);
@@ -72,14 +77,19 @@ export const EditAccount: React.FC<EditAccountProps> = ({
 
   return (
     <div className="fixed inset-0 flex items-start justify-center bg-[#FFFFFFB2] z-50">
-      <div className="mt-[3.5rem] md:mt-[8rem] font-bold bg-primary1 text-white w-[95%] md:w-[60%] lg:w-[50%] h-[27rem] md:h-[34rem] rounded-t-[10px] shadow-2xl">
+      <div className="mt-[3rem] md:mt-[8rem] font-bold bg-primary1 text-white w-[90%] md:w-[60%] lg:w-[50%] h-[30rem] md:h-[34rem] rounded-t-[10px] shadow-2xl">
         <EditAccountForm
           onSubmit={onSubmit}
           setMessage={setMessage}
           setCreationError={setCreationError}
           message={message}
           creationError={creationError}
-          defaultData={studentData || undefined}
+          defaultData={studentData ? {
+    nome: studentData.nome,
+    email: studentData.email,
+    cpf: studentData.cpf || '',
+    dataNascimento: studentData.dataNascimento || ''
+  } : undefined}
           setIsVisible={setIsVisible}
         />
       </div>

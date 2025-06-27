@@ -12,6 +12,7 @@ export interface TableRowData {
   id: number;
   nome: string;
   email: string;
+  cpf: string;
   ativo: boolean;
   dataNascimento: string;
 }
