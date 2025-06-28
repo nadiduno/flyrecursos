@@ -1,0 +1,84 @@
+.upload-container{
+    width: 100%;
+    height: auto;
+    min-height: 100%;
+    gap: 0.5rem;
+    display: flex;
+    flex-direction: column;
+}
+.upload-container.perfil{
+    width: 100%;
+    height: auto;
+    min-height: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    position: relative;
+}
+.container-img{
+    max-width: 100%;
+    height: 50%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    object-fit: cover;
+    background-color: #888888;
+    border-radius: 8px;
+    padding: 1rem;
+}
+.container-img.perfil {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  padding:0;
+}
+.container-img img,.container-img.perfil img{
+    width: 100%;
+    height: 100%;
+    object-fit: fill;
+    border-radius: 50%;
+}
+.boton-upload{
+    width: 100%;
+    height: 50px;
+    border-radius: 8px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: #BCBCBC;
+    font-size: 20px;
+    cursor: pointer;
+    border: #BCBCBC solid 1px;
+}
+.boton-upload.perfil {
+  position: absolute;
+  bottom:0;
+  border: 0;
+  background-color: rgba(0, 0, 0, 0.623);
+  color: #c2c2c2;
+  height: 60px;
+}
+.archivo-info{
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: start;
+    flex-direction: row;
+    gap: 0.5rem;
+    font-size: 20px;
+    padding: 0 0.5rem;
+    color: #888888;
+    word-break: break-all;
+}
+.archivo-info button{
+    padding: 0;
+    align-items: center;
+    display: flex;
+    color: #888888;
+}
+.archivo-info.perfil, .boton-excluir.perfil{
+    display: none;
+}
+
+
