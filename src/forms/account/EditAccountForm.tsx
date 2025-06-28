@@ -180,7 +180,7 @@ export const EditAccountForm: React.FC<EditAccountFormProps> = ({
           <div className="w-full flex flex-col md:flex-col">
             <label className="w-full md:text-m py-[0.5rem] md:pt-[2rem] text-left md:text-lg">
               CPF -{" "}
-              <span className="text-secondary text-[1rem] font-normal">
+              <span className="text-secondary text-xs md:text-[1rem] font-normal">
                 Ex: 999.999.999-99
               </span>
             </label>
@@ -223,7 +223,7 @@ export const EditAccountForm: React.FC<EditAccountFormProps> = ({
           </div>
         </div>
 
-        <div className="w-full h-[5.5rem] md:h-[9.5rem] rounded-b-[10px] bg-white flex justify-center items-center space-x-4 mt-[1rem]">
+        <div className="w-full h-[5.5rem] md:h-[9.5rem] rounded-b-[10px] bg-white flex justify-center items-center space-x-4 mt-[1rem] border-b-[3px] border-primary2">
           <button
             className="w-[8rem] md:w-[15rem] h-[3rem]  rounded-[50px]  border-secondary bg-white shadow-[0px_4px_4px_0px_rgba(0,0,0,0.2)]  hover:bg-secondary2 hover:text-black transition-colors duration-200"
             type="button"

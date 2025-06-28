@@ -33,7 +33,7 @@ export function HeaderMain({ selectedVideo, onCloseVideo }: HeaderMainProps) {
         // Senão renderiza o conteúdo principal
         <div className="relative w-full h-full max-h-[28rem] overflow-hidden md:h-[28rem] lg:h-[28rem] rounded-2xl">
           <ImagemBanner />
-          <div className="absolute top-0 left-0 w-full h-full flex flex-col md:flex-row items-start md:items-center px-[1rem] md:px-[5rem] ld:px-[5rem] py-4 md:py-0">
+          <div className="absolute top-0 left-0 w-full h-full flex flex-col md:flex-row items-start md:items-center px-[1rem] md:px-[5rem] ld:px-[5rem] pt-4 md:py-0">
             <TextMain />
 
             <nav className="rounded-md z-20 w-full mb-4 md:mb-0">

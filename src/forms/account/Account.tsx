@@ -95,19 +95,19 @@ export function Account() {
   // Editar
   const handleEditSuccess = () => {
     // console.log("Edição bem-sucedida! Recarregando a lista de alunos...");
-    fetchStudents(); 
-    setShowEditAccount(false); 
-    setSelectedStudent(null); 
+    fetchStudents();
+    setShowEditAccount(false);
+    setSelectedStudent(null);
   };
 
   const handleEditAccount = (student: TableRowData): void => {
     // console.log("Iniciando edição para o aluno:", student.nome);
-    setSelectedStudent(student); 
+    setSelectedStudent(student);
     setShowEditAccount(true);
   };
 
   return (
-    <div className="w-full flex-row text-xs m-2 my-3 p-1 md:p-3 lg:p-3">
+    <div className="w-full flex-row text-xs my-3 p-1 md:p-3 lg:p-3">
       <div className="h-[3rem] md:h-[6rem] lg:h-[6rem] rounded-lg border border-primary2">
         <div className="flex items-center justify-between p-2 md:p-6 lg:p-6">
           <p className="text-xl font-medium">Conta</p>
@@ -126,7 +126,7 @@ export function Account() {
           <input
             type="text"
             placeholder="Digite o nome para consultar"
-            className="w-[10rem] h-[1.5rem] md:w-[20rem] md:h-[2.5rem] lg:w-[20rem] lg:h-[2.5rem] rounded-[4rem] rounded-br-none border-whitebg-white p-3 text-black"
+            className="w-[14rem] h-[1.5rem] md:w-[20rem] md:h-[2.5rem] lg:w-[20rem] lg:h-[2.5rem] rounded-[4rem] rounded-br-none border-whitebg-white p-3 text-black"
             onChange={(e) => setSearchTerm(e.target.value)} // Atualiza buscar
             value={searchTerm} // Controla o valor do input
             autoComplete="name"

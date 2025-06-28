@@ -16,7 +16,7 @@ interface NavbarProps {
 export function Navbar({ user }: NavbarProps) {
   const navigate = useNavigate();
 
-  const { isAuthenticated} = useAuth();
+  const { isAuthenticated } = useAuth();
   const showSignupLogin = !isAuthenticated;
   const isLoggedIn = isAuthenticated;
   const [showCreateAccount, setShowCreateAccount] = useState(false);
@@ -27,7 +27,7 @@ export function Navbar({ user }: NavbarProps) {
   //   setShowCreateAccount(true);
   // };
 
-  const {  isAdmin, logout } = useAuth();
+  const { isAdmin, logout } = useAuth();
 
   // const handleLogin = (): void => {
   //     setIsLoggedIn(true);
@@ -48,9 +48,9 @@ export function Navbar({ user }: NavbarProps) {
   //   }
   // };
 
-  const handleDashboard = ()  => {
+  const handleDashboard = () => {
     navigate("/dashboard");
-  }
+  };
 
   const toggleDropdown = (): void => {
     setIsDropdownVisible((prevState) => !prevState); // Alterna la visibilidad del menú desplegable
@@ -68,7 +68,7 @@ export function Navbar({ user }: NavbarProps) {
       <div className="flex justify-end lg:w-[40%] gap-3 items-center sm:w-[85%] md:w-[60%] xs:w-[80%]">
         {isAdmin && (
           <button
-            className="border-2 border-secondary px-8 py-2 rounded-3xl text-primary1 font-bold hover:bg-yellow hover:border-yellow hover:text-black transition duration-300 sm:px-6 sm:py-2 sm:text-base"
+            className="border-2 border-secondary px-3 md:px-8 py-2 rounded-3xl text-primary1 font-bold hover:bg-yellow hover:border-yellow hover:text-black transition duration-300 text-[0.75rem] md:text-[1.125rem] mt-1"
             onClick={handleDashboard}
           >
             {" "}

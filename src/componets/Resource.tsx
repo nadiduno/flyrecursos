@@ -71,6 +71,7 @@ const ResourceComponent = ({ resource, onVideoSelect }: ResourceProps) => {
   const [modulos, setModulos] = useState<{ [key: number]: string }>({});
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
+  const [showArrows, setShowArrows] = useState<boolean>(false);
 
   const scrollPerClick = 400;
 
@@ -128,10 +129,10 @@ const ResourceComponent = ({ resource, onVideoSelect }: ResourceProps) => {
 
       await fetchPromise;
     } catch (err: any) {
-      console.error("Erro ao buscar recursos:", err);
+      console.error("Erro ao buscar as aulas:", err);
       setError(
         err.message ||
-          "Não conseguimos carregar os conteúdos agora. Verifique sua conexão ou recarregue a página."
+          "Não conseguimos carregar o conteúdo agora. Verifique sua conexão ou recarregue a página."
       );
       aulasCache = null;
       modulosCache = null;
@@ -158,11 +159,27 @@ const ResourceComponent = ({ resource, onVideoSelect }: ResourceProps) => {
       );
     };
 
+    const checkArrowVisibility = () => {
+      // A condição para mostrar as setas é:
+      // A largura total do conteúdo é maior que a largura do contêiner visível
+      const contentOverflows = carousel.scrollWidth > carousel.clientWidth;
+      setShowArrows(contentOverflows);
+    };
+
     carousel.addEventListener("scroll", handleScroll);
     handleScroll(); // Verifica estado inicial
+    checkArrowVisibility(); // Verifica a visibilidade das setas na montagem e redimensionamento
+
+    const handleResize = () => {
+      checkArrowVisibility();
+      // Opcional: Reinicialize o estado de scroll para recalcular isAtStart/isAtEnd
+      handleScroll();
+    };
+    window.addEventListener("resize", handleResize);
 
     return () => {
       carousel.removeEventListener("scroll", handleScroll);
+      window.removeEventListener("resize", handleResize);
     };
   }, [aulas]);
 
@@ -197,14 +214,16 @@ const ResourceComponent = ({ resource, onVideoSelect }: ResourceProps) => {
     return (
       <div className="flex flex-col items-center justify-center h-[250px] w-full bg-white rounded-2xl mx-auto my-3">
         <div className="w-12 h-12 border-4 border-secondary border-t-transparent rounded-full animate-spin"></div>
-        <span className="text-primary2 pt-2">Preparando o conteúdo pra você...</span>
+        <span className="text-primary2 pt-2">
+          Preparando o conteúdo pra você...
+        </span>
       </div>
     );
   }
 
   if (error) {
     return (
-      <div className="flex items-center justify-center h-[250px] w-full bg-white rounded-2xl mx-auto my-3 text-secondary3">
+      <div className="flex flex-col items-center justify-center h-[250px] w-full bg-white rounded-2xl mx-auto my-3 text-secondary3">
         <div className="text-lg font-semibold">
           Opa! Não conseguimos carregar as aulas no momento.
           <br />
@@ -216,7 +235,7 @@ const ResourceComponent = ({ resource, onVideoSelect }: ResourceProps) => {
 
   if (aulas.length === 0) {
     return (
-      <div className="flex items-center justify-center h-[250px] w-full bg-white rounded-2xl mx-auto my-3 text-secondary3">
+      <div className="flex flex-col items-center justify-center h-[250px] w-full bg-white rounded-2xl mx-auto my-3 text-secondary3">
         <div className="text-lg font-semibold">
           Ainda não temos aulas disponíveis por aqui.
           <br />
@@ -228,12 +247,12 @@ const ResourceComponent = ({ resource, onVideoSelect }: ResourceProps) => {
 
   return (
     <div className="w-[90%] relative mx-auto rounded-2xl">
-      <h2 className="text-2xl pt-[0.5rem] md:px-1 md:text-3xl">
+      <h2 className="pt-[0.5rem] md:pt-[1.5rem] md:px-1 md:text-xl">
         {resource.titulo}
       </h2>
       <div
         ref={carouselRef}
-        className="h-[250px] w-full overflow-hidden whitespace-nowrap flex items-center scroll-smooth"
+        className="h-full md:h-[250px] w-full overflow-hidden whitespace-nowrap flex items-center scroll-smooth pb-1"
       >
         {aulas.map((aula) => (
           <div
@@ -255,24 +274,32 @@ const ResourceComponent = ({ resource, onVideoSelect }: ResourceProps) => {
           </div>
         ))}
       </div>
-      <button
-        onClick={sliderScrollLeft}
-        className={`absolute left-[-5%] top-[60%] transform -translate-y-1/2 bg-gray-400 text-white rounded-full w-[34px] h-[34px] flex items-center justify-center opacity-70 hover:opacity-100 transition-opacity duration-300 ${
-          isAtStart ? "hidden" : ""
-        } md:left-[-50px] ml:left-[-50px]`}
-        disabled={isAtStart}
-      >
-        <GoChevronLeft size={24} />
-      </button>
-      <button
-        onClick={slideScrollRight}
-        className={`absolute right-[-5%] top-[60%] transform -translate-y-1/2 bg-gray-400 text-white rounded-full w-[34px] h-[34px] flex items-center justify-center opacity-70 hover:opacity-100 transition-opacity duration-300 ${
-          isAtEnd ? "hidden" : ""
-        } md:right-[-50px] ml:right-[-50px]`}
-        disabled={isAtEnd}
-      >
-        <GoChevronRight size={24} />
-      </button>
+
+      {/* Botão da esquerda */}
+      {showArrows && ( // <-- A seta só é renderizada se houver overflow de conteúdo
+        <button
+          onClick={sliderScrollLeft}
+          className={`absolute left-[-5%] top-[60%] transform -translate-y-1/2 bg-gray-400 text-white rounded-full w-[34px] h-[34px] flex items-center justify-center opacity-70 hover:opacity-100 transition-opacity duration-300 ${
+            isAtStart ? "hidden" : ""
+          } md:left-[-50px] ml:left-[-50px]`}
+          disabled={isAtStart}
+        >
+          <GoChevronLeft size={24} />
+        </button>
+      )}
+
+      {/* Botão da direita */}
+      {showArrows && ( // <-- A seta só é renderizada se houver overflow de conteúdo
+        <button
+          onClick={slideScrollRight}
+          className={`absolute right-[-5%] top-[60%] transform -translate-y-1/2 bg-gray-400 text-white rounded-full w-[34px] h-[34px] flex items-center justify-center opacity-70 hover:opacity-100 transition-opacity duration-300 ${
+            isAtEnd ? "hidden" : ""
+          } md:right-[-50px] ml:right-[-50px]`}
+          disabled={isAtEnd}
+        >
+          <GoChevronRight size={24} />
+        </button>
+      )}
     </div>
   );
 };
