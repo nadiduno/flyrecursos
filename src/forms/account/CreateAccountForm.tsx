@@ -1,6 +1,6 @@
 import React from "react";
 import { useForm } from "react-hook-form";
-import FormData from "../../types/typeFormData";
+import { FormData } from "../../types/typeFormData";
 
 interface AccountFormProps {
   onSubmit: (data: FormData) => void;
@@ -10,7 +10,7 @@ interface AccountFormProps {
   creationError: string | null;
 }
 
-const AccountForm: React.FC<AccountFormProps> = ({
+export const CreateAccountForm: React.FC<AccountFormProps> = ({
   onSubmit,
   setMessage,
   setCreationError,
@@ -135,4 +135,4 @@ const perfilSelecionado = watch("perfil")
   );
 };
 
-export default AccountForm;
+

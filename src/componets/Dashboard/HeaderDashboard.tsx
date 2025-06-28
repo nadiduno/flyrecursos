@@ -1,9 +1,10 @@
 import { useNavigate } from "react-router-dom";
 import { useState } from "react";
-import { Count } from "../Count";
-import { Course } from "../Course";
-import { Module } from "../Module";
-import { Lesson } from "../Lesson";
+import { Account } from "../../forms/account/Account";
+import { Course } from "../../forms/course/Course";
+import { Module } from "../../forms/module/Module";
+import { Lesson } from "../../forms/lesson/Lesson";
+import { Toaster } from 'react-hot-toast';
 
 export const menuItemsConfig = [
   { label: "Conta", action: "Conta" },
@@ -21,9 +22,9 @@ export function HeaderDashboard() {
 
   const handleMenuClick = (action: string) => {
     if (action === "Recursos") {
-      navigate("/");
+      navigate("/aulas");
     } else if (action === "Conta") {
-      setConteudoHeader(<Count />); // Renderize o componente Count
+      setConteudoHeader(<Account />); // Renderize o componente Count
     } else if (action === "Curso") {
       setConteudoHeader(<Course />);
     } else if (action === "Modulo") {
@@ -70,12 +71,13 @@ export function HeaderDashboard() {
               </div>
             ) : (
               <div className="w-full h-full rounded-lg ">
-                <Count />
+                <Account />
               </div>
             )}
           </div>
         </div>
       </div>
+      <Toaster />
     </div>
   );
 }

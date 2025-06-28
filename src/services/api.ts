@@ -17,7 +17,7 @@ export const api = axios.create({
   headers: {
     'Content-Type': 'application/json'
   },
-  timeout: 10000
+  timeout: 30000
 });
 
 api.interceptors.request.use(
@@ -37,6 +37,7 @@ api.interceptors.response.use(
     if (error.response?.status === 401) {
       console.warn('Token expirado ou inválido');
       localStorage.removeItem('accessToken');
+      // window.location.href = '/login';
     }
     return Promise.reject(error);
   }
@@ -55,8 +56,13 @@ const handleRequest = async <T>(
       console.error('❌ Erro de requisição:', {
         url: error.config?.url ?? 'URL desconhecida',
         status: error.response?.status ?? 'sem status',
-        data: error.response?.data
+        data: error.response?.data,
+        message: error.message,
+        isTimeout: error.code === 'ECONNABORTED'
       });
+    }
+    if (error.code === 'ECONNABORTED') {
+        throw new Error('Tempo limite excedido ao conectar com o servidor. Por favor, tente novamente.');
     }
 
     throw error; 

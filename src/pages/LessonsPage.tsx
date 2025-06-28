@@ -60,7 +60,7 @@ export function LessonsPage() {
             sectionContent = (
               <Resource
                 key={1}
-                resource={resourcesData[0]} 
+                resource={resourcesData[0]}
                 onVideoSelect={handleVideoSelect}
               />
             );
@@ -70,9 +70,9 @@ export function LessonsPage() {
             <section
               key={index}
               id={sectionId}
-              className={`py-1 border-t-[3px] border-primary2 ${
+              className={`md:py-1 border-t-[3px] border-primary2 ${
                 index % 2 === 0 ? "bg-white" : "odd:bg-primary1 text-white"
-              } transition-all duration-300 hover:shadow-lg text-primary2 my-[1.5rem] rounded-2xl`}
+              } transition-all duration-300 hover:shadow-lg text-primary2 mt-[0.25rem] md:mt-[1rem] mb-[1rem] md:mb-[1.5rem] rounded-2xl`}
             >
               {sectionContent}
             </section>

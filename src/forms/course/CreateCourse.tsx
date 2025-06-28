@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
-import FormCourse from "./FormCourse";
 import { post } from "../../services/api";
+import { CreateCourseForm } from "./CreateCourseForm";
 
 interface CourseCreateProps {
   isVisible: boolean;
@@ -15,7 +15,7 @@ type FormData = {
   autorID: string;
 };
 
- const CourseCreate: React.FC<CourseCreateProps> = ({
+ export const CreateCourse: React.FC<CourseCreateProps> = ({
   isVisible,
   setIsVisible,
 }) => {
@@ -63,7 +63,7 @@ type FormData = {
         </h2>
 
         <div className="px-10">
-          <FormCourse
+          <CreateCourseForm
             onSubmit={onSubmit}
             setMessage={setMessage}
             setCreationError={setCreationError}
@@ -75,5 +75,3 @@ type FormData = {
     </div>
   );
 };
-
-export default CourseCreate;

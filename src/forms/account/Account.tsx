@@ -1,27 +1,30 @@
 import { CiSearch } from "react-icons/ci";
-import { TableCRUDCount } from "./tabelas/TableCRUDCount";
-import { CreateAccount } from "./cadastro/CreateAccount";
-import { useState, useEffect } from "react"; // Importar useEffect
-import { ButtonFly } from "./ButtonFly";
+import { TableCRUDAccount } from "./TableCRUDAccount";
+import { CreateAccount } from "./CreateAccount";
+import { useState, useEffect } from "react";
+import { ButtonFly } from "../../componets/ButtonFly";
 import { CgAdd } from "react-icons/cg";
-import { del, get } from "../services/api";
+import { del, get } from "../../services/api";
+import toast from "react-hot-toast";
+import { EditAccount } from "./EditAccount";
 
-interface TableRowData {
+export interface TableRowData {
   id: number;
   nome: string;
-  email?: string; 
+  email: string;
+  cpf: string;
+  ativo: boolean;
+  dataNascimento: string;
 }
 
-type Aluno = {
-  id: number;
-  nome: string; 
-  email: string; 
-  ativo: boolean 
-};
-export function Count() {
+export function Account() {
   const [showCreateAccount, setShowCreateAccount] = useState(false);
+  const [showEditAccount, setShowEditAccount] = useState(false);
+  const [selectedStudent, setSelectedStudent] = useState<TableRowData | null>(
+    null
+  );
   const [students, setStudents] = useState<TableRowData[]>([]);
-  const [filteredStudents, setFilteredStudents] = useState<TableRowData[]>([]); 
+  const [filteredStudents, setFilteredStudents] = useState<TableRowData[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [searchTerm, setSearchTerm] = useState<string>("");
@@ -29,33 +32,39 @@ export function Count() {
   const handleCreateAccount = (): void => {
     setShowCreateAccount(true);
   };
-const handleDelete = async (id: number) => {
-  try {
-    await del(`/alunos/${id}`);
-    setStudents((prev) => prev.filter((student) => student.id !== id));
-    setFilteredStudents((prev) => prev.filter((student) => student.id !== id));
-    console.log("usuario deletado:" + id )
-  } catch (err) {
-    console.error("Erro ao deletar aluno:", err);
-    setError("Não foi possível deletar o aluno.");
-  }
-};
+
+  // Eliminar
+  const handleDelete = async (id: number) => {
+    try {
+      await del(`/alunos/${id}`);
+      setStudents((prev) => prev.filter((student) => student.id !== id));
+      setFilteredStudents((prev) =>
+        prev.filter((student) => student.id !== id)
+      );
+      toast.success("Usuário eliminado com sucesso!");
+      // console.log("Usuário eliminado com sucesso!:" + id);
+    } catch (err) {
+      toast.error("Erro ao eliminar Usuário");
+      console.error("Erro ao eliminar Usuário:", err);
+      setError("Não foi possível deletar o aluno.");
+    }
+  };
 
   // Ler data API - students
   const fetchStudents = async () => {
     try {
       setLoading(true);
       setError(null);
-      const response = await get<{ content: Aluno[] }>("/alunos");
+      const response = await get<{ content: TableRowData[] }>("/alunos");
       const fetchedData = response.data.content;
-      console.log("Resposta do backend:", response);
+      // console.log("Resposta do backend:", fetchedData);
 
       setStudents(fetchedData);
       setFilteredStudents(fetchedData);
     } catch (err) {
       console.error("Erro ao buscar alunos:", err);
       setError("Não foi possível carregar os dados dos alunos.");
-      setStudents([]); 
+      setStudents([]);
       setFilteredStudents([]);
     } finally {
       setLoading(false);
@@ -83,9 +92,22 @@ const handleDelete = async (id: number) => {
     handleSearch(); // Chama a buscar quando se digita
   }, [searchTerm, students]);
 
+  // Editar
+  const handleEditSuccess = () => {
+    // console.log("Edição bem-sucedida! Recarregando a lista de alunos...");
+    fetchStudents();
+    setShowEditAccount(false);
+    setSelectedStudent(null);
+  };
+
+  const handleEditAccount = (student: TableRowData): void => {
+    // console.log("Iniciando edição para o aluno:", student.nome);
+    setSelectedStudent(student);
+    setShowEditAccount(true);
+  };
 
   return (
-    <div className="w-full flex-row text-xs m-2 my-3 p-1 md:p-3 lg:p-3">
+    <div className="w-full flex-row text-xs my-3 p-1 md:p-3 lg:p-3">
       <div className="h-[3rem] md:h-[6rem] lg:h-[6rem] rounded-lg border border-primary2">
         <div className="flex items-center justify-between p-2 md:p-6 lg:p-6">
           <p className="text-xl font-medium">Conta</p>
@@ -104,7 +126,7 @@ const handleDelete = async (id: number) => {
           <input
             type="text"
             placeholder="Digite o nome para consultar"
-            className="w-[10rem] h-[1.5rem] md:w-[20rem] md:h-[2.5rem] lg:w-[20rem] lg:h-[2.5rem] rounded-[4rem] rounded-br-none border-whitebg-white p-3 text-black"
+            className="w-[14rem] h-[1.5rem] md:w-[20rem] md:h-[2.5rem] lg:w-[20rem] lg:h-[2.5rem] rounded-[4rem] rounded-br-none border-whitebg-white p-3 text-black"
             onChange={(e) => setSearchTerm(e.target.value)} // Atualiza buscar
             value={searchTerm} // Controla o valor do input
             autoComplete="name"
@@ -114,21 +136,22 @@ const handleDelete = async (id: number) => {
             className=" opacity-90 hover:opacity-100 cursor-pointer transition-transform duration-500"
             title="Buscar"
             aria-label="Buscar"
-            onClick={handleSearch} 
+            // onClick={handleSearch}
           />
         </div>
       </div>
       <div className="h-[13rem] md:h-[19rem] lg:h-[19rem] rounded-lg border border-primary2 overflow-auto">
-       {error ? (
-  <div className="p-4 text-red-600 text-center">{error}</div>
-) : (
-  <TableCRUDCount
-    onDelete={handleDelete}
-    students={filteredStudents}
-    loading={loading}
-    error={null}
-  />
-)}
+        {error ? (
+          <div className="p-4 text-red-600 text-center">{error}</div>
+        ) : (
+          <TableCRUDAccount
+            onDelete={handleDelete}
+            students={filteredStudents}
+            loading={loading}
+            error={error}
+            onEdit={handleEditAccount}
+          />
+        )}
       </div>
 
       <div className="">
@@ -136,6 +159,15 @@ const handleDelete = async (id: number) => {
           <CreateAccount
             isVisible={showCreateAccount}
             setIsVisible={setShowCreateAccount}
+          />
+        )}
+
+        {showEditAccount && selectedStudent && (
+          <EditAccount
+            isVisible={showEditAccount}
+            setIsVisible={setShowEditAccount}
+            studentData={selectedStudent}
+            onEditSuccess={handleEditSuccess}
           />
         )}
       </div>

@@ -1,8 +1,8 @@
-type FormData = {
+export type FormData = {
+  id?: number;
   nome: string;
   email: string;
   cpf: string;
-  dataNascimento?: string;
-  perfil: string;
+  dataNascimento: string;
+  perfil?: string;
 };
-export default FormData;

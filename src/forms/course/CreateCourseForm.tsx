@@ -16,7 +16,7 @@ interface FormCourseProps {
   creationError: string | null;
 }
 
-const FormCourse: React.FC<FormCourseProps> = ({
+export const CreateCourseForm: React.FC<FormCourseProps> = ({
   onSubmit,
   setMessage,
   setCreationError,
@@ -124,4 +124,3 @@ const FormCourse: React.FC<FormCourseProps> = ({
   );
 };
 
-export default FormCourse;
