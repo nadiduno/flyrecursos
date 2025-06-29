@@ -1,7 +1,8 @@
 import { toast } from "react-hot-toast";
-import  NaviLogo  from "../assets/Navi.png";
+import NaviLogo from "../assets/Navi.png";
 
-export const toastCustomEditSuccess = (studentName: string): void => {
+export const toastCustomEditSuccess = (studentName: string, message?: string): void => {
+  const displayMessage = message || "Foi editado com sucesso!!!"; 
   toast.custom((t) => (
     <div
       className={`${
@@ -14,6 +15,7 @@ export const toastCustomEditSuccess = (studentName: string): void => {
             <img
               className="h-8 w-8 rounded-full"
               src={NaviLogo}
+              alt="Logo"
             />
           </div>
           <div className="ml-3 flex-1">
@@ -24,7 +26,7 @@ export const toastCustomEditSuccess = (studentName: string): void => {
               </span>
             </p>
             <p className="mt-1 text-sm text-green-900">
-              Foi editado com sucesso!!!
+              {displayMessage}
             </p>
           </div>
         </div>
@@ -55,6 +57,7 @@ export const toastCustomEditError = (studentName: string, errorMessage?: string)
             <img
               className="h-8 w-8 rounded-full"
               src={NaviLogo}
+              alt="Logo"
             />
           </div>
           <div className="ml-3 flex-1">
@@ -70,14 +73,14 @@ export const toastCustomEditError = (studentName: string, errorMessage?: string)
           </div>
         </div>
       </div>
-       <div className="flex border-m border-secondary">
+      <div className="flex border-m border-secondary">
         <button
           onClick={() => toast.dismiss(t.id)}
           className="w-full border border-transparent rounded-none rounded-r-lg p-4 flex items-center justify-center text-sm font-medium text-secondary hover:text-secondary3 focus:outline-none focus:ring-2 focus:ring-secondary"
         >
           Fechar
         </button>
-      </div>    
+      </div>    
     </div>
   ));
 };
