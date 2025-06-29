@@ -4,9 +4,9 @@ import { CreateAccount } from "./CreateAccount";
 import { useState, useEffect } from "react";
 import { ButtonFly } from "../../componets/ButtonFly";
 import { CgAdd } from "react-icons/cg";
-import { del, get } from "../../services/api";
-import toast from "react-hot-toast";
+import { get } from "../../services/api";
 import { EditAccount } from "./EditAccount";
+import { DeleteAccount } from "./DeleteAccount";
 
 export interface TableRowData {
   id: number;
@@ -20,9 +20,8 @@ export interface TableRowData {
 export function Account() {
   const [showCreateAccount, setShowCreateAccount] = useState(false);
   const [showEditAccount, setShowEditAccount] = useState(false);
-  const [selectedStudent, setSelectedStudent] = useState<TableRowData | null>(
-    null
-  );
+  const [showDeleteAccount, setShowDeleteAccount] = useState(false);
+  const [selectedStudent, setSelectedStudent] = useState<TableRowData | null>(null);
   const [students, setStudents] = useState<TableRowData[]>([]);
   const [filteredStudents, setFilteredStudents] = useState<TableRowData[]>([]);
   const [loading, setLoading] = useState(true);
@@ -34,20 +33,14 @@ export function Account() {
   };
 
   // Eliminar
-  const handleDelete = async (id: number) => {
-    try {
-      await del(`/alunos/${id}`);
-      setStudents((prev) => prev.filter((student) => student.id !== id));
-      setFilteredStudents((prev) =>
-        prev.filter((student) => student.id !== id)
-      );
-      toast.success("Usuário eliminado com sucesso!");
-      // console.log("Usuário eliminado com sucesso!:" + id);
-    } catch (err) {
-      toast.error("Erro ao eliminar Usuário");
-      console.error("Erro ao eliminar Usuário:", err);
-      setError("Não foi possível deletar o aluno.");
-    }
+  const handleDelete = (student: TableRowData): void => {
+  setSelectedStudent(student);
+  setShowDeleteAccount(true);
+};
+   const handleDeleteSuccess = () => {
+    fetchStudents(); // Recarrega a lista de alunos
+    setShowDeleteAccount(false);
+    setSelectedStudent(null);
   };
 
   // Ler data API - students
@@ -145,11 +138,11 @@ export function Account() {
           <div className="p-4 text-red-600 text-center">{error}</div>
         ) : (
           <TableCRUDAccount
+            onEdit={handleEditAccount}
             onDelete={handleDelete}
             students={filteredStudents}
             loading={loading}
             error={error}
-            onEdit={handleEditAccount}
           />
         )}
       </div>
@@ -168,6 +161,15 @@ export function Account() {
             setIsVisible={setShowEditAccount}
             studentData={selectedStudent}
             onEditSuccess={handleEditSuccess}
+          />
+        )}
+
+         {showDeleteAccount && selectedStudent && (
+          <DeleteAccount
+            isVisible={showDeleteAccount}
+            setIsVisible={setShowDeleteAccount}
+            studentData={selectedStudent}
+            onDeleteSuccess={handleDeleteSuccess}
           />
         )}
       </div>

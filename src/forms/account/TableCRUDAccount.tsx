@@ -1,14 +1,13 @@
-import { useState } from "react";
 import { GrEdit } from "react-icons/gr";
 import { RiDeleteBin6Line } from "react-icons/ri";
 import { TableRowData } from "./Account";
 
 interface TableCRUDAccountProps {
-  onDelete: (id: number) => void;
   students: TableRowData[];
   loading: boolean;
   error: string | null;
   onEdit: (student: TableRowData) => void;
+  onDelete: (student: TableRowData) => void;
 }
 
 function formatarData(data: string): string {
@@ -23,21 +22,7 @@ export function TableCRUDAccount({
   error,
   onEdit,
 }: TableCRUDAccountProps) {
-  const [isModalOpen, setIsModalOpen] = useState(false);
-  const [selectedId, setSelectedId] = useState<number | null>(null);
-
-  const openModal = (id: number) => {
-    setSelectedId(id);
-    setIsModalOpen(true);
-  };
-  const closeModal = () => setIsModalOpen(false);
-
-  const confirmDelete = () => {
-    if (selectedId !== null) {
-      onDelete(selectedId);
-      closeModal();
-    }
-  };
+  
 
   if (loading) {
     return (
@@ -110,7 +95,7 @@ export function TableCRUDAccount({
                       aria-label="Editar"
                     />
                   </button>
-                  <button onClick={() => openModal(row.id)}>
+                  <button onClick={() => onDelete(row)}>
                     <RiDeleteBin6Line
                       size={18}
                       className="opacity-90 hover:opacity-100 hover:text-red-500 cursor-pointer transition-transform duration-500"
@@ -125,29 +110,7 @@ export function TableCRUDAccount({
         </tbody>
       </table>
 
-      {isModalOpen && (
-        <div className="fixed inset-0 bg-[#FFFFFFB2] bg-opacity-50 flex items-center justify-center z-50">
-          <div className="bg-[#004054] p-6 rounded-[10px] shadow-md w-full max-w-md">
-            <p className="text-xl text-center font-normal font-roboto mb-10">
-              Tem certeza que deseja deletar o usuário?
-            </p>
-            <div className="flex justify-end space-x-4">
-              <button
-                onClick={closeModal}
-                className="px-4 py-2 text-black bg-gray-200 rounded hover:bg-gray-400"
-              >
-                Cancelar
-              </button>
-              <button
-                onClick={confirmDelete}
-                className="px-4 py-2 bg-red-600 text-white rounded hover:bg-red-700"
-              >
-                Confirmar
-              </button>
-            </div>
-          </div>
-        </div>
-      )}
+      
     </div>
   );
 }
