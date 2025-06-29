@@ -1,8 +1,14 @@
 import React, { useEffect } from "react";
 import { del } from "../../services/api";
-import { TableRowData } from "../../forms/account/Account"; // Ajuste o caminho se necessário
+import { TableRowData } from "../../forms/account/Account";
 import { DeleteAccountForm } from "./DeleteAccountForm";
-import toast from "react-hot-toast";
+import { formatarMensagemErro } from "../../utils/formatarErrors";
+import { AxiosError } from "axios";
+
+import {
+  toastCustomEditSuccess,
+  toastCustomEditError,
+} from "../../componets/ToastCustom";
 
 interface DeleteAccountProps {
   isVisible: boolean;
@@ -17,34 +23,38 @@ export const DeleteAccount: React.FC<DeleteAccountProps> = ({
   studentData,
   onDeleteSuccess,
 }) => {
-
   const handleDeleteConfirm = async () => {
     if (!studentData?.id) {
-      toast.error("ID do aluno não encontrado para exclusão.");
+      toastCustomEditError("Erro", "ID do Usuário não encontrado para exclusão.");
       setIsVisible(false);
       return;
     }
 
     try {
-      // Chama a API de exclusão
       await del(`/alunos/${studentData.id}`);
-      
-      // Notifica o sucesso
-      toast.success(`Usuário ${studentData.nome} eliminado com sucesso!`);
-      
-      // Fecha o modal e atualiza a lista de alunos
+      const nome = studentData.nome || "Usuário";
+      toastCustomEditSuccess(nome, "Foi eliminado com sucesso!");
+
       setTimeout(() => {
         onDeleteSuccess();
         setIsVisible(false);
       }, 500);
-      
+
     } catch (error) {
-      // Em caso de erro, notifica o usuário
-      toast.error("Erro ao eliminar o usuário. Por favor, tente novamente.");
-      console.error("Erro ao eliminar Usuário:", error);
+      // Tratamento de erro mais robusto com AxiosError
+      if (error instanceof AxiosError) {
+        console.error("Detalhes do erro da API (exclusão):", error.response?.data);
+        const errorMessage = error.response?.data?.message || formatarMensagemErro(error);
+        const nome = studentData.nome || "Usuário";
+        toastCustomEditError(nome, errorMessage);
+      } else {
+        const errorMessage = formatarMensagemErro(error);
+        const nome = studentData.nome || "Usuário";
+        toastCustomEditError(nome, errorMessage);
+      }
     }
   };
-  
+
   const handleCancel = () => {
     setIsVisible(false);
   };
