@@ -3,6 +3,7 @@ import { EditAccountForm } from "./EditAccountForm";
 import { put } from "../../services/api";
 import { FormData } from "../../types/typeFormData";
 import { formatarMensagemErro } from "../../utils/formatarErrors";
+import { AxiosError } from "axios";
 
 import {
   toastCustomEditSuccess,
@@ -43,16 +44,29 @@ export const EditAccount: React.FC<EditAccountProps> = ({
       // console.log("Enviando requisição PUT para /alunos com o payload:", dataToUpdate);
       await put("/alunos", dataToUpdate);
       setCreationError(null);
-      toastCustomEditSuccess(formData.nome || "Aluno");
+      toastCustomEditSuccess(formData.nome || "Usuário", "Foi editado com sucesso!");
+
       setTimeout(() => {
         onEditSuccess();
         setIsVisible(false);
       }, 1500);
+
     } catch (error) {
-      // console.error("Erro na edição:", error);
-      const errorMessage = formatarMensagemErro(error);
-      setCreationError(errorMessage);
-      toastCustomEditError(formData.nome || "Aluno", errorMessage);
+      // Tratamento de erro mais robusto com AxiosError
+      if (error instanceof AxiosError) {
+        // Loga os detalhes da resposta da API para depuração
+        console.error("Detalhes do erro da API (edição):", error.response?.data);
+        const errorMessage = error.response?.data?.message || formatarMensagemErro(error);
+        const nome = formData.nome || "Aluno";
+        toastCustomEditError(nome, errorMessage);
+        setCreationError(errorMessage);
+      } else {
+        // Caso não seja um erro do Axios (ex: erro de rede, erro de código)
+        const errorMessage = formatarMensagemErro(error);
+        const nome = formData.nome || "Aluno";
+        toastCustomEditError(nome, errorMessage);
+        setCreationError(errorMessage);
+      }
     }
   };
 
