@@ -42,9 +42,8 @@ export const CreateModule: React.FC<CreateModuleProps> = ({
       };
 
       // console.log("Enviando requisição POST para: /api/modulos com o payload:", payload);
-      const response = await post("/api/modulos", payload);
-      console.log("Resposta da API (criação de módulo):", response.data);
-
+      await post("/api/modulos", payload);
+      
       const moduleTitulo = formData.titulo || "Módulo";
       toastCustomEditSuccess(moduleTitulo, "Criado com sucesso!");
       // setMessage("Módulo criado com sucesso!");
@@ -93,7 +92,7 @@ export const CreateModule: React.FC<CreateModuleProps> = ({
 
   return (
     <div className="fixed inset-0 flex items-start justify-center bg-[#FFFFFFB2] z-50">
-      <div className="mt-[1rem] md:mt-[4rem] font-bold bg-primary1 text-white w-[90%] md:w-[70%] h-[33.5rem] md:h-[40rem] rounded-t-[10px] shadow-2xl">
+      <div className="mt-[1rem] md:mt-[4rem] font-bold bg-primary1 text-white w-[90%] md:w-[70%] h-[15rem] md:h-[20rem] rounded-t-[10px] shadow-2xl">
         <CreateModuleForm
           onSubmit={onSubmit}
           setIsVisible={setIsVisible}

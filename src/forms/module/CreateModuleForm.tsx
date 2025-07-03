@@ -57,9 +57,9 @@ export const CreateModuleForm: React.FC<EditModuleFormProps> = ({
     >
       <div className="flex flex-col justify-center items-center gap-2">
         <p className="my-[1rem] md:mt-[3rem] text-m md:text-xl lg:text-xl mx-auto text-center font-bold ">
-          EDITAR MÓDULO{" "}
+          CRIAR MÓDULO{" "}
         </p>
-        <div className="w-full grid min-h-[10rem] gap-2 md:gap-6 px-4 md:px-8 lg:px-12 items-star content-start">
+        <div className="w-full grid min-h-[10rem] gap-2 md:gap-6 px-4 md:px-8 lg:px-12 items-center content-center">
           {/* Título do Módulo */}
           <div className="w-full flex flex-col">
             <label className="w-full md:text-m p-b-[0.5rem] md:py-[0.5rem] md:pt-[2rem] text-left md:text-lg">
