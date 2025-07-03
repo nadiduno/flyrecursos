@@ -1,7 +1,7 @@
 import { toast } from "react-hot-toast";
 import NaviLogo from "../assets/Navi.png";
 
-export const toastCustomEditSuccess = (studentName: string, message?: string): void => {
+export const toastCustomSuccess = (entityType: string, entityName: string, message?: string): void => { // Adicionado entityType
   const displayMessage = message || "Foi editado com sucesso!!!"; 
   toast.custom((t) => (
     <div
@@ -20,9 +20,9 @@ export const toastCustomEditSuccess = (studentName: string, message?: string): v
           </div>
           <div className="ml-3 flex-1">
             <p className="text-sm font-medium text-secondary3">
-              Usuário{" "}
+              {entityType}{" "}
               <span className="mt-1 text-sm text-primary2">
-                {" "}{studentName}{" "}
+                {" "}{entityName}{" "}
               </span>
             </p>
             <p className="mt-1 text-sm text-green-900">
@@ -43,7 +43,7 @@ export const toastCustomEditSuccess = (studentName: string, message?: string): v
   ));
 };
 
-export const toastCustomEditError = (studentName: string, errorMessage?: string): void => {
+export const toastCustomError = (entityType: string, entityName: string, errorMessage?: string): void => {
   const displayMessage = errorMessage || "Não editado. Por favor, tente novamente!!!";
   toast.custom((t) => (
     <div
@@ -62,9 +62,9 @@ export const toastCustomEditError = (studentName: string, errorMessage?: string)
           </div>
           <div className="ml-3 flex-1">
             <p className="text-sm font-medium text-secondary3">
-              Usuário{" "}
+              {entityType}{" "}
               <span className="mt-1 text-sm text-primary2">
-                {" "}{studentName}{" "}
+                {" "}{entityName}{" "}
               </span>
             </p>
             <p className="mt-1 text-sm text-red-600">
@@ -79,11 +79,12 @@ export const toastCustomEditError = (studentName: string, errorMessage?: string)
           className="w-full border border-transparent rounded-none rounded-r-lg p-4 flex items-center justify-center text-sm font-medium text-secondary hover:text-secondary3 focus:outline-none focus:ring-2 focus:ring-secondary"
         >
           Fechar
-        </button>
-      </div>    
+        </button>    
+      </div>
     </div>
   ));
 };
+
 export function ToastCustom() {
   return <></>;
 }

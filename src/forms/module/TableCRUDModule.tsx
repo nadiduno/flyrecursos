@@ -1,7 +1,8 @@
 import { GrEdit } from "react-icons/gr";
 import { RiDeleteBin6Line } from "react-icons/ri";
 import { TableRowDataModule } from "./Module";
-interface TableCRUDModuleProps {
+
+export interface TableCRUDModuleProps {
   modules: TableRowDataModule[];
   loading: boolean;
   error: string | null;

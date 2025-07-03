@@ -6,8 +6,8 @@ import { AxiosError } from "axios";
 import { EditModuleForm } from "./EditModuleForm";
 
 import {
-  toastCustomEditSuccess,
-  toastCustomEditError,
+  toastCustomSuccess,
+  toastCustomError,
 } from "../../componets/ToastCustom";
 
 interface EditModuleProps {
@@ -29,7 +29,7 @@ export const EditModule: React.FC<EditModuleProps> = ({
   const onSubmit = async (formData: FormDataModule) => {
     // console.log("Dados do formulário:", formData);
     if (!moduleData?.id) {
-      toastCustomEditError(
+      toastCustomError(
         "Edição de Módulo",
         "ID do módulo não encontrado para edição."
       );
@@ -45,7 +45,7 @@ export const EditModule: React.FC<EditModuleProps> = ({
       // console.log("Enviando PUT para /api/modulos:", dataToUpdate);
       await put("/api/modulos", dataToUpdate);
       setCreationError(null);
-      toastCustomEditSuccess(formData.titulo || "Módulo","Foi editado com sucesso!");
+      toastCustomSuccess("Módulo", formData.titulo || "Módulo", "Foi editado com sucesso!");
 
       setTimeout(() => {
         onEditSuccess();
@@ -65,9 +65,9 @@ export const EditModule: React.FC<EditModuleProps> = ({
           error.response?.data?.message ||
           formatarMensagemErro(error);
 
-        toastCustomEditError("Edição", errorMessage);
+        toastCustomError("Módulo", formData.titulo || "Módulo", errorMessage);
       } else {
-        toastCustomEditError("Edição", formatarMensagemErro(error));
+        toastCustomError("Módulo", formData.titulo || "Módulo", formatarMensagemErro(error));
       }
     }
   };

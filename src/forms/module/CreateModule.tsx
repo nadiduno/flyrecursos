@@ -6,8 +6,8 @@ import { AxiosError } from "axios";
 import { CreateModuleForm } from "./CreateModuleForm";
 
 import {
-  toastCustomEditSuccess,
-  toastCustomEditError,
+  toastCustomSuccess,
+  toastCustomError,
 } from "../../componets/ToastCustom";
 
 interface CreateModuleProps {
@@ -45,7 +45,7 @@ export const CreateModule: React.FC<CreateModuleProps> = ({
       await post("/api/modulos", payload);
       
       const moduleTitulo = formData.titulo || "Módulo";
-      toastCustomEditSuccess(moduleTitulo, "Criado com sucesso!");
+      toastCustomSuccess("Módulo",moduleTitulo, "Criado com sucesso!");
       // setMessage("Módulo criado com sucesso!");
 
       setTimeout(() => {
@@ -61,12 +61,12 @@ export const CreateModule: React.FC<CreateModuleProps> = ({
         const errorMessage =
           error.response?.data?.message || formatarMensagemErro(error);
         const moduleTitulo = formData.titulo || "Módulo";
-        toastCustomEditError(moduleTitulo, errorMessage);
+        toastCustomError("Módulo",moduleTitulo, errorMessage);
         setCreationError(errorMessage);
       } else {
         const errorMessage = formatarMensagemErro(error);
         const moduleTitulo = formData.titulo || "Módulo";
-        toastCustomEditError(moduleTitulo, errorMessage);
+        toastCustomError("Módulo",moduleTitulo, errorMessage);
         setCreationError(errorMessage);
       }
       setMessage(null);

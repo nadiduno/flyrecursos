@@ -6,8 +6,8 @@ import { AxiosError } from "axios";
 import { DeleteModuleForm } from "./DeleteModuleForm";
 
 import {
-  toastCustomEditSuccess,
-  toastCustomEditError,
+  toastCustomSuccess,
+  toastCustomError,
 } from "../../componets/ToastCustom";
 
 interface DeleteModuleProps {
@@ -25,7 +25,7 @@ export const DeleteModule: React.FC<DeleteModuleProps> = ({
 }) => {
   const handleDeleteConfirm = async () => {
     if (!moduleData?.id) {
-      toastCustomEditError(
+      toastCustomError(
         "Módulo",
         "ID do módulo não encontrado para exclusão."
       );
@@ -40,7 +40,7 @@ export const DeleteModule: React.FC<DeleteModuleProps> = ({
       await del(`/api/modulos/${moduleData.id}`);
 
       const moduleTitle = moduleData.titulo || "Módulo";
-      toastCustomEditSuccess(moduleTitle, "Excluído com sucesso!");
+      toastCustomSuccess("Módulo",moduleTitle, "Excluído com sucesso!");
 
       setTimeout(() => {
         onDeleteSuccess();
@@ -53,11 +53,11 @@ export const DeleteModule: React.FC<DeleteModuleProps> = ({
         const errorMessage =
           error.response?.data?.message || formatarMensagemErro(error);
         const moduleTitle = moduleData.titulo || "Módulo";
-        toastCustomEditError(moduleTitle, errorMessage);
+        toastCustomError("Módulo",moduleTitle, errorMessage);
       } else {
         const errorMessage = formatarMensagemErro(error);
         const moduleTitle = moduleData.titulo || "Módulo";
-        toastCustomEditError(moduleTitle, errorMessage);
+        toastCustomError("Módulo",moduleTitle, errorMessage);
       }
     }
   };
