@@ -6,8 +6,8 @@ import { formatarMensagemErro } from "../../utils/formatarErrors";
 import { AxiosError } from "axios";
 
 import {
-  toastCustomEditSuccess,
-  toastCustomEditError,
+  toastCustomSuccess,
+  toastCustomError,
 } from "../../componets/ToastCustom";
 
 interface EditAccountProps {
@@ -29,7 +29,7 @@ export const EditAccount: React.FC<EditAccountProps> = ({
   const onSubmit = async (formData: FormData) => {
     // console.log("Dados do formulário:", formData);
     if (!studentData?.id) {
-      toastCustomEditError("ID do aluno não encontrado para edição.");
+      toastCustomError("Conta","ID do aluno não encontrado para edição.");
       return;
     }
 
@@ -44,7 +44,7 @@ export const EditAccount: React.FC<EditAccountProps> = ({
       // console.log("Enviando requisição PUT para /alunos com o payload:", dataToUpdate);
       await put("/alunos", dataToUpdate);
       setCreationError(null);
-      toastCustomEditSuccess(formData.nome || "Usuário", "Foi editado com sucesso!");
+      toastCustomSuccess("Usuário",formData.nome || "Usuário", "Foi editado com sucesso!");
 
       setTimeout(() => {
         onEditSuccess();
@@ -58,13 +58,13 @@ export const EditAccount: React.FC<EditAccountProps> = ({
         console.error("Detalhes do erro da API (edição):", error.response?.data);
         const errorMessage = error.response?.data?.message || formatarMensagemErro(error);
         const nome = formData.nome || "Aluno";
-        toastCustomEditError(nome, errorMessage);
+        toastCustomError("Usuário",nome, errorMessage);
         setCreationError(errorMessage);
       } else {
         // Caso não seja um erro do Axios (ex: erro de rede, erro de código)
         const errorMessage = formatarMensagemErro(error);
         const nome = formData.nome || "Aluno";
-        toastCustomEditError(nome, errorMessage);
+        toastCustomError("Usuário",nome, errorMessage);
         setCreationError(errorMessage);
       }
     }

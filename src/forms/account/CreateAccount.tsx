@@ -6,8 +6,8 @@ import { formatarMensagemErro} from "../../utils/formatarErrors";
 import { AxiosError } from "axios";
 
 import {
-  toastCustomEditSuccess,
-  toastCustomEditError,
+  toastCustomSuccess,
+  toastCustomError,
 } from "../../componets/ToastCustom";
 
 
@@ -39,7 +39,7 @@ export const CreateAccount: React.FC<CreateAccountProps> = ({
       dataToSend = commonData;
       // console.log("Admin", dataToSend)
     } else {
-      toastCustomEditError("Usuário", "Perfil inválido. Não foi possível criar o usuário.");
+      toastCustomError("Usuário", "Perfil inválido. Não foi possível criar o usuário.");
       return;
     }
 
@@ -51,7 +51,7 @@ export const CreateAccount: React.FC<CreateAccountProps> = ({
       console.log(response.data); 
       
       const nome = formData.nome || "Usuário";
-      toastCustomEditSuccess(nome, "Foi criado com sucesso!!!");
+      toastCustomSuccess("Usuário",nome, "Foi criado com sucesso!!!");
 
       setTimeout(() => {
         setIsVisible(false);
@@ -65,11 +65,11 @@ export const CreateAccount: React.FC<CreateAccountProps> = ({
         // console.error("Detalhes do erro da API:", error.response?.data);
         const errorMessage = error.response?.data?.message || formatarMensagemErro(error);
         const nome = formData.nome || "Usuário";
-        toastCustomEditError(nome, errorMessage);
+        toastCustomError("Usuário",nome, errorMessage);
       } else {
         const errorMessage = formatarMensagemErro(error);
         const nome = formData.nome || "Usuário";
-        toastCustomEditError(nome, errorMessage);
+        toastCustomError("Usuário",nome, errorMessage);
       }
     }
   };

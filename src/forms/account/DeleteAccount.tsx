@@ -6,8 +6,8 @@ import { formatarMensagemErro } from "../../utils/formatarErrors";
 import { AxiosError } from "axios";
 
 import {
-  toastCustomEditSuccess,
-  toastCustomEditError,
+  toastCustomSuccess,
+  toastCustomError,
 } from "../../componets/ToastCustom";
 
 interface DeleteAccountProps {
@@ -25,7 +25,7 @@ export const DeleteAccount: React.FC<DeleteAccountProps> = ({
 }) => {
   const handleDeleteConfirm = async () => {
     if (!studentData?.id) {
-      toastCustomEditError("Erro", "ID do Usuário não encontrado para exclusão.");
+      toastCustomError("Erro", "ID do Usuário não encontrado para exclusão.");
       setIsVisible(false);
       return;
     }
@@ -33,7 +33,7 @@ export const DeleteAccount: React.FC<DeleteAccountProps> = ({
     try {
       await del(`/alunos/${studentData.id}`);
       const nome = studentData.nome || "Usuário";
-      toastCustomEditSuccess(nome, "Foi eliminado com sucesso!");
+      toastCustomSuccess("Usuário",nome, "Foi eliminado com sucesso!");
 
       setTimeout(() => {
         onDeleteSuccess();
@@ -46,11 +46,11 @@ export const DeleteAccount: React.FC<DeleteAccountProps> = ({
         console.error("Detalhes do erro da API (exclusão):", error.response?.data);
         const errorMessage = error.response?.data?.message || formatarMensagemErro(error);
         const nome = studentData.nome || "Usuário";
-        toastCustomEditError(nome, errorMessage);
+        toastCustomError("Usuário",nome, errorMessage);
       } else {
         const errorMessage = formatarMensagemErro(error);
         const nome = studentData.nome || "Usuário";
-        toastCustomEditError(nome, errorMessage);
+        toastCustomError("Usuário",nome, errorMessage);
       }
     }
   };
