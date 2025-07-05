@@ -1,71 +1,73 @@
 import React, { useState, useEffect } from "react";
-import { EditAccountForm } from "./EditAccountForm";
 import { put } from "../../services/api";
-import { FormData } from "../../types/typeFormData";
+import { FormDataModule } from "../../types/typeFormData";
 import { formatarMensagemErro } from "../../utils/formatarErrors";
 import { AxiosError } from "axios";
+import { EditModuleForm } from "./EditModuleForm";
 
 import {
   toastCustomSuccess,
   toastCustomError,
 } from "../../componets/ToastCustom";
 
-interface EditAccountProps {
+interface EditModuleProps {
   isVisible: boolean;
   setIsVisible: React.Dispatch<React.SetStateAction<boolean>>;
-  studentData: FormData | null;
+  moduleData: FormDataModule | null;
   onEditSuccess: () => void;
 }
 
-export const EditAccount: React.FC<EditAccountProps> = ({
+export const EditModule: React.FC<EditModuleProps> = ({
   isVisible: propIsVisible,
   setIsVisible,
-  studentData,
+  moduleData,
   onEditSuccess,
 }) => {
   const [message, setMessage] = useState<string | null>(null);
   const [creationError, setCreationError] = useState<string | null>(null);
 
-  const onSubmit = async (formData: FormData) => {
+  const onSubmit = async (formData: FormDataModule) => {
     // console.log("Dados do formulário:", formData);
-    if (!studentData?.id) {
-      toastCustomError("Conta","ID do aluno não encontrado para edição.");
+    if (!moduleData?.id) {
+      toastCustomError(
+        "Edição de Módulo",
+        "ID do módulo não encontrado para edição."
+      );
       return;
     }
 
-    // const dataToUpdate = { ...formData, id: studentData.id };
     const dataToUpdate = {
-      ...formData,
-      id: studentData.id,
-      ativo: true, // Adiciona o campo ativo com valor true
+      id: moduleData.id,
+      titulo: formData.titulo,
     };
 
     try {
-      // console.log("Enviando requisição PUT para /alunos com o payload:", dataToUpdate);
-      await put("/alunos", dataToUpdate);
+      // console.log("Enviando PUT para /api/modulos:", dataToUpdate);
+      await put("/api/modulos", dataToUpdate);
       setCreationError(null);
-      toastCustomSuccess("Usuário",formData.nome || "Usuário", "Foi editado com sucesso!");
+      toastCustomSuccess("Módulo", formData.titulo || "Módulo", "Foi editado com sucesso!");
 
       setTimeout(() => {
         onEditSuccess();
         setIsVisible(false);
       }, 1500);
-
     } catch (error) {
       // Tratamento de erro mais robusto com AxiosError
       if (error instanceof AxiosError) {
         // Loga os detalhes da resposta da API para depuração
-        console.error("Detalhes do erro da API (edição):", error.response?.data);
-        const errorMessage = error.response?.data?.message || formatarMensagemErro(error);
-        const nome = formData.nome || "Aluno";
-        toastCustomError("Usuário",nome, errorMessage);
-        setCreationError(errorMessage);
+        console.error("Detalhes do erro:", {
+          status: error.response?.status,
+          data: error.response?.data,
+          headers: error.response?.headers,
+        });
+        const errorMessage =
+          error.response?.data?.mensagem ||
+          error.response?.data?.message ||
+          formatarMensagemErro(error);
+
+        toastCustomError("Módulo", formData.titulo || "Módulo", errorMessage);
       } else {
-        // Caso não seja um erro do Axios (ex: erro de rede, erro de código)
-        const errorMessage = formatarMensagemErro(error);
-        const nome = formData.nome || "Aluno";
-        toastCustomError("Usuário",nome, errorMessage);
-        setCreationError(errorMessage);
+        toastCustomError("Módulo", formData.titulo || "Módulo", formatarMensagemErro(error));
       }
     }
   };
@@ -91,20 +93,17 @@ export const EditAccount: React.FC<EditAccountProps> = ({
 
   return (
     <div className="fixed inset-0 flex items-start justify-center bg-[#FFFFFFB2] z-50">
-      <div className="mt-[3.25rem] md:mt-[8rem] font-bold bg-primary1 text-white w-[90%] md:w-[60%] lg:w-[50%] h-[30rem] md:h-[34rem] rounded-t-[10px] shadow-2xl">
-        <EditAccountForm
+      <div className="mt-[3.25rem] md:mt-[8rem] font-bold bg-primary1 text-white w-[90%] md:w-[60%] lg:w-[50%] h-[14rem] md:h-[20rem] rounded-t-[10px] shadow-2xl">
+        <EditModuleForm
           onSubmit={onSubmit}
           setMessage={setMessage}
           setCreationError={setCreationError}
           message={message}
           creationError={creationError}
           defaultData={
-            studentData
+            moduleData
               ? {
-                  nome: studentData.nome,
-                  email: studentData.email,
-                  cpf: studentData.cpf || "",
-                  dataNascimento: studentData.dataNascimento || "",
+                  titulo: moduleData.titulo,
                 }
               : undefined
           }

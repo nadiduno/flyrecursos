@@ -1,7 +1,8 @@
 import { toast } from "react-hot-toast";
-import  NaviLogo  from "../assets/Navi.png";
+import NaviLogo from "../assets/Navi.png";
 
-export const toastCustomEditSuccess = (studentName: string): void => {
+export const toastCustomSuccess = (entityType: string, entityName: string, message?: string): void => { // Adicionado entityType
+  const displayMessage = message || "Foi editado com sucesso!!!"; 
   toast.custom((t) => (
     <div
       className={`${
@@ -14,17 +15,18 @@ export const toastCustomEditSuccess = (studentName: string): void => {
             <img
               className="h-8 w-8 rounded-full"
               src={NaviLogo}
+              alt="Logo"
             />
           </div>
           <div className="ml-3 flex-1">
             <p className="text-sm font-medium text-secondary3">
-              Usuário{" "}
+              {entityType}{" "}
               <span className="mt-1 text-sm text-primary2">
-                {" "}{studentName}{" "}
+                {" "}{entityName}{" "}
               </span>
             </p>
             <p className="mt-1 text-sm text-green-900">
-              Foi editado com sucesso!!!
+              {displayMessage}
             </p>
           </div>
         </div>
@@ -41,7 +43,7 @@ export const toastCustomEditSuccess = (studentName: string): void => {
   ));
 };
 
-export const toastCustomEditError = (studentName: string, errorMessage?: string): void => {
+export const toastCustomError = (entityType: string, entityName: string, errorMessage?: string): void => {
   const displayMessage = errorMessage || "Não editado. Por favor, tente novamente!!!";
   toast.custom((t) => (
     <div
@@ -55,13 +57,14 @@ export const toastCustomEditError = (studentName: string, errorMessage?: string)
             <img
               className="h-8 w-8 rounded-full"
               src={NaviLogo}
+              alt="Logo"
             />
           </div>
           <div className="ml-3 flex-1">
             <p className="text-sm font-medium text-secondary3">
-              Usuário{" "}
+              {entityType}{" "}
               <span className="mt-1 text-sm text-primary2">
-                {" "}{studentName}{" "}
+                {" "}{entityName}{" "}
               </span>
             </p>
             <p className="mt-1 text-sm text-red-600">
@@ -70,17 +73,18 @@ export const toastCustomEditError = (studentName: string, errorMessage?: string)
           </div>
         </div>
       </div>
-       <div className="flex border-m border-secondary">
+      <div className="flex border-m border-secondary">
         <button
           onClick={() => toast.dismiss(t.id)}
           className="w-full border border-transparent rounded-none rounded-r-lg p-4 flex items-center justify-center text-sm font-medium text-secondary hover:text-secondary3 focus:outline-none focus:ring-2 focus:ring-secondary"
         >
           Fechar
-        </button>
-      </div>    
+        </button>    
+      </div>
     </div>
   ));
 };
+
 export function ToastCustom() {
   return <></>;
 }

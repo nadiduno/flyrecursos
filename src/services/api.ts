@@ -53,7 +53,7 @@ const handleRequest = async <T>(
     const error = err as AxiosError<ErroBackend>;
 
     if (import.meta.env.DEV) {
-      console.error('❌ Erro de requisição:', {
+      console.error('Erro de requisição:', {
         url: error.config?.url ?? 'URL desconhecida',
         status: error.response?.status ?? 'sem status',
         data: error.response?.data,
