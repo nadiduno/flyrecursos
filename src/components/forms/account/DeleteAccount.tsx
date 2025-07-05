@@ -1,63 +1,56 @@
 import React, { useEffect } from "react";
-import { del } from "../../services/api";
-import { TableRowDataModule } from "./Module";
-import { formatarMensagemErro } from "../../utils/formatarErrors";
+import { del } from "../../../services/api";
+import { TableRowData } from "./Account";
+import { DeleteAccountForm } from "./DeleteAccountForm";
+import { formatarMensagemErro } from "../../../utils/formatarErrors";
 import { AxiosError } from "axios";
-import { DeleteModuleForm } from "./DeleteModuleForm";
 
-import {
-  toastCustomSuccess,
-  toastCustomError,
-} from "../../componets/ToastCustom";
+import { toastCustomSuccess, toastCustomError } from "../../ToastCustom";
 
-interface DeleteModuleProps {
+interface DeleteAccountProps {
   isVisible: boolean;
   setIsVisible: React.Dispatch<React.SetStateAction<boolean>>;
-  moduleData: TableRowDataModule | null;
+  studentData: TableRowData | null;
   onDeleteSuccess: () => void;
 }
 
-export const DeleteModule: React.FC<DeleteModuleProps> = ({
+export const DeleteAccount: React.FC<DeleteAccountProps> = ({
   isVisible: propIsVisible,
   setIsVisible,
-  moduleData,
+  studentData,
   onDeleteSuccess,
 }) => {
   const handleDeleteConfirm = async () => {
-    if (!moduleData?.id) {
-      toastCustomError(
-        "Módulo",
-        "ID do módulo não encontrado para exclusão."
-      );
+    if (!studentData?.id) {
+      toastCustomError("Erro", "ID do Usuário não encontrado para exclusão.");
       setIsVisible(false);
       return;
     }
 
     try {
-      console.log(
-        "Enviando requisição DELETE para: /api/modulos/" + moduleData.id
-      );
-      await del(`/api/modulos/${moduleData.id}`);
-
-      const moduleTitle = moduleData.titulo || "Módulo";
-      toastCustomSuccess("Módulo",moduleTitle, "Excluído com sucesso!");
+      await del(`/alunos/${studentData.id}`);
+      const nome = studentData.nome || "Usuário";
+      toastCustomSuccess("Usuário", nome, "Foi eliminado com sucesso!");
 
       setTimeout(() => {
         onDeleteSuccess();
         setIsVisible(false);
       }, 500);
     } catch (error) {
-      console.error("Erro na exclusão do módulo:", error);
-
+      // Tratamento de erro mais robusto com AxiosError
       if (error instanceof AxiosError) {
+        console.error(
+          "Detalhes do erro da API (exclusão):",
+          error.response?.data
+        );
         const errorMessage =
           error.response?.data?.message || formatarMensagemErro(error);
-        const moduleTitle = moduleData.titulo || "Módulo";
-        toastCustomError("Módulo",moduleTitle, errorMessage);
+        const nome = studentData.nome || "Usuário";
+        toastCustomError("Usuário", nome, errorMessage);
       } else {
         const errorMessage = formatarMensagemErro(error);
-        const moduleTitle = moduleData.titulo || "Módulo";
-        toastCustomError("Módulo",moduleTitle, errorMessage);
+        const nome = studentData.nome || "Usuário";
+        toastCustomError("Usuário", nome, errorMessage);
       }
     }
   };
@@ -66,6 +59,7 @@ export const DeleteModule: React.FC<DeleteModuleProps> = ({
     setIsVisible(false);
   };
 
+  // Efeito para fechar o modal com a tecla 'Escape'
   const handleEscape = (event: KeyboardEvent): void => {
     if (event.key === "Escape") setIsVisible(false);
   };
@@ -77,15 +71,15 @@ export const DeleteModule: React.FC<DeleteModuleProps> = ({
     };
   }, []);
 
-  if (!propIsVisible || !moduleData) return null;
+  if (!propIsVisible || !studentData) return null;
 
   return (
     <div className="fixed inset-0 flex items-start justify-center bg-[#FFFFFFB2] z-50">
       <div className="mt-[3.25rem] md:mt-[8rem] font-bold bg-primary1 text-white w-[90%] md:w-[60%] lg:w-[50%] h-[15rem] md:h-[23rem] rounded-t-[10px] shadow-2xl">
-        <DeleteModuleForm
+        <DeleteAccountForm
           onConfirm={handleDeleteConfirm}
           onCancel={handleCancel}
-          moduleTitle={moduleData.titulo}
+          studentName={studentData.nome}
         />
       </div>
     </div>

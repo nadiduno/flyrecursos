@@ -1,7 +1,7 @@
-import { CardVideoType } from "./CardVideo";
-import { ImagemBanner } from "./Dashboard/ImagemBanner";
-import { TextMain } from "./TextMain";
-import { Video } from "./Video";
+import { CardVideoType } from "../components/Cursos/CardVideo";
+import { ImagemBanner } from "../components/Dashboard/ImagemBanner";
+import { TextMain } from "../components/text/TextMain";
+import { Video } from "../components/Cursos/Video";
 
 interface MenuItem {
   label: string;

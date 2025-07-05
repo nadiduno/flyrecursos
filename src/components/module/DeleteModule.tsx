@@ -1,56 +1,57 @@
 import React, { useEffect } from "react";
 import { del } from "../../services/api";
-import { TableRowData } from "../../forms/account/Account";
-import { DeleteAccountForm } from "./DeleteAccountForm";
+import { TableRowDataModule } from "./Module";
 import { formatarMensagemErro } from "../../utils/formatarErrors";
 import { AxiosError } from "axios";
+import { DeleteModuleForm } from "./DeleteModuleForm";
 
-import {
-  toastCustomSuccess,
-  toastCustomError,
-} from "../../componets/ToastCustom";
+import { toastCustomSuccess, toastCustomError } from "../ToastCustom";
 
-interface DeleteAccountProps {
+interface DeleteModuleProps {
   isVisible: boolean;
   setIsVisible: React.Dispatch<React.SetStateAction<boolean>>;
-  studentData: TableRowData | null;
+  moduleData: TableRowDataModule | null;
   onDeleteSuccess: () => void;
 }
 
-export const DeleteAccount: React.FC<DeleteAccountProps> = ({
+export const DeleteModule: React.FC<DeleteModuleProps> = ({
   isVisible: propIsVisible,
   setIsVisible,
-  studentData,
+  moduleData,
   onDeleteSuccess,
 }) => {
   const handleDeleteConfirm = async () => {
-    if (!studentData?.id) {
-      toastCustomError("Erro", "ID do Usuário não encontrado para exclusão.");
+    if (!moduleData?.id) {
+      toastCustomError("Módulo", "ID do módulo não encontrado para exclusão.");
       setIsVisible(false);
       return;
     }
 
     try {
-      await del(`/alunos/${studentData.id}`);
-      const nome = studentData.nome || "Usuário";
-      toastCustomSuccess("Usuário",nome, "Foi eliminado com sucesso!");
+      console.log(
+        "Enviando requisição DELETE para: /api/modulos/" + moduleData.id
+      );
+      await del(`/api/modulos/${moduleData.id}`);
+
+      const moduleTitle = moduleData.titulo || "Módulo";
+      toastCustomSuccess("Módulo", moduleTitle, "Excluído com sucesso!");
 
       setTimeout(() => {
         onDeleteSuccess();
         setIsVisible(false);
       }, 500);
-
     } catch (error) {
-      // Tratamento de erro mais robusto com AxiosError
+      console.error("Erro na exclusão do módulo:", error);
+
       if (error instanceof AxiosError) {
-        console.error("Detalhes do erro da API (exclusão):", error.response?.data);
-        const errorMessage = error.response?.data?.message || formatarMensagemErro(error);
-        const nome = studentData.nome || "Usuário";
-        toastCustomError("Usuário",nome, errorMessage);
+        const errorMessage =
+          error.response?.data?.message || formatarMensagemErro(error);
+        const moduleTitle = moduleData.titulo || "Módulo";
+        toastCustomError("Módulo", moduleTitle, errorMessage);
       } else {
         const errorMessage = formatarMensagemErro(error);
-        const nome = studentData.nome || "Usuário";
-        toastCustomError("Usuário",nome, errorMessage);
+        const moduleTitle = moduleData.titulo || "Módulo";
+        toastCustomError("Módulo", moduleTitle, errorMessage);
       }
     }
   };
@@ -59,7 +60,6 @@ export const DeleteAccount: React.FC<DeleteAccountProps> = ({
     setIsVisible(false);
   };
 
-  // Efeito para fechar o modal com a tecla 'Escape'
   const handleEscape = (event: KeyboardEvent): void => {
     if (event.key === "Escape") setIsVisible(false);
   };
@@ -71,15 +71,15 @@ export const DeleteAccount: React.FC<DeleteAccountProps> = ({
     };
   }, []);
 
-  if (!propIsVisible || !studentData) return null;
+  if (!propIsVisible || !moduleData) return null;
 
   return (
     <div className="fixed inset-0 flex items-start justify-center bg-[#FFFFFFB2] z-50">
       <div className="mt-[3.25rem] md:mt-[8rem] font-bold bg-primary1 text-white w-[90%] md:w-[60%] lg:w-[50%] h-[15rem] md:h-[23rem] rounded-t-[10px] shadow-2xl">
-        <DeleteAccountForm
+        <DeleteModuleForm
           onConfirm={handleDeleteConfirm}
           onCancel={handleCancel}
-          studentName={studentData.nome}
+          moduleTitle={moduleData.titulo}
         />
       </div>
     </div>

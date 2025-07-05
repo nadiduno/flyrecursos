@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { post } from "../../services/api";
+import { post } from "../../../services/api";
 import { CreateCourseForm } from "./CreateCourseForm";
 
 interface CourseCreateProps {
@@ -15,7 +15,7 @@ type FormData = {
   autorID: string;
 };
 
- export const CreateCourse: React.FC<CourseCreateProps> = ({
+export const CreateCourse: React.FC<CourseCreateProps> = ({
   isVisible,
   setIsVisible,
 }) => {

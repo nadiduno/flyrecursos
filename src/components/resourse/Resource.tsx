@@ -1,8 +1,8 @@
 import { useRef, useState, useEffect, useCallback, memo } from "react";
 import { GoChevronLeft, GoChevronRight } from "react-icons/go";
-import { CardVideo } from "./CardVideo";
-import { useAuth } from "../context/AuthContext";
-import { get } from "../services/api";
+import { CardVideo } from "../Cursos/CardVideo";
+import { useAuth } from "../../context/AuthContext";
+import { get } from "../../services/api";
 
 interface CacheData<T> {
   data: T;

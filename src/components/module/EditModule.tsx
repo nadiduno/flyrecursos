@@ -5,10 +5,7 @@ import { formatarMensagemErro } from "../../utils/formatarErrors";
 import { AxiosError } from "axios";
 import { EditModuleForm } from "./EditModuleForm";
 
-import {
-  toastCustomSuccess,
-  toastCustomError,
-} from "../../componets/ToastCustom";
+import { toastCustomSuccess, toastCustomError } from "../ToastCustom";
 
 interface EditModuleProps {
   isVisible: boolean;
@@ -45,7 +42,11 @@ export const EditModule: React.FC<EditModuleProps> = ({
       // console.log("Enviando PUT para /api/modulos:", dataToUpdate);
       await put("/api/modulos", dataToUpdate);
       setCreationError(null);
-      toastCustomSuccess("Módulo", formData.titulo || "Módulo", "Foi editado com sucesso!");
+      toastCustomSuccess(
+        "Módulo",
+        formData.titulo || "Módulo",
+        "Foi editado com sucesso!"
+      );
 
       setTimeout(() => {
         onEditSuccess();
@@ -67,7 +68,11 @@ export const EditModule: React.FC<EditModuleProps> = ({
 
         toastCustomError("Módulo", formData.titulo || "Módulo", errorMessage);
       } else {
-        toastCustomError("Módulo", formData.titulo || "Módulo", formatarMensagemErro(error));
+        toastCustomError(
+          "Módulo",
+          formData.titulo || "Módulo",
+          formatarMensagemErro(error)
+        );
       }
     }
   };

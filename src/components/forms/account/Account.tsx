@@ -2,9 +2,9 @@ import { CiSearch } from "react-icons/ci";
 import { TableCRUDAccount } from "./TableCRUDAccount";
 import { CreateAccount } from "./CreateAccount";
 import { useState, useEffect } from "react";
-import { ButtonFly } from "../../componets/ButtonFly";
+import { ButtonFly } from "../../botoes/ButtonFly";
 import { CgAdd } from "react-icons/cg";
-import { get } from "../../services/api";
+import { get } from "../../../services/api";
 import { EditAccount } from "./EditAccount";
 import { DeleteAccount } from "./DeleteAccount";
 
@@ -21,7 +21,9 @@ export function Account() {
   const [showCreateAccount, setShowCreateAccount] = useState(false);
   const [showEditAccount, setShowEditAccount] = useState(false);
   const [showDeleteAccount, setShowDeleteAccount] = useState(false);
-  const [selectedStudent, setSelectedStudent] = useState<TableRowData | null>(null);
+  const [selectedStudent, setSelectedStudent] = useState<TableRowData | null>(
+    null
+  );
   const [students, setStudents] = useState<TableRowData[]>([]);
   const [filteredStudents, setFilteredStudents] = useState<TableRowData[]>([]);
   const [loading, setLoading] = useState(true);
@@ -34,10 +36,10 @@ export function Account() {
 
   // Eliminar
   const handleDelete = (student: TableRowData): void => {
-  setSelectedStudent(student);
-  setShowDeleteAccount(true);
-};
-   const handleDeleteSuccess = () => {
+    setSelectedStudent(student);
+    setShowDeleteAccount(true);
+  };
+  const handleDeleteSuccess = () => {
     fetchStudents(); // Recarrega a lista de alunos
     setShowDeleteAccount(false);
     setSelectedStudent(null);
@@ -164,7 +166,7 @@ export function Account() {
           />
         )}
 
-         {showDeleteAccount && selectedStudent && (
+        {showDeleteAccount && selectedStudent && (
           <DeleteAccount
             isVisible={showDeleteAccount}
             setIsVisible={setShowDeleteAccount}

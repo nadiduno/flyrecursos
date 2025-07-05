@@ -2,7 +2,7 @@ import { CiSearch } from "react-icons/ci";
 import { TableCRUDModule } from "./TableCRUDModule";
 import { CreateModule } from "./CreateModule";
 import { useState, useEffect } from "react";
-import { ButtonFly } from "../../componets/ButtonFly";
+import { ButtonFly } from "../botoes/ButtonFly";
 import { CgAdd } from "react-icons/cg";
 import { get } from "../../services/api";
 import { EditModule } from "./EditModule";
