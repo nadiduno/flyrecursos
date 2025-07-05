@@ -1,85 +1,98 @@
-// import { useState } from "react";
-// import { FaArrowUp, FaXmark } from "react-icons/fa6";
-// import "./UploadImage.css";
-// import img from "../../assets/imgPerfil.png"
-// import { post } from "../../services/api"; 
+import { useState, useEffect } from "react";
+import { FaArrowUp, FaXmark } from "react-icons/fa6";
+import "./UploadImage.css";
+import imgPerfil from "../../assets/fotodeperfil.png";
+import imgCurso from "../../assets/fotocurso.png";
+import { post, get } from "../../services/api"; 
+import { useAuth } from "../../context/AuthContext";
 
-// interface Props {
-//   carpeta: string;
-//   onUploadComplete: (url: string) => void;
-//   estilos?: "perfil" | "default";
-//   urlPorDefecto?: string;
-// }
+interface Props {
+  estilos?: "perfil" | "curso";
+  onUploadComplete: (url: string) => void;
+}
 
+export default function UploadImage({ estilos = "perfil", onUploadComplete }: Props) {
+  const { userId } = useAuth(); 
+  const [fileName, setFileName] = useState<string | null>(null);
+  const [previewUrl, setPreviewUrl] = useState<string | null>(null);
 
-// export default function UploadImage({ carpeta, onUploadComplete, estilos, urlPorDefecto }: Props) {
-//   const [fileName, setFileName] = useState<string | null>(null);
-//   const [previewUrl, setPreviewUrl] = useState<string | null>(null);
+  
+  useEffect(() => {
+    const fetchImagen = async () => {
+      try {
+        const response = await get<{ url: string }>(`/usuarios/${user.id}/foto`);
+        if (response?.url) {
+          setPreviewUrl(response.url);
+          onUploadComplete(response.url);
+        }
+      } catch (error) {
+        console.warn("No se encontró imagen personalizada, mostrando por defecto.");
+      }
+    };
 
-//   const handleUpload = (event: React.ChangeEvent<HTMLInputElement>) => {
-//     const file = event.target.files?.[0];
-//     if (file) {
-//       const storageRef = ref(storage, `${carpeta}/${file.name}`);
-//       const uploadTask = uploadBytesResumable(storageRef, file);
+    if (estilos === "perfil" && user?.id) {
+      fetchImagen();
+    }
+  }, [user, estilos, onUploadComplete]);
 
-//       uploadTask.on(
-//         "state_changed",
-//         (snapshot) => {
-//           const progreso = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
-//           console.log(`Progreso de carga: ${progreso.toFixed(2)}%`);
-//         },
-//         (error) => {
-//           console.error("Error al subir la imagen:", error);
-//         },
-//         async () => {
-//           const downloadURL = await getDownloadURL(uploadTask.snapshot.ref);
-//           setPreviewUrl(downloadURL);
-//           setFileName(file.name);
-//           onUploadComplete(downloadURL);
-//         }
-//       );
-//     }
-//   };
+  const handleUpload = async (event: React.ChangeEvent<HTMLInputElement>) => {
+    const file = event.target.files?.[0];
+    if (!file || !user?.id) return;
 
-//   const handleRemove = () => {
-//     setPreviewUrl(null);
-//     setFileName(null);
-//     onUploadComplete("");
-//   };
+    const formData = new FormData();
+    formData.append("archivo", file);
 
-//   return (
-//     <div className={`upload-container ${estilos === "perfil" ? "perfil" : ""}`}>
-//     <div className={`container-img ${estilos === "perfil" ? "perfil" : ""}`}>
-//   {previewUrl ? (
-//     <img src={previewUrl} alt="Imagen subida" />
-//   ) : estilos === "perfil" && (
-//     <img src={urlPorDefecto || img} alt="Imagen de perfil" />
-//   )}
-// </div>
+    try {
+      const response = await post<{ url: string }>(`/usuarios/${user.id}/foto`, formData);
+      if (response?.url) {
+        setPreviewUrl(response.url);
+        setFileName(file.name);
+        onUploadComplete(response.url);
+      }
+    } catch (error) {
+      console.error("Error al subir la imagen:", error);
+    }
+  };
 
+  const handleRemove = () => {
+    setPreviewUrl(null);
+    setFileName(null);
+    onUploadComplete("");
+  };
 
+  const getDefaultImage = () => {
+    return estilos === "curso" ? imgCurso : imgPerfil;
+  };
 
-// <label
-//   htmlFor="file-upload"
-//   className={`boton-upload ${estilos === "perfil" ? "perfil" : ""}`}
-// >
-//   Cargar imagen <FaArrowUp />
-// </label>
-//       <input
-//         id="file-upload"
-//         type="file"
-//         accept="image/*"
-//         onChange={handleUpload}
-//         style={{ display: "none" }}
-//       />
-//       {previewUrl && (
-//         <div className={`archivo-info ${estilos === "perfil"? "perfil": ""}`}>
-//           <span>{fileName}</span>
-//           <button className={`boton-excluir ${estilos === "perfil" ? "perfil" : ""}`} onClick={handleRemove}>
-//             <FaXmark />
-//           </button>
-//         </div>
-//       )}
-//     </div>
-//   );
-// }
+  return (
+    <div className={`upload-container ${estilos}`}>
+      <div className={`container-img ${estilos}`}>
+        {previewUrl ? (
+          <img src={previewUrl} alt="Imagen subida" />
+        ) : (
+          <img src={getDefaultImage()} alt="Imagen por defecto" />
+        )}
+      </div>
+
+      <label htmlFor="file-upload" className={`boton-upload ${estilos}`}>
+        Cargar imagen <FaArrowUp />
+      </label>
+      <input
+        id="file-upload"
+        type="file"
+        accept="image/*"
+        onChange={handleUpload}
+        style={{ display: "none" }}
+      />
+
+      {previewUrl && (
+        <div className={`archivo-info ${estilos}`}>
+          <span>{fileName}</span>
+          <button className={`boton-excluir ${estilos}`} onClick={handleRemove}>
+            <FaXmark />
+          </button>
+        </div>
+      )}
+    </div>
+  );
+}

@@ -28,6 +28,11 @@ interface AuthContextType {
   refreshToken: () => Promise<boolean>;
   isLoading: boolean;
 }
+const token = localStorage.getItem("accessToken");
+if (token) {
+  const decoded = jwtDecode(token);
+  console.log(decoded);
+}
 
 //context
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
@@ -39,12 +44,13 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
     isAuthenticated: boolean;
     isAdmin: boolean;
     userAuthorities: string[];
-    // allowedCategories: string;
+    userId: string | null;
   }>({
     isAuthenticated: false,
     isAdmin: false,
     userAuthorities: [],
-    // allowedCategories: ''
+    userId: null,
+
   });
 
   const [isLoading, setIsLoading] = useState(true);
@@ -57,7 +63,8 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
       isAuthenticated: false,
       isAdmin: false,
       userAuthorities: [],
-      // allowedCategories: "",
+      userId: null,
+
     });
     navigate("/");
   }, [navigate]);
@@ -79,13 +86,12 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
         // console.log("AuthContext: Token decodificado:", decoded);
         // console.log("AuthContext: isAdminUser (do token):", isAdminUser);
         // console.log("AuthContext: userAuthorities (do token):", authoritiesFromToken);
-
-        setAuthState({
-          isAuthenticated: true,
-          isAdmin: isAdminUser,
-          userAuthorities: authoritiesFromToken,
-          // allowedCategories: "",
-        });
+setAuthState({
+  isAuthenticated: true,
+  isAdmin: isAdminUser,
+  userAuthorities: authoritiesFromToken,
+  userId: decoded.sub,
+});
         return isAdminUser;
       } catch (error) {
         console.error("AuthContext: Erro ao decodificar token JWT:", error);
@@ -126,6 +132,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
           isAuthenticated: false,
           isAdmin: false,
           userAuthorities: [],
+           userId: null,
         });
       }
       setIsLoading(false);
