@@ -1,4 +1,4 @@
-import logo from "../assets/Navi.png";
+import logo from "../../assets/logo.png";
 
 
 

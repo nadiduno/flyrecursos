@@ -1,8 +1,7 @@
 import { useState } from "react";
-// import { AiOutlineSearch } from "react-icons/ai";
-import logo from "../assets/Navi.png";
+import logo from "../../assets/logo.png";
 import { CreateAccount } from "../forms/account/CreateAccount";
-import { useAuth } from "../context/AuthContext";
+import { useAuth } from "../../context/AuthContext";
 import { useNavigate } from "react-router-dom";
 
 interface User {

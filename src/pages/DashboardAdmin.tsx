@@ -3,7 +3,7 @@ import { Footer } from "../components/footer/Footer";
 import { HeaderDashboard } from "../components/Dashboard/HeaderDashboard";
 // import { HeaderDashboard } from "../componets/HeaderDashboard";
 import { ImagemBanner } from "../components/Dashboard/ImagemBanner";
-import { Navbar } from "../componets/Navbar";
+import { Navbar } from "../components//nav/Navbar";
 
 export function DashboardAdmin() {
   return (

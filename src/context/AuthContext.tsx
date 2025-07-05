@@ -1,4 +1,3 @@
-// src/context/AuthContext.tsx
 import {
   createContext,
   useContext,
@@ -21,20 +20,16 @@ interface AuthContextType {
   isAuthenticated: boolean;
   isAdmin: boolean;
   userAuthorities: string[];
-  // allowedCategories: string;
+  userId: string | null;
+  photoUrl: string;
+  setPhotoUrl: (url: string) => void;
   login: (token: string, expiresIn: number) => boolean;
   logout: () => void;
   redirectToLogin: () => void;
   refreshToken: () => Promise<boolean>;
   isLoading: boolean;
 }
-const token = localStorage.getItem("accessToken");
-if (token) {
-  const decoded = jwtDecode(token);
-  console.log(decoded);
-}
 
-//context
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
 export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
@@ -45,17 +40,21 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
     isAdmin: boolean;
     userAuthorities: string[];
     userId: string | null;
+    photoUrl: string;
   }>({
     isAuthenticated: false,
     isAdmin: false,
     userAuthorities: [],
     userId: null,
-
+    photoUrl: "",
   });
 
   const [isLoading, setIsLoading] = useState(true);
 
-  // 1. Defina `logout` PRIMEIRO com useCallback
+  const setPhotoUrl = (url: string) => {
+    setAuthState((prev) => ({ ...prev, photoUrl: url }));
+  };
+
   const logout = useCallback(() => {
     localStorage.removeItem("accessToken");
     localStorage.removeItem("expirationTime");
@@ -64,17 +63,15 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
       isAdmin: false,
       userAuthorities: [],
       userId: null,
-
+      photoUrl: "",
     });
     navigate("/");
   }, [navigate]);
 
-  // 2. Defina `redirectToLogin` com useCallback (depende de navigate)
   const redirectToLogin = useCallback(() => {
     navigate("/");
   }, [navigate]);
 
-  // 3. Defina `decodeAndSetAuthState` com useCallback (depende de logout)
   const decodeAndSetAuthState = useCallback(
     (token: string): boolean => {
       try {
@@ -83,18 +80,18 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
           decoded.authorities?.includes("ROLE_ADMIN") || false;
         const authoritiesFromToken = decoded.authorities || [];
 
-        // console.log("AuthContext: Token decodificado:", decoded);
-        // console.log("AuthContext: isAdminUser (do token):", isAdminUser);
-        // console.log("AuthContext: userAuthorities (do token):", authoritiesFromToken);
-setAuthState({
-  isAuthenticated: true,
-  isAdmin: isAdminUser,
-  userAuthorities: authoritiesFromToken,
-  userId: decoded.sub,
-});
+        setAuthState((prev) => ({
+          ...prev,
+          isAuthenticated: true,
+          isAdmin: isAdminUser,
+          userAuthorities: authoritiesFromToken,
+          userId: decoded.sub,
+          photoUrl: prev.photoUrl || "",
+        }));
+
         return isAdminUser;
       } catch (error) {
-        console.error("AuthContext: Erro ao decodificar token JWT:", error);
+        console.error("AuthContext: Error al decodificar token JWT:", error);
         logout();
         return false;
       }
@@ -102,20 +99,16 @@ setAuthState({
     [logout]
   );
 
-  // 4. Defina `login` com useCallback (depende de decodeAndSetAuthState)
   const login = useCallback(
     (token: string, expiresIn: number): boolean => {
       const expirationTime = Date.now() + expiresIn * 1000;
       localStorage.setItem("accessToken", token);
       localStorage.setItem("expirationTime", String(expirationTime));
-
-      const isUserAdmin = decodeAndSetAuthState(token);
-      return isUserAdmin;
+      return decodeAndSetAuthState(token);
     },
     [decodeAndSetAuthState]
   );
 
-  // 5. O `useEffect` para verificar o token inicial (depende de decodeAndSetAuthState e logout)
   useEffect(() => {
     const checkAuthStatus = () => {
       const token = localStorage.getItem("accessToken");
@@ -124,15 +117,15 @@ setAuthState({
         if (expirationTime && Date.now() < parseInt(expirationTime)) {
           decodeAndSetAuthState(token);
         } else {
-          logout(); // Token expirado, desloga
+          logout();
         }
       } else {
-        // Não há token, garante que o estado é desautenticado
         setAuthState({
           isAuthenticated: false,
           isAdmin: false,
           userAuthorities: [],
-           userId: null,
+          userId: null,
+          photoUrl: "",
         });
       }
       setIsLoading(false);
@@ -142,27 +135,19 @@ setAuthState({
   }, [decodeAndSetAuthState, logout]);
 
   const refreshToken = useCallback(async (): Promise<boolean> => {
-    // console.warn("Função refreshToken");
-    // try {
-    //     const response = await post('/auth/refresh-token', { refreshToken: localStorage.getItem('refreshToken') });
-    //     if (response.data?.accessToken) {
-    //         login(response.data.accessToken, response.data.expiresIn);
-    //         return true;
-    //     }
-    //     logout();
-    //     return false;
-    // } catch (error) {
-    //     console.error("Erro ao refrescar token:", error);
-    //     logout();
-    //     return false;
-    // }
+    // Por implementar si decides tener refresh
     return false;
-  }, [login, logout]);
+  }, []);
 
   return (
     <AuthContext.Provider
       value={{
-        ...authState,
+        isAuthenticated: authState.isAuthenticated,
+        isAdmin: authState.isAdmin,
+        userAuthorities: authState.userAuthorities,
+        userId: authState.userId,
+        photoUrl: authState.photoUrl,
+        setPhotoUrl,
         login,
         logout,
         redirectToLogin,
@@ -175,9 +160,9 @@ setAuthState({
   );
 };
 
-// Hook personalizado para uso
 export const useAuth = () => {
   const context = useContext(AuthContext);
-  if (!context) throw new Error("useAuth must be used within AuthProvider");
+  if (!context)
+    throw new Error("useAuth debe usarse dentro de un AuthProvider");
   return context;
 };

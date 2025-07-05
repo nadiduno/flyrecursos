@@ -1,5 +1,5 @@
 import { Link } from "react-router-dom";
-import { ButtonFly } from "@/components/ButtonFly";
+import { ButtonFly } from "../botoes/ButtonFly";
 import { IoEye, IoEyeOff } from "react-icons/io5";
 import { FieldErrors, UseFormHandleSubmit, UseFormRegister, SubmitHandler } from "react-hook-form";
 

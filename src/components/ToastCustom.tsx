@@ -1,5 +1,5 @@
 import { toast } from "react-hot-toast";
-import NaviLogo from "../assets/Navi.png";
+import NaviLogo from "../assets/logo.png";
 
 export const toastCustomSuccess = (entityType: string, entityName: string, message?: string): void => { // Adicionado entityType
   const displayMessage = message || "Foi editado com sucesso!!!"; 

@@ -1,4 +1,4 @@
-import imgDefault from "../assets/imgDefault.png";
+import imgDefault from "../../assets/imgDefault.png";
 
 export interface CardVideoType{
     id: number;

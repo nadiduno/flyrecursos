@@ -3,7 +3,7 @@ import { FaArrowUp, FaXmark } from "react-icons/fa6";
 import "./UploadImage.css";
 import imgPerfil from "../../assets/fotodeperfil.png";
 import imgCurso from "../../assets/fotocurso.png";
-import { post, get } from "../../services/api"; 
+import { post, get } from "../../services/api";
 import { useAuth } from "../../context/AuthContext";
 
 interface Props {
@@ -12,42 +12,47 @@ interface Props {
 }
 
 export default function UploadImage({ estilos = "perfil", onUploadComplete }: Props) {
-  const { userId } = useAuth(); 
+  const { userId, setPhotoUrl } = useAuth();
   const [fileName, setFileName] = useState<string | null>(null);
   const [previewUrl, setPreviewUrl] = useState<string | null>(null);
 
-  
   useEffect(() => {
     const fetchImagen = async () => {
       try {
-        const response = await get<{ url: string }>(`/usuarios/${user.id}/foto`);
-        if (response?.url) {
-          setPreviewUrl(response.url);
-          onUploadComplete(response.url);
+        const response = await get<{ url: string }>(`/usuarios/${userId}/foto`);
+        if (response?.data?.url) {
+          setPreviewUrl(response.data.url);
+          setPhotoUrl(response.data.url);         // Actualiza el contexto global
+          onUploadComplete(response.data.url);
         }
+      // eslint-disable-next-line @typescript-eslint/no-unused-vars
       } catch (error) {
         console.warn("No se encontró imagen personalizada, mostrando por defecto.");
       }
     };
 
-    if (estilos === "perfil" && user?.id) {
+    if (estilos === "perfil" && userId) {
       fetchImagen();
     }
-  }, [user, estilos, onUploadComplete]);
+  }, [userId, estilos, onUploadComplete, setPhotoUrl]);
 
   const handleUpload = async (event: React.ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0];
-    if (!file || !user?.id) return;
+    if (!file || !userId) return;
 
     const formData = new FormData();
     formData.append("archivo", file);
 
     try {
-      const response = await post<{ url: string }>(`/usuarios/${user.id}/foto`, formData);
-      if (response?.url) {
-        setPreviewUrl(response.url);
+      const response = await post<{ url: string }>(`/usuarios/${userId}/foto`, formData, {
+        headers: { "Content-Type": "multipart/form-data" },
+      });
+
+      if (response?.data?.url) {
+        setPreviewUrl(response.data.url);
         setFileName(file.name);
-        onUploadComplete(response.url);
+        setPhotoUrl(response.data.url);          // Actualiza el contexto global
+        onUploadComplete(response.data.url);
       }
     } catch (error) {
       console.error("Error al subir la imagen:", error);
@@ -57,6 +62,7 @@ export default function UploadImage({ estilos = "perfil", onUploadComplete }: Pr
   const handleRemove = () => {
     setPreviewUrl(null);
     setFileName(null);
+    setPhotoUrl("");                             // Limpia en el contexto también
     onUploadComplete("");
   };
 
