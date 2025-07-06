@@ -2,8 +2,8 @@ import React, { useState, useEffect } from "react";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { FormDataLesson } from "../../types/typeFormData";
-import { get } from "../../services/api";
+import { FormDataLesson } from "../../../types/typeFormData";
+import { get } from "../../../services/api";
 import { CreateModulePopover } from "../module/CreateModulePopover";
 
 interface ModuloOption {

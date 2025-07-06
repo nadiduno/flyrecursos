@@ -1,14 +1,14 @@
 import React, { useState, useEffect } from "react";
 import { EditLessonForm } from "../lesson/EditLessonForm";
-import { put } from "../../services/api";
-import { FormDataLesson } from "../../types/typeFormData";
-import { formatarMensagemErro } from "../../utils/formatarErrors";
+import { put } from "../../../services/api";
+import { FormDataLesson } from "../../../types/typeFormData";
+import { formatarMensagemErro } from "../../../utils/formatarErrors";
 import { AxiosError } from "axios";
 
 import {
   toastCustomSuccess,
   toastCustomError,
-} from "../../componets/ToastCustom";
+} from "../../ToastCustom";
 
 interface EditLessonProps {
   isVisible: boolean;

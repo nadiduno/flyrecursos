@@ -1,14 +1,14 @@
 import React, { useEffect } from "react";
-import { del } from "../../services/api";
+import { del } from "../../../services/api";
 import { TableRowData } from "../lesson/Lesson";
 import { DeleteLessonForm } from "../lesson/DeleteLessonForm";
-import { formatarMensagemErro } from "../../utils/formatarErrors";
+import { formatarMensagemErro } from "../../../utils/formatarErrors";
 import { AxiosError } from "axios";
 
 import {
   toastCustomSuccess,
   toastCustomError,
-} from "../../componets/ToastCustom";
+} from "../../ToastCustom";
 
 interface DeleteLessonProps {
   isVisible: boolean;

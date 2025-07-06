@@ -2,7 +2,7 @@ import { GrEdit } from "react-icons/gr";
 import { RiDeleteBin6Line } from "react-icons/ri";
 import { TableRowData } from "./Lesson";
 import { useEffect, useState } from "react";
-import { get } from "../../services/api";
+import { get } from "../../../services/api";
 
 interface Modulo {
   id: number;

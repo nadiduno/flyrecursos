@@ -1,14 +1,14 @@
 import React, { useEffect } from "react";
 import { CreateLessonForm } from "../lesson/CreateLessonForm";
-import { post } from "../../services/api"; 
-import { FormDataLesson } from "../../types/typeFormData";
-import { formatarMensagemErro} from "../../utils/formatarErrors";
+import { post } from "../../../services/api"; 
+import { FormDataLesson } from "../../../types/typeFormData";
+import { formatarMensagemErro} from "../../../utils/formatarErrors";
 import { AxiosError } from "axios";
 
 import {
   toastCustomSuccess,
   toastCustomError,
-} from "../../componets/ToastCustom";
+} from "../../ToastCustom";
 
 
 interface CreateLessonProps {

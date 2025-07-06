@@ -1,9 +1,10 @@
+
 import React, { useEffect, useState } from "react";
 import { useForm, SubmitHandler } from "react-hook-form";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { FormDataLesson } from "../../types/typeFormData";
-import { get } from "../../services/api";
+import { FormDataLesson } from "../../../types/typeFormData";
+import { get } from "../../../services/api";
 // import { PatternFormat } from "react-number-format";
 
 interface ModuloOption {

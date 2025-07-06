@@ -7,7 +7,7 @@ import { get } from "../../../services/api";
 import { EditLesson } from "./EditLesson";
 import { DeleteLesson } from "./DeleteLesson";
 import { ButtonFly } from "../../botoes/ButtonFly";
-
+// import { FormDataLesson } from "../../types/typeFormData";
 
 export interface TableRowData {
   id: number;
