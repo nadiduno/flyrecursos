@@ -28,9 +28,7 @@ export const DeleteModule: React.FC<DeleteModuleProps> = ({
     }
 
     try {
-      console.log(
-        "Enviando requisição DELETE para: /api/modulos/" + moduleData.id
-      );
+      // console.log("Enviando requisição DELETE para: /api/modulos/" + moduleData.id);
       await del(`/api/modulos/${moduleData.id}`);
 
       const moduleTitle = moduleData.titulo || "Módulo";
