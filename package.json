@@ -19,7 +19,7 @@
     "react": "^19.0.0",
     "react-aria": "^3.41.1",
     "react-dom": "^19.0.0",
-    "react-hook-form": "^7.57.0",
+    "react-hook-form": "^7.60.0",
     "react-hot-toast": "^2.5.2",
     "react-icons": "^5.5.0",
     "react-number-format": "^5.4.4",

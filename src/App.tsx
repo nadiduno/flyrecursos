@@ -9,7 +9,6 @@ export function App() {
   return (
     <BrowserRouter>
       <AuthProvider>
-       
         <Router />
       </AuthProvider>
     </BrowserRouter>

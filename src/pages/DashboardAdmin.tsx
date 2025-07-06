@@ -1,9 +1,9 @@
 // import desktopImage from "../assets/LoginPage/large.jpg";
-import { Footer } from "../componets/Footer";
-import { HeaderDashboard } from "../componets/Dashboard/HeaderDashboard";
+import { Footer } from "../components/footer/Footer";
+import { HeaderDashboard } from "../components/Dashboard/HeaderDashboard";
 // import { HeaderDashboard } from "../componets/HeaderDashboard";
-import { ImagemBanner } from "../componets/Dashboard/ImagemBanner";
-import { Navbar } from "../componets/Navbar";
+import { ImagemBanner } from "../components/Dashboard/ImagemBanner";
+import { Navbar } from "../components//nav/Navbar";
 
 export function DashboardAdmin() {
   return (

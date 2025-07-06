@@ -1,9 +1,8 @@
-import { Footer } from "../componets/Footer";
-import { HeaderMain } from "../componets/HeaderMain";
-import { Navbar } from "../componets/Navbar";
-import { Resource } from "../componets/Resource";
-import { menuItems as headerMenuItems } from "../componets/HeaderMain";
-import { CardVideoType } from "../componets/CardVideo";
+import { Footer } from "../components/footer/Footer";
+import { HeaderMain, menuItems as headerMenuItems } from "../components/nav/HeaderMain";
+import { Navbar } from "../components/nav/Navbar";
+import { Resource } from "../components/resourse/Resource";
+import { CardVideoType } from "../components/Cursos/CardVideo";
 import { useState } from "react";
 
 interface Aula {
