@@ -50,7 +50,7 @@ export function Module() {
       const response = await get<{ content: TableRowDataModule[] }>(
         "/api/modulos"
       );
-      const fetchedData = response.data.content;
+      const fetchedData = response.data.content  || [];
       // console.log("Resposta do backend (módulos):", fetchedData);
 
       setModulesData(fetchedData);

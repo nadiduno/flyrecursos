@@ -99,7 +99,7 @@ export const CreateModuleForm: React.FC<EditModuleFormProps> = ({
             type="submit"
           >
             <p className="leading-tight tracking-normal text-center font-bold md:text-[1.25rem]">
-              Salvar Edição
+              Criar Módulo
             </p>
           </button>
         </div>

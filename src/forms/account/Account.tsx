@@ -49,7 +49,7 @@ export function Account() {
       setLoading(true);
       setError(null);
       const response = await get<{ content: TableRowData[] }>("/alunos");
-      const fetchedData = response.data.content;
+      const fetchedData = response.data.content  || [];
       // console.log("Resposta do backend:", fetchedData);
 
       setStudents(fetchedData);
