@@ -62,7 +62,7 @@ export function TableCRUDModule({
         <tbody className="divide-y border-b divide-secondary md:text-s lg:text-s">
           {modules.length === 0 ? ( // Usar 'modules'
             <tr>
-              <td colSpan={2} className="text-center py-4 text-gray-500">
+              <td colSpan={2} className="flex text-center py-4 text-gray-500">
                 {" "}
                 {/* colSpan ajustado para 2 colunas */}
                 Nenhum módulo encontrado.

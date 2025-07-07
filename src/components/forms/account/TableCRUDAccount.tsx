@@ -75,7 +75,7 @@ export function TableCRUDAccount({
         <tbody className="divide-y border-b divide-secondary md:text-s lg:text-s">
           {students.length === 0 ? (
             <tr>
-              <td colSpan={3} className="text-center py-4 text-gray-500">
+              <td colSpan={3} className="flex text-center py-4 text-gray-500">
                 Nenhum aluno encontrado.
               </td>
             </tr>

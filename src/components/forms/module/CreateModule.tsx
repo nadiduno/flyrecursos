@@ -1,11 +1,11 @@
 import React, { useState, useEffect } from "react";
-import { post } from "../../services/api";
-import { FormDataModule } from "../../types/typeFormData";
-import { formatarMensagemErro } from "../../utils/formatarErrors";
+import { post } from "../../../services/api";
+import { FormDataModule } from "../../../types/typeFormData";
+import { formatarMensagemErro } from "../../../utils/formatarErrors";
 import { AxiosError } from "axios";
 import { CreateModuleForm } from "./CreateModuleForm";
 
-import { toastCustomSuccess, toastCustomError } from "../ToastCustom";
+import { toastCustomSuccess, toastCustomError } from "../../ToastCustom";
 
 interface CreateModuleProps {
   isVisible: boolean;

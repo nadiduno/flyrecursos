@@ -9,6 +9,8 @@ type RespostaBackend<T> = AxiosResponse<T>;
 interface ErroBackend {
   error?: string;
   message?: string;
+  status?: number;
+  codigoErro?: string;
   [key: string]: unknown;
 }
 
@@ -53,19 +55,36 @@ const handleRequest = async <T>(
     const error = err as AxiosError<ErroBackend>;
 
     if (import.meta.env.DEV) {
-      console.error('Erro de requisição:', {
+       console.error('Erro de requisição:', {
         url: error.config?.url ?? 'URL desconhecida',
+        method: error.config?.method ?? 'Método desconhecido',
         status: error.response?.status ?? 'sem status',
         data: error.response?.data,
         message: error.message,
-        isTimeout: error.code === 'ECONNABORTED'
+        isTimeout: error.code === 'ECONNABORTED',
+        stack: error.stack
       });
     }
-    if (error.code === 'ECONNABORTED') {
-        throw new Error('Tempo limite excedido ao conectar com o servidor. Por favor, tente novamente.');
+    
+    // Tratamento para erros 500
+    if (error.response?.status === 500) {
+      const serverMessage = error.response.data?.message || 'Erro interno no servidor';
+      throw new Error(`Servidor indisponível: ${serverMessage}`);
     }
 
-    throw error; 
+    // Tratamento para erros 4xx 
+    if (error.response?.status && error.response.status >= 400 && error.response.status < 500) {
+      const serverMessage = error.response.data?.message || 'Requisição inválida';
+      throw new Error(`Erro na requisição: ${serverMessage} (${error.response.status})`);
+    }
+
+    // Tratamento para timeout
+    if (error.code === 'ECONNABORTED') {
+      throw new Error('Tempo limite excedido ao conectar com o servidor. Por favor, tente novamente.');
+    }
+
+    // Para outros erros
+    throw new Error(`Erro na comunicação com o servidor: ${error.message}`);
   }
 };
 

@@ -2,7 +2,7 @@ import React, { useEffect } from "react";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { FormDataModule } from "../../types/typeFormData";
+import { FormDataModule } from "../../../types/typeFormData";
 
 const ModuleSchemaEdit = z.object({
   titulo: z
@@ -99,7 +99,7 @@ export const CreateModuleForm: React.FC<EditModuleFormProps> = ({
             type="submit"
           >
             <p className="leading-tight tracking-normal text-center font-bold md:text-[1.25rem]">
-              Salvar Edição
+              Criar Módulo
             </p>
           </button>
         </div>

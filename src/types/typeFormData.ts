@@ -17,3 +17,14 @@ export type FormDataModule = {
   id?: number;
   titulo: string;
 };
+
+export type FormDataLesson = {
+  id?: number;
+  titulo: string;
+  tipo: string; // Ex: "VIDEO", "ARTIGO", "PDF"
+  duracaoEstimada: number; 
+  linkConteudo: string;
+  moduloId?: number; 
+  ordem?: number;
+  urlCapa?: string;
+};

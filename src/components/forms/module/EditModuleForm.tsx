@@ -2,7 +2,7 @@ import React, { useEffect } from "react";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { FormDataModule } from "../../types/typeFormData";
+import { FormDataModule } from "../../../types/typeFormData";
 
 const ModuleSchemaEdit = z.object({
   titulo: z

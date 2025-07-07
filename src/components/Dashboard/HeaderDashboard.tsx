@@ -2,7 +2,7 @@ import { useNavigate } from "react-router-dom";
 import { useState } from "react";
 import { Account } from "../forms/account/Account";
 import { Course } from "../forms/course/Course";
-import { Module } from "../module/Module";
+import { Module } from "../forms/module/Module";
 import { Lesson } from "../forms/lesson/Lesson";
 import { Toaster } from "react-hot-toast";
 

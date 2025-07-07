@@ -1,11 +1,11 @@
 import React, { useEffect } from "react";
-import { del } from "../../services/api";
+import { del } from "../../../services/api";
 import { TableRowDataModule } from "./Module";
-import { formatarMensagemErro } from "../../utils/formatarErrors";
+import { formatarMensagemErro } from "../../../utils/formatarErrors";
 import { AxiosError } from "axios";
 import { DeleteModuleForm } from "./DeleteModuleForm";
 
-import { toastCustomSuccess, toastCustomError } from "../ToastCustom";
+import { toastCustomSuccess, toastCustomError } from "../../ToastCustom";
 
 interface DeleteModuleProps {
   isVisible: boolean;
@@ -28,9 +28,7 @@ export const DeleteModule: React.FC<DeleteModuleProps> = ({
     }
 
     try {
-      console.log(
-        "Enviando requisição DELETE para: /api/modulos/" + moduleData.id
-      );
+      // console.log("Enviando requisição DELETE para: /api/modulos/" + moduleData.id);
       await del(`/api/modulos/${moduleData.id}`);
 
       const moduleTitle = moduleData.titulo || "Módulo";

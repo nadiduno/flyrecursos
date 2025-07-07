@@ -2,9 +2,9 @@ import { CiSearch } from "react-icons/ci";
 import { TableCRUDModule } from "./TableCRUDModule";
 import { CreateModule } from "./CreateModule";
 import { useState, useEffect } from "react";
-import { ButtonFly } from "../botoes/ButtonFly";
+import { ButtonFly } from "../../botoes/ButtonFly";
 import { CgAdd } from "react-icons/cg";
-import { get } from "../../services/api";
+import { get } from "../../../services/api";
 import { EditModule } from "./EditModule";
 import { DeleteModule } from "./DeleteModule";
 
@@ -50,7 +50,7 @@ export function Module() {
       const response = await get<{ content: TableRowDataModule[] }>(
         "/api/modulos"
       );
-      const fetchedData = response.data.content;
+      const fetchedData = response.data.content  || [];
       // console.log("Resposta do backend (módulos):", fetchedData);
 
       setModulesData(fetchedData);
