@@ -1,39 +1,41 @@
-import React, { useEffect, useState } from "react";
-import { post, get } from "../../../services/api"; // Mantenha as importações
+// src/components/modals/course/EditCourse.tsx
+import React, { useState, useEffect } from "react";
+import { put, get, post, del } from "../../../services/api"; // Importar 'del'
 import { FormDataCourse } from "../../../types/typeFormData";
 import { formatarMensagemErro } from "../../../utils/formatarErrors";
 import { AxiosError } from "axios";
 import { toastCustomSuccess, toastCustomError } from "../../ToastCustom";
-import { useAuth } from "../../../context/AuthContext";
-import { CreateCourseForm } from "./CreateCourseForm";
+import { useAuth } from "../../../context/AuthContext"; // Se precisar do autorId
+import { EditCourseForm } from "../../forms/course/EditCourseForm"; // Caminho correto
 
 interface Modulo {
   id: number;
   titulo: string;
 }
 
-interface CreateCourseProps {
+interface EditCourseProps {
   isVisible: boolean;
   setIsVisible: React.Dispatch<React.SetStateAction<boolean>>;
-  onCourseCreated?: () => void;
+  courseData: FormDataCourse | null; // Dados do curso a ser editado
+  onEditSuccess: () => void;
 }
 
-export const CreateCourse: React.FC<CreateCourseProps> = ({
+export const EditCourse: React.FC<EditCourseProps> = ({
   isVisible: propIsVisible,
   setIsVisible,
-  onCourseCreated,
+  courseData,
+  onEditSuccess,
 }) => {
-  const { userId } = useAuth(); // Assume que userId é uma string
+  const { userId } = useAuth(); // Obter userId do contexto de autenticação
   const [modulosDisponiveis, setModulosDisponiveis] = useState<Modulo[]>([]);
   const [loadingModulos, setLoadingModulos] = useState(true);
   const [errorModulos, setErrorModulos] = useState<string | null>(null);
-  const [refreshModulosTrigger, setRefreshModulosTrigger] = useState(0); // Renomeado para clareza
 
   useEffect(() => {
     const fetchModulos = async () => {
       try {
         setLoadingModulos(true);
-        const response = await get<{ content: Modulo[] }>("/api/modulos"); // Ajuste se a API não retornar `content`
+        const response = await get<{ content: Modulo[] }>("/api/modulos");
         setModulosDisponiveis(response.data.content || []);
       } catch (err) {
         console.error("Erro ao carregar módulos:", err);
@@ -46,66 +48,68 @@ export const CreateCourse: React.FC<CreateCourseProps> = ({
     if (propIsVisible) {
       fetchModulos();
     }
-  }, [propIsVisible, refreshModulosTrigger]); // Dependência do trigger
-
-  const handleEscape = (event: KeyboardEvent): void => {
-    if (event.key === "Escape") setIsVisible(false);
-  };
+  }, [propIsVisible]); // Recarregar módulos quando o modal se torna visível
 
   const onSubmit = async (formData: FormDataCourse) => {
+    if (!courseData?.id) {
+      toastCustomError("Edição de Curso", "ID do curso não encontrado para edição.");
+      return;
+    }
+
+    if (!userId) {
+      toastCustomError("Edição de Curso", "Usuário não autenticado. Faça login novamente.");
+      return;
+    }
+
+    const autorId = parseInt(userId);
+    if (isNaN(autorId)) {
+      toastCustomError("Edição de Curso", "ID do usuário inválido.");
+      return;
+    }
+
+    const cursoId = courseData.id;
+    const currentModulesIds = courseData.modulosIds || [];
+    const newModulesIds = formData.modulosIds || [];
+
     try {
-      if (!userId) {
-        throw new Error("Usuário não autenticado. Faça login novamente.");
-      }
-
-      const autorId = parseInt(userId);
-      if (isNaN(autorId)) {
-        throw new Error("ID do usuário inválido");
-      }
-
-      // --- Passo 1: Criar o curso SEM módulos no payload inicial ---
-      const createCoursePayload = {
+      // 1. Atualizar o título do curso (PUT /api/cursos/{id})
+      const updatePayload = {
         titulo: formData.titulo,
-        autorId: autorId,
+        autorId: autorId, // Enviar o autorId na atualização se a API exigir
       };
+      console.log(`Enviando PUT para /api/cursos/${cursoId} com payload:`, updatePayload);
+      await put(`/api/cursos/${cursoId}`, updatePayload);
 
-      console.log("Payload para criar curso (Passo 1):", createCoursePayload);
-      const createCourseResponse = await post<{ id: number }>( // Especifique que a resposta terá `id`
-        "/api/cursos",
-        createCoursePayload
+      // 2. Sincronizar módulos (associar novos, desassociar removidos)
+      const modulesToAdd = newModulesIds.filter(
+        (id) => !currentModulesIds.includes(id)
       );
-      const newCourseId = createCourseResponse.data.id; // Suponha que o ID do novo curso esteja em `data.id`
+      const modulesToRemove = currentModulesIds.filter(
+        (id) => !newModulesIds.includes(id)
+      );
 
-      if (!newCourseId) {
-        throw new Error("ID do curso recém-criado não retornado pela API.");
+      // Desassociar módulos
+      for (const moduloId of modulesToRemove) {
+        console.log(`Deletando associação: /api/cursos/${cursoId}/modulos/${moduloId}`);
+        await del(`/api/cursos/${cursoId}/modulos/${moduloId}`);
       }
 
-      // --- Passo 2: Associar módulos, SE houver módulos selecionados ---
-      if (formData.modulosIds && formData.modulosIds.length > 0) {
-        console.log("Módulos selecionados para associação:", formData.modulosIds);
-        for (const moduloId of formData.modulosIds) {
-          console.log(`Associando módulo ${moduloId} ao curso ${newCourseId}`);
-          await post(
-            `/api/cursos/${newCourseId}/modulos/${moduloId}`,
-            {} // Endpoint espera corpo vazio ou nulo se for apenas path params
-          );
-        }
-        toastCustomSuccess("Curso", formData.titulo, "Criado com sucesso! (com módulos)");
-      } else {
-        toastCustomSuccess("Curso", formData.titulo, "Criado com sucesso! (sem módulos)");
+      // Associar novos módulos
+      for (const moduloId of modulesToAdd) {
+        console.log(`Criando associação: /api/cursos/${cursoId}/modulos/${moduloId}`);
+        await post(`/api/cursos/${cursoId}/modulos/${moduloId}`, {}); // Payload vazio ou nulo
       }
 
-
-      console.log("Operação de criação de curso concluída com sucesso.");
+      toastCustomSuccess("Curso", formData.titulo, "Editado com sucesso!");
 
       setTimeout(() => {
         setIsVisible(false);
-        onCourseCreated?.();
+        onEditSuccess(); // Callback para atualizar a lista de cursos na interface
       }, 1500);
     } catch (error) {
-      console.error("Erro na criação do curso:", error);
+      console.error("Erro na edição do curso:", error);
+      let errorMessage = "Erro desconhecido ao editar curso.";
 
-      let errorMessage = "Erro desconhecido ao criar curso.";
       if (error instanceof AxiosError) {
         errorMessage =
           error.response?.data?.message || formatarMensagemErro(error);
@@ -114,6 +118,10 @@ export const CreateCourse: React.FC<CreateCourseProps> = ({
       }
       toastCustomError("Curso", formData.titulo, errorMessage);
     }
+  };
+
+  const handleEscape = (event: KeyboardEvent): void => {
+    if (event.key === "Escape") setIsVisible(false);
   };
 
   const handleBackButton = (): void => {
@@ -153,19 +161,14 @@ export const CreateCourse: React.FC<CreateCourseProps> = ({
     );
   }
 
-  // Função para passar para o CreateCourseForm
-  const handleRefreshModulos = () => {
-    setRefreshModulosTrigger((prev) => prev + 1);
-  };
-
   return (
     <div className="fixed inset-0 flex items-start justify-center bg-[#FFFFFFB2] z-50">
       <div className="mt-[0.25rem] font-bold bg-primary1 text-white w-[90%] md:w-[70%] h-screen rounded-t-[10px] shadow-2xl">
-        <CreateCourseForm
+        <EditCourseForm
           onSubmit={onSubmit}
           setIsVisible={setIsVisible}
+          defaultData={courseData || undefined} // Passa os dados do curso
           modulosDisponiveis={modulosDisponiveis} // Passa os módulos carregados
-          onModulosRefetch={handleRefreshModulos}
         />
       </div>
     </div>

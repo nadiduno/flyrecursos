@@ -1,17 +1,18 @@
-import React, { useState, useEffect } from "react";
-import { useForm, SubmitHandler } from "react-hook-form"; // Adicione SubmitHandler
+import React, { useEffect, useState } from "react";
+import { useForm, SubmitHandler } from "react-hook-form";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { FormDataCourse } from "../../../types/typeFormData";
-import { CreateModulePopover } from "../module/CreateModulePopover";
-import { Checkbox, CheckboxGroup } from "react-aria-components"; // Importar Checkbox e CheckboxGroup
+import { Checkbox, CheckboxGroup } from "react-aria-components";
 
+// Interface ModuloOption (assumindo que já existe em algum lugar ou será definida aqui)
 interface ModuloOption {
   id: number;
   titulo: string;
 }
 
-// Zod schema para validação do formulário de criação de curso
+// Zod schema para validação do formulário de edição de curso
+// Mantém a mesma validação do CreateCourseForm
 const FormDataSchema = z.object({
   titulo: z
     .string()
@@ -20,31 +21,34 @@ const FormDataSchema = z.object({
     .max(100, "O título deve ter no máximo 100 caracteres."),
   modulosIds: z
     .array(z.number())
-    .optional(), // Opcional para Zod, mas vamos garantir que é um array vazio se não houver seleção
+    .optional(), // Módulos são opcionais no Zod para o formulário
 });
 
-// Definindo o tipo FormData como inferido do schema
-export type FormData = z.infer<typeof FormDataSchema>;
+// Tipo de dados do formulário local
+type FormData = z.infer<typeof FormDataSchema> & {
+  id?: number; // Para edição, o ID é parte dos dados do formulário
+  autorId?: number; // Se o autorId for manipulado ou exibido no form
+};
 
-interface CourseFormProps {
-  onSubmit: SubmitHandler<FormDataCourse>; // Mudado para SubmitHandler<FormDataCourse>
+interface EditCourseFormProps {
+  onSubmit: SubmitHandler<FormData>;
+  defaultData?: FormDataCourse; // Dados do curso a ser editado
   setIsVisible: React.Dispatch<React.SetStateAction<boolean>>;
-  modulosDisponiveis: ModuloOption[];
-  onModulosRefetch: () => void;
+  modulosDisponiveis: ModuloOption[]; // Recebe os módulos do componente pai
 }
 
-export const CreateCourseForm: React.FC<CourseFormProps> = ({
+export const EditCourseForm: React.FC<EditCourseFormProps> = ({
   onSubmit,
+  defaultData,
   setIsVisible,
   modulosDisponiveis,
-  onModulosRefetch,
 }) => {
   const {
     register,
     handleSubmit,
+    reset, // Usado para pré-popular o formulário
     formState: { errors },
     setValue,
-    // watch, // Não é mais necessário watch para a lógica de 'selectedModules' se usarmos `CheckboxGroup`
   } = useForm<FormData>({
     resolver: zodResolver(FormDataSchema),
     defaultValues: {
@@ -55,48 +59,41 @@ export const CreateCourseForm: React.FC<CourseFormProps> = ({
 
   const [selectedModules, setSelectedModules] = useState<number[]>([]);
 
-  // Sincroniza `selectedModules` com o `formState` quando os módulos mudam
-  // e vice-versa quando a seleção de módulos via CheckboxGroup muda.
-  // A inicialização dos defaultValues já cuida disso para a montagem inicial.
-  // Para a re-renderização de `modulosDisponiveis` após refetch, podemos
-  // garantir que os IDs ainda selecionados permaneçam selecionados.
+  // Inicializa os valores do formulário e `selectedModules` quando `defaultData` muda
   useEffect(() => {
-    // Se modulosDisponiveis mudar (ex: um novo módulo foi criado),
-    // queremos garantir que os módulos previamente selecionados ainda são válidos.
-    setSelectedModules((prevSelected) => {
-      const validSelected = prevSelected.filter((id) =>
-        modulosDisponiveis.some((mod) => mod.id === id)
-      );
-      // Atualiza o form state para refletir apenas os módulos válidos
-      setValue("modulosIds", validSelected, { shouldValidate: true });
-      return validSelected;
-    });
-  }, [modulosDisponiveis, setValue]);
+    if (defaultData) {
+      reset({
+        titulo: defaultData.titulo,
+        modulosIds: defaultData.modulosIds || [],
+        id: defaultData.id,
+        autorId: defaultData.autorId,
+      });
+      setSelectedModules(defaultData.modulosIds || []); // Sincroniza com o estado do checkbox
+    } else {
+      // Se defaultData for nulo (caso de reset ou formulário de criação convertido)
+      reset({
+        titulo: "",
+        modulosIds: [],
+        id: undefined,
+        autorId: undefined,
+      });
+      setSelectedModules([]);
+    }
+  }, [defaultData, reset]);
 
-
-  // Handler para quando a seleção de módulos muda via CheckboxGroup
+  // Sincroniza selectedModules com o form state quando o usuário interage com o CheckboxGroup
   const handleSelectedModulesChange = (newSelection: number[]) => {
     setSelectedModules(newSelection);
     setValue("modulosIds", newSelection, { shouldValidate: true });
   };
 
-  const handleFormSubmit: SubmitHandler<FormData> = (data) => {
-    // Garante que o autorId seja passado (assumindo que ele será fornecido pelo componente pai)
-    // Para criação, o autorId viria do contexto de autenticação do componente que chama este formulário
-    onSubmit({
-      titulo: data.titulo,
-      modulosIds: data.modulosIds || [], // Garante que seja um array vazio se undefined
-      // autorId: <seu_autor_id_aqui>, // Você precisará passar o autorId do componente pai (CreateCourse)
-    });
-  };
-
   return (
-    <form onSubmit={handleSubmit(handleFormSubmit)}>
+    <form onSubmit={handleSubmit(onSubmit)}>
       <div className="flex flex-col justify-center items-center gap-0 md:gap-1">
         <p className="my-[1rem] md:mt-[1rem] text-m md:text-xl lg:text-xl mx-auto text-center font-bold mb-0">
-          CRIAR CURSO
+          EDITAR CURSO
         </p>
-        <div className="w-[95%] grid gap-2 md:gap-6 pb-4 items-star content-start">
+        <div className="w-[95%] grid gap-2 md:gap-6 pb-4 items-start content-start">
           {/* Título do Curso */}
           <div className="w-full flex flex-col md:flex-col">
             <label
@@ -125,6 +122,7 @@ export const CreateCourseForm: React.FC<CourseFormProps> = ({
           </label>
           <div className="flex items-center gap-8">
             <div className="">
+              {/* Campo de busca para módulos (opcional, manter se necessário) */}
               <input
                 type="text"
                 placeholder="Digite o nome para consultar"
@@ -132,21 +130,18 @@ export const CreateCourseForm: React.FC<CourseFormProps> = ({
                 autoComplete="name"
               />
             </div>
-
-            <div className="hidden md:block w-px h-8 bg-gray-300"></div>
-
-            <div className="pl-0 md:pl-0">
-              <CreateModulePopover
-                onModuleCreated={(newModuleId) => {
-                  if (newModuleId) {
-                    onModulosRefetch(); // Recarrega a lista de módulos
-                    // Opcional: Adicionar o novo módulo automaticamente à seleção
-                    setSelectedModules((prev) => [...prev, newModuleId]);
-                    setValue("modulosIds", [...selectedModules, newModuleId], { shouldValidate: true });
-                  }
-                }}
-              />
-            </div>
+            {/* Divisor removido ou ajustado conforme layout */}
+            {/* <div className="hidden md:block w-px h-8 bg-gray-300"></div> */}
+            {/* Se você tiver um componente para criar módulos (como CreateModulePopover), ele pode ir aqui.
+                No contexto de edição, talvez não seja o lugar mais comum, mas se for necessário, mantenha.
+                Se não, remova o div abaixo. */}
+            {/* <div className="pl-0 md:pl-0">
+              <CreateModulePopover onModuleCreated={(newModuleId) => {
+                // Lógica para adicionar o novo módulo à lista se for relevante
+                // e talvez pré-selecioná-lo no formulário de edição.
+                // Exemplo: onModulosRefetch(); // se houver um refetch de módulos no pai
+              }} />
+            </div> */}
           </div>
         </div>
 
@@ -157,7 +152,7 @@ export const CreateCourseForm: React.FC<CourseFormProps> = ({
               Nenhum módulo disponível. Por favor, crie um módulo primeiro.
             </p>
           ) : (
-            <CheckboxGroup
+            <CheckboxGroup // Removido o argumento de tipo genérico <number[]>
               value={selectedModules}
               onChange={handleSelectedModulesChange}
               className="w-full"
@@ -236,6 +231,7 @@ export const CreateCourseForm: React.FC<CourseFormProps> = ({
             })}
           </div>
         </div>
+
         <div className="w-full h-[7.5rem] md:h-[10rem] rounded-b-[10px] bg-white flex justify-center items-center space-x-4 mt-[1rem] border-b-[3px] border-primary2">
           <button
             className="w-[8rem] md:w-[15rem] h-[3rem] rounded-[50px] border-secondary bg-white shadow-[0px_4px_4px_0px_rgba(0,0,0,0.2)] hover:bg-secondary2 hover:text-black transition-colors duration-200"
@@ -251,7 +247,7 @@ export const CreateCourseForm: React.FC<CourseFormProps> = ({
             type="submit"
           >
             <p className="leading-tight tracking-normal text-center font-bold md:text-[1.25rem]">
-              Criar Curso
+              Salvar Alterações
             </p>
           </button>
         </div>
