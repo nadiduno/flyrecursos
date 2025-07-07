@@ -1,8 +1,8 @@
 import { useState, useEffect } from "react";
 import { FaArrowUp, FaXmark } from "react-icons/fa6";
-import "./UploadImage.css";
-import imgPerfil from "../../assets/fotodeperfil.png";
-import imgCurso from "../../assets/fotocurso.png";
+import "./UploadImg.css";
+import imgPerfil from "../../../public/user.png";
+import imgCurso from "../../assets/imgprevvideo.png";
 import { post, get } from "../../services/api";
 import { useAuth } from "../../context/AuthContext";
 
@@ -15,7 +15,7 @@ export default function UploadImage({ estilos = "perfil", onUploadComplete }: Pr
   const { userId, setPhotoUrl } = useAuth();
   const [fileName, setFileName] = useState<string | null>(null);
   const [previewUrl, setPreviewUrl] = useState<string | null>(null);
-
+  const DEFAULT_IMAGE_URL = import.meta.env.VITE_DEFAULT_IMAGE_URL;
   useEffect(() => {
     const fetchImagen = async () => {
       try {
@@ -41,8 +41,12 @@ export default function UploadImage({ estilos = "perfil", onUploadComplete }: Pr
     if (!file || !userId) return;
 
     const formData = new FormData();
-    formData.append("archivo", file);
-
+    formData.append("foto", file);
+console.log("userId:", userId);
+console.log("Enviando foto:", file);
+for (const pair of formData.entries()) {
+  console.log("FormData:", pair[0], pair[1]);
+}
     try {
       const response = await post<{ url: string }>(`/usuarios/${userId}/foto`, formData, {
         headers: { "Content-Type": "multipart/form-data" },
@@ -62,7 +66,7 @@ export default function UploadImage({ estilos = "perfil", onUploadComplete }: Pr
   const handleRemove = () => {
     setPreviewUrl(null);
     setFileName(null);
-    setPhotoUrl("");                             // Limpia en el contexto también
+    setPhotoUrl("");                             
     onUploadComplete("");
   };
 

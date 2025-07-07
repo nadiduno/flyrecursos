@@ -3,6 +3,7 @@ import logo from "../../assets/logo.png";
 import { CreateAccount } from "../forms/account/CreateAccount";
 import { useAuth } from "../../context/AuthContext";
 import { useNavigate } from "react-router-dom";
+import UploadImage from "../uploadImg/UploadImg";
 
 interface User {
   photoUrl?: string;
@@ -21,7 +22,7 @@ export function Navbar({ user }: NavbarProps) {
   const [showCreateAccount, setShowCreateAccount] = useState(false);
   // const [searchQuery, setSearchQuery] = useState<string>("");
   const [isDropdownVisible, setIsDropdownVisible] = useState<boolean>(false);
-
+  const [showUploader, setShowUploader] = useState(false);
   // const handleCreateAccount = (): void => {
   //   setShowCreateAccount(true);
   // };
@@ -110,11 +111,12 @@ export function Navbar({ user }: NavbarProps) {
               </button>
             </div> */}
             <div className="relative">
+             
               <img
                 className="w-12 h-12 rounded-full object-cover cursor-pointer"
                 src={user?.photoUrl || "../../public/user.png"}
                 alt="User"
-                onClick={toggleDropdown} // Muestra/oculta el menú desplegable
+                onClick={toggleDropdown}
               />
               {isDropdownVisible && (
                 <div className="w-[18rem] absolute right-0 mt-2 bg-white shadow-lg rounded-lg p-4 z-50">
@@ -125,6 +127,17 @@ export function Navbar({ user }: NavbarProps) {
                     <br />
                     Email
                   </span>
+<button
+  onClick={() => setShowUploader((prev) => !prev)}
+  className="w-full border border-gray-300 rounded-full text-blue-500 hover:bg-blue-500 hover:text-white px-4 py-1 my-2"
+>
+  {showUploader ? "Cerrar editor" : "Editar imagen"}
+</button>
+{showUploader && (
+  <div className="mt-2">
+    <UploadImage estilos="perfil" onUploadComplete={() => setShowUploader(false)} />
+  </div>
+)}
                   <button
                     className="w-full border rounded-tl-full rounded-tr-full rounded-bl-full border-gray-300 focus:outline-none  text-red-500 hover:bg-red-500 hover:text-white  px-4 py-1 rounded-lg my-4 "
                     onClick={handleLogout}

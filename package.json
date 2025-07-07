@@ -14,6 +14,7 @@
     "@hookform/resolvers": "^5.0.1",
     "@tailwindcss/vite": "^4.0.15",
     "axios": "^1.9.0",
+    "firebase": "^11.10.0",
     "gsap": "^3.13.0",
     "jwt-decode": "^4.0.0",
     "react": "^19.0.0",
