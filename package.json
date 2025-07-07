@@ -18,6 +18,7 @@
     "jwt-decode": "^4.0.0",
     "react": "^19.0.0",
     "react-aria": "^3.41.1",
+    "react-aria-components": "^1.10.1",
     "react-dom": "^19.0.0",
     "react-hook-form": "^7.60.0",
     "react-hot-toast": "^2.5.2",
