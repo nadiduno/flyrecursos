@@ -21,18 +21,19 @@ export const CreateAccount: React.FC<CreateAccountProps> = ({
   };
 
   const onSubmit = async (formData: FormData) => {
+     console.log('Formulario enviado', formData);
     const { perfil, dataNascimento, ...commonData } = formData;
     let endpoint = "";
     let dataToSend: Partial<FormData> = commonData;
-
+console.log("Payload para /admin:", dataToSend);
     if (perfil === "ALUNO") {
       endpoint = "/alunos";
       dataToSend = { ...commonData, dataNascimento };
-      // console.log("Aluno", dataToSend)
+      console.log("Aluno", dataToSend)
     } else if (perfil === "ADMIN") {
       endpoint = "/admin";
       dataToSend = commonData;
-      // console.log("Admin", dataToSend)
+      console.log("Admin", dataToSend)
     } else {
       toastCustomError(
         "Usuário",
@@ -45,6 +46,12 @@ export const CreateAccount: React.FC<CreateAccountProps> = ({
       // console.log("Enviando para:", import.meta.env.VITE_BACKEND_BASE_URL + endpoint);
       // console.log("Enviando requisição POST para:", endpoint, "com o payload:", dataToSend);
       const response = await post(endpoint, dataToSend);
+      console.log("Resposta do /admin:", response);
+ if (!response || !response.data) {
+    toastCustomError("Usuário", "Admin", "Sem resposta da API. Verifique os dados e tente novamente.");
+    return;
+  }
+
       console.log(response.data);
 
       const nome = formData.nome || "Usuário";
