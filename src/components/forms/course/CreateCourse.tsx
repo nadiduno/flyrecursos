@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { post, get } from "../../../services/api"; // Mantenha as importações
+import { post, get } from "../../../services/api";
 import { FormDataCourse } from "../../../types/typeFormData";
 import { formatarMensagemErro } from "../../../utils/formatarErrors";
 import { AxiosError } from "axios";
@@ -23,17 +23,22 @@ export const CreateCourse: React.FC<CreateCourseProps> = ({
   setIsVisible,
   onCourseCreated,
 }) => {
-  const { userId } = useAuth(); // Assume que userId é uma string
+  const { userId } = useAuth();
   const [modulosDisponiveis, setModulosDisponiveis] = useState<Modulo[]>([]);
   const [loadingModulos, setLoadingModulos] = useState(true);
   const [errorModulos, setErrorModulos] = useState<string | null>(null);
-  const [refreshModulosTrigger, setRefreshModulosTrigger] = useState(0); // Renomeado para clareza
+  const [refreshModulosTrigger, setRefreshModulosTrigger] = useState(0);
+
+  const [currentSelectedModuleIds, setCurrentSelectedModuleIds] = useState<
+    string[]
+  >([]);
 
   useEffect(() => {
     const fetchModulos = async () => {
       try {
         setLoadingModulos(true);
-        const response = await get<{ content: Modulo[] }>("/api/modulos"); // Ajuste se a API não retornar `content`
+        setErrorModulos(null); // Limpa erros anteriores
+        const response = await get<{ content: Modulo[] }>("/api/modulos");
         setModulosDisponiveis(response.data.content || []);
       } catch (err) {
         console.error("Erro ao carregar módulos:", err);
@@ -45,8 +50,14 @@ export const CreateCourse: React.FC<CreateCourseProps> = ({
 
     if (propIsVisible) {
       fetchModulos();
+    } else {
+      setCurrentSelectedModuleIds([]);
+      // Resetar também os módulos disponíveis e estados de carregamento/erro ao fechar
+      setModulosDisponiveis([]);
+      setLoadingModulos(true); // Preparar para o próximo carregamento
+      setErrorModulos(null);
     }
-  }, [propIsVisible, refreshModulosTrigger]); // Dependência do trigger
+  }, [propIsVisible, refreshModulosTrigger]);
 
   const handleEscape = (event: KeyboardEvent): void => {
     if (event.key === "Escape") setIsVisible(false);
@@ -66,37 +77,38 @@ export const CreateCourse: React.FC<CreateCourseProps> = ({
       // --- Passo 1: Criar o curso SEM módulos no payload inicial ---
       const createCoursePayload = {
         titulo: formData.titulo,
-        autorId: autorId,
+        // autorId: autorId,
       };
 
-      console.log("Payload para criar curso (Passo 1):", createCoursePayload);
-      const createCourseResponse = await post<{ id: number }>( // Especifique que a resposta terá `id`
+      // console.log("Payload para criar curso (Passo 1):", createCoursePayload);
+      const createCourseResponse = await post<{ id: number }>(
         "/api/cursos",
         createCoursePayload
       );
-      const newCourseId = createCourseResponse.data.id; // Suponha que o ID do novo curso esteja em `data.id`
+      const newCourseId = createCourseResponse.data.id;
 
       if (!newCourseId) {
         throw new Error("ID do curso recém-criado não retornado pela API.");
       }
-
       // --- Passo 2: Associar módulos, SE houver módulos selecionados ---
       if (formData.modulosIds && formData.modulosIds.length > 0) {
-        console.log("Módulos selecionados para associação:", formData.modulosIds);
+        // console.log("Módulos selecionados para associação:", formData.modulosIds );
         for (const moduloId of formData.modulosIds) {
-          console.log(`Associando módulo ${moduloId} ao curso ${newCourseId}`);
-          await post(
-            `/api/cursos/${newCourseId}/modulos/${moduloId}`,
-            {} // Endpoint espera corpo vazio ou nulo se for apenas path params
-          );
+          // console.log(`Associando módulo ${moduloId} ao curso ${newCourseId}`);
+          await post(`/api/cursos/${newCourseId}/modulos/${moduloId}`, {});
         }
-        toastCustomSuccess("Curso", formData.titulo, "Criado com sucesso! (com módulos)");
+        toastCustomSuccess("Curso", formData.titulo, "Criado com sucesso!");
       } else {
-        toastCustomSuccess("Curso", formData.titulo, "Criado com sucesso! (sem módulos)");
+        toastCustomSuccess(
+          "Curso",
+          formData.titulo,
+          "Criado com sucesso! (sem módulos)"
+        );
       }
 
+      // console.log("Operação de criação de curso concluída com sucesso.");
 
-      console.log("Operação de criação de curso concluída com sucesso.");
+      setCurrentSelectedModuleIds([]);
 
       setTimeout(() => {
         setIsVisible(false);
@@ -131,28 +143,7 @@ export const CreateCourse: React.FC<CreateCourseProps> = ({
 
   if (!propIsVisible) return null;
 
-  if (loadingModulos) {
-    return (
-      <div className="fixed inset-0 flex items-center justify-center bg-[#FFFFFFB2] z-50">
-        <div className="w-12 h-12 border-4 border-secondary border-t-transparent rounded-full animate-spin"></div>
-      </div>
-    );
-  }
-
-  if (errorModulos) {
-    return (
-      <div className="fixed inset-0 flex items-center justify-center bg-[#FFFFFFB2] z-50">
-        <div className="text-red-500 text-xl font-bold">{errorModulos}</div>
-        <button
-          onClick={() => setIsVisible(false)}
-          className="ml-4 px-4 py-2 bg-primary2 text-white rounded"
-        >
-          Fechar
-        </button>
-      </div>
-    );
-  }
-
+  
   // Função para passar para o CreateCourseForm
   const handleRefreshModulos = () => {
     setRefreshModulosTrigger((prev) => prev + 1);
@@ -164,8 +155,12 @@ export const CreateCourse: React.FC<CreateCourseProps> = ({
         <CreateCourseForm
           onSubmit={onSubmit}
           setIsVisible={setIsVisible}
-          modulosDisponiveis={modulosDisponiveis} // Passa os módulos carregados
+          modulosDisponiveis={modulosDisponiveis}
           onModulosRefetch={handleRefreshModulos}
+          selectedModuleIds={currentSelectedModuleIds}
+          setSelectedModuleIds={setCurrentSelectedModuleIds}
+          loadingModulos={loadingModulos}
+          errorModulos={errorModulos}
         />
       </div>
     </div>

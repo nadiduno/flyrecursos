@@ -1,36 +1,36 @@
-import React, { useState, useEffect } from "react";
-import { useForm, SubmitHandler } from "react-hook-form"; // Adicione SubmitHandler
+import React, { useEffect } from "react";
+import { useForm, SubmitHandler } from "react-hook-form";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { FormDataCourse } from "../../../types/typeFormData";
 import { CreateModulePopover } from "../module/CreateModulePopover";
-import { Checkbox, CheckboxGroup } from "react-aria-components"; // Importar Checkbox e CheckboxGroup
+import { Checkbox, CheckboxGroup } from "react-aria-components";
 
 interface ModuloOption {
   id: number;
   titulo: string;
 }
 
-// Zod schema para validação do formulário de criação de curso
 const FormDataSchema = z.object({
   titulo: z
     .string()
     .nonempty("O título do curso é obrigatório.")
     .min(3, "O título deve ter no mínimo 3 caracteres.")
     .max(100, "O título deve ter no máximo 100 caracteres."),
-  modulosIds: z
-    .array(z.number())
-    .optional(), // Opcional para Zod, mas vamos garantir que é um array vazio se não houver seleção
+  modulosIds: z.array(z.string()).optional(),
 });
 
-// Definindo o tipo FormData como inferido do schema
 export type FormData = z.infer<typeof FormDataSchema>;
 
 interface CourseFormProps {
-  onSubmit: SubmitHandler<FormDataCourse>; // Mudado para SubmitHandler<FormDataCourse>
+  onSubmit: SubmitHandler<FormDataCourse>;
   setIsVisible: React.Dispatch<React.SetStateAction<boolean>>;
   modulosDisponiveis: ModuloOption[];
   onModulosRefetch: () => void;
+  selectedModuleIds: string[];
+  setSelectedModuleIds: React.Dispatch<React.SetStateAction<string[]>>;
+  loadingModulos: boolean;
+  errorModulos: string | null;
 }
 
 export const CreateCourseForm: React.FC<CourseFormProps> = ({
@@ -38,55 +38,55 @@ export const CreateCourseForm: React.FC<CourseFormProps> = ({
   setIsVisible,
   modulosDisponiveis,
   onModulosRefetch,
+  selectedModuleIds,
+  setSelectedModuleIds,
+  loadingModulos, 
+  errorModulos,   
 }) => {
   const {
     register,
     handleSubmit,
     formState: { errors },
     setValue,
-    // watch, // Não é mais necessário watch para a lógica de 'selectedModules' se usarmos `CheckboxGroup`
   } = useForm<FormData>({
     resolver: zodResolver(FormDataSchema),
     defaultValues: {
       titulo: "",
-      modulosIds: [],
+      modulosIds: selectedModuleIds,
     },
   });
 
-  const [selectedModules, setSelectedModules] = useState<number[]>([]);
-
-  // Sincroniza `selectedModules` com o `formState` quando os módulos mudam
-  // e vice-versa quando a seleção de módulos via CheckboxGroup muda.
-  // A inicialização dos defaultValues já cuida disso para a montagem inicial.
-  // Para a re-renderização de `modulosDisponiveis` após refetch, podemos
-  // garantir que os IDs ainda selecionados permaneçam selecionados.
   useEffect(() => {
-    // Se modulosDisponiveis mudar (ex: um novo módulo foi criado),
-    // queremos garantir que os módulos previamente selecionados ainda são válidos.
-    setSelectedModules((prevSelected) => {
-      const validSelected = prevSelected.filter((id) =>
-        modulosDisponiveis.some((mod) => mod.id === id)
+    setValue("modulosIds", selectedModuleIds, { shouldValidate: true });
+  }, [selectedModuleIds, setValue]);
+
+  useEffect(() => {
+    setSelectedModuleIds((prevSelected) => {
+      const validSelected = prevSelected.filter((idString) =>
+        modulosDisponiveis.some((mod) => mod.id === parseInt(idString))
       );
-      // Atualiza o form state para refletir apenas os módulos válidos
-      setValue("modulosIds", validSelected, { shouldValidate: true });
       return validSelected;
     });
-  }, [modulosDisponiveis, setValue]);
-
+  }, [modulosDisponiveis, setSelectedModuleIds]);
 
   // Handler para quando a seleção de módulos muda via CheckboxGroup
-  const handleSelectedModulesChange = (newSelection: number[]) => {
-    setSelectedModules(newSelection);
-    setValue("modulosIds", newSelection, { shouldValidate: true });
+  const handleSelectedModulesChange = (newSelection: string[]) => {
+    setSelectedModuleIds(newSelection);
   };
 
+  // Para debug os módulos criados e seleccionados
+  // useEffect(() => {
+  //   console.log("Módulos Seleccionados:", selectedModuleIds);
+  //   console.log("Módulos Disponibles:", modulosDisponiveis);
+  // }, [selectedModuleIds, modulosDisponiveis]);
+
   const handleFormSubmit: SubmitHandler<FormData> = (data) => {
-    // Garante que o autorId seja passado (assumindo que ele será fornecido pelo componente pai)
-    // Para criação, o autorId viria do contexto de autenticação do componente que chama este formulário
+    const modulosIdsAsNumbers =
+      data.modulosIds?.map((idString) => parseInt(idString)) || [];
+
     onSubmit({
       titulo: data.titulo,
-      modulosIds: data.modulosIds || [], // Garante que seja um array vazio se undefined
-      // autorId: <seu_autor_id_aqui>, // Você precisará passar o autorId do componente pai (CreateCourse)
+      modulosIds: modulosIdsAsNumbers,
     });
   };
 
@@ -97,7 +97,6 @@ export const CreateCourseForm: React.FC<CourseFormProps> = ({
           CRIAR CURSO
         </p>
         <div className="w-[95%] grid gap-2 md:gap-6 pb-4 items-star content-start">
-          {/* Título do Curso */}
           <div className="w-full flex flex-col md:flex-col">
             <label
               htmlFor="titulo"
@@ -137,12 +136,17 @@ export const CreateCourseForm: React.FC<CourseFormProps> = ({
 
             <div className="pl-0 md:pl-0">
               <CreateModulePopover
-                onModuleCreated={(newModuleId) => {
+                onModuleCreated={async (newModuleId) => {
                   if (newModuleId) {
-                    onModulosRefetch(); // Recarrega a lista de módulos
-                    // Opcional: Adicionar o novo módulo automaticamente à seleção
-                    setSelectedModules((prev) => [...prev, newModuleId]);
-                    setValue("modulosIds", [...selectedModules, newModuleId], { shouldValidate: true });
+                    await onModulosRefetch();
+                    const newModuleIdString = newModuleId.toString();
+
+                    setSelectedModuleIds((prevSelected) => {
+                      if (!prevSelected.includes(newModuleIdString)) {
+                        return [...prevSelected, newModuleIdString];
+                      }
+                      return prevSelected;
+                    });
                   }
                 }}
               />
@@ -150,15 +154,23 @@ export const CreateCourseForm: React.FC<CourseFormProps> = ({
           </div>
         </div>
 
-        {/* Seleção de Módulos com CheckboxGroup e Layout Responsivo */}
-        <div className="w-[95%] h-[13rem] md:h-[10rem] rounded-lg border border-primary2 overflow-auto p-2">
-          {modulosDisponiveis.length === 0 ? (
+        {/* SEÇÃO DE SELEÇÃO DE MÓDULOS */}
+        <div className="w-[95%] h-[13rem] md:h-[10rem] rounded-lg border border-primary2 overflow-auto p-2 relative"> {/* Adicionado relative para posicionar o spinner */}
+          {loadingModulos ? ( // Renderiza spinner se estiver carregando
+            <div className="absolute inset-0 flex items-center justify-center bg-primary1/80 z-10">
+              <div className="w-8 h-8 border-4 border-secondary border-t-transparent rounded-full animate-spin"></div>
+            </div>
+          ) : errorModulos ? ( // Renderiza erro se houver
+            <p className="text-red-500 text-sm mt-2 text-center absolute inset-0 flex items-center justify-center bg-primary1/80 z-10">
+              {errorModulos}
+            </p>
+          ) : modulosDisponiveis.length === 0 ? (
             <p className="text-red-500 text-sm mt-2 text-center">
               Nenhum módulo disponível. Por favor, crie um módulo primeiro.
             </p>
           ) : (
             <CheckboxGroup
-              value={selectedModules}
+              value={selectedModuleIds}
               onChange={handleSelectedModulesChange}
               className="w-full"
             >
@@ -166,7 +178,7 @@ export const CreateCourseForm: React.FC<CourseFormProps> = ({
                 {modulosDisponiveis.map((modulo) => (
                   <Checkbox
                     key={modulo.id}
-                    value={modulo.id}
+                    value={modulo.id.toString()}
                     className="flex items-center space-x-2 p-2 rounded-md hover:bg-primary2/20 focus:outline-none focus-visible:ring-2 focus-visible:ring-primary2 data-[selected]:bg-primary2/50 data-[selected]:text-white cursor-pointer"
                   >
                     {({ isSelected, isFocusVisible }) => (
@@ -211,30 +223,49 @@ export const CreateCourseForm: React.FC<CourseFormProps> = ({
           )}
         </div>
 
-        {/* Seção de Módulos Agregados (exibição dos módulos selecionados) */}
-        <div className="w-[95%] h-[17rem] md:h-[15rem] rounded-lg border border-primary2 overflow-auto p-2 py-4">
-          <span className="text-white">
-            {selectedModules.length} Módulo{selectedModules.length !== 1 ? "s" : ""} de aprendizagem agregado
-            {selectedModules.length !== 1 ? "s" : ""}
-          </span>
-          <div className="w-full grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 mt-4">
-            {selectedModules.map((moduleId) => {
-              const module = modulosDisponiveis.find((m) => m.id === moduleId);
-              return module ? (
-                <div
-                  key={module.id}
-                  className="flex flex-col h-[6rem] rounded-lg border border-white p-2 px-4 gap-1"
-                >
-                  <span className="font-extralight text-white">MÓDULO</span>
-                  <span className="text-primary2 pb-2">{module.titulo}</span>
-                  <div className="pt-2 border-t border-white">
-                    <span className="font-extralight text-white">0 aula(s) - </span>
-                    <span className="font-extralight text-white">0 minutos</span>
-                  </div>
-                </div>
-              ) : null;
-            })}
-          </div>
+        {/* SEÇÃO DE MÓDULOS AGREGADOS */}
+        <div className="w-[95%] h-[17rem] md:h-[15rem] rounded-lg border border-primary2 overflow-auto p-2 py-4 relative"> {/* Adicionado relative para posicionar o spinner */}
+          {loadingModulos ? ( // Renderiza spinner aqui também
+            <div className="absolute inset-0 flex items-center justify-center bg-primary1/80 z-10">
+              <div className="w-8 h-8 border-4 border-secondary border-t-transparent rounded-full animate-spin"></div>
+            </div>
+          ) : errorModulos ? ( // Renderiza erro aqui também
+            <p className="text-red-500 text-sm mt-2 text-center absolute inset-0 flex items-center justify-center bg-primary1/80 z-10">
+              {errorModulos}
+            </p>
+          ) : (
+            <>
+              <span className="text-white">
+                {selectedModuleIds.length} Módulo
+                {selectedModuleIds.length !== 1 ? "s" : ""} de aprendizagem agregado
+                {selectedModuleIds.length !== 1 ? "s" : ""}
+              </span>
+              <div className="w-full grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 mt-4">
+                {selectedModuleIds.map((moduleIdString) => {
+                  const module = modulosDisponiveis.find(
+                    (m) => m.id === parseInt(moduleIdString)
+                  );
+                  return module ? (
+                    <div
+                      key={module.id}
+                      className="flex flex-col h-[6rem] rounded-lg border border-white p-2 px-4 gap-1"
+                    >
+                      <span className="font-extralight text-white">MÓDULO</span>
+                      <span className="text-primary2 pb-2">{module.titulo}</span>
+                      <div className="pt-2 border-t border-white">
+                        <span className="font-extralight text-white">
+                          0 aula(s) -{" "}
+                        </span>
+                        <span className="font-extralight text-white">
+                          0 minutos
+                        </span>
+                      </div>
+                    </div>
+                  ) : null;
+                })}
+              </div>
+            </>
+          )}
         </div>
         <div className="w-full h-[7.5rem] md:h-[10rem] rounded-b-[10px] bg-white flex justify-center items-center space-x-4 mt-[1rem] border-b-[3px] border-primary2">
           <button
