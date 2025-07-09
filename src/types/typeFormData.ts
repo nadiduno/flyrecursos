@@ -10,7 +10,8 @@ export type FormData = {
 export type FormDataCourse = {
   id?: number;
   titulo: string;
-  modulosIds?: number[];
+  modulosIds?: number [];
+  autorId?: number;
 };
 
 export type FormDataModule = {

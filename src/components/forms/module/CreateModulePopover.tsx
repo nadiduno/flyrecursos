@@ -66,15 +66,17 @@ export function CreateModulePopover({
   });
 
   const onSubmit = async (data: ModuleFormData) => {
-    try {
-      const response = await post<{ id: number }>("/api/modulos", data);
+  try {
+    const response = await post<{ id: number }>("/api/modulos", data);
+    if (response.data.id) {
       onModuleCreated(response.data.id);
       state.close();
       reset();
-    } catch (error) {
-      console.error("Erro ao criar módulo:", error);
     }
-  };
+  } catch (error) {
+    console.error("Erro ao criar módulo:", error);
+  }
+};
 
   return (
     <>
@@ -83,7 +85,7 @@ export function CreateModulePopover({
           {...buttonProps}
           ref={triggerRef}
           className="ml-1 md:ml-5 w-[1.5rem] h-[1.5rem] rounded-full text-primary2 flex items-center justify-center  hover:text-secondary4 transition-colors duration-200"
-          title="Adicionar módulo"
+          title="Adicionar novo módulo"
         >
           <CgAdd size={30} />
         </button>
