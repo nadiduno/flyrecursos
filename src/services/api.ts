@@ -19,12 +19,19 @@ export const api = axios.create({
   headers: {
     'Content-Type': 'application/json'
   },
-  timeout: 30000
+  timeout: 50000
 });
 
 api.interceptors.request.use(
   (config) => {
-    const token = localStorage.getItem('accessToken');
+    if (
+      config.url?.includes("firebasestorage.googleapis.com") ||
+      config.baseURL?.includes("firebasestorage.googleapis.com")
+    ) {
+      return config; 
+    }
+
+    const token = localStorage.getItem("accessToken");
     if (token) {
       config.headers.Authorization = `Bearer ${token}`;
     }
@@ -104,6 +111,12 @@ export const put = <T = unknown>(
   data?: unknown,
   config?: AxiosRequestConfig
 ) => handleRequest<T>(api.put<T>(url, data, config));
+
+export const patch = <T = unknown>(
+  url: string,
+  data?: unknown,
+  config?: AxiosRequestConfig
+) => handleRequest<T>(api.patch<T>(url, data, config));
 
 export const del = <T = unknown>(
   url: string,

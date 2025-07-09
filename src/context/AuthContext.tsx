@@ -1,3 +1,4 @@
+// AuthContext.tsx
 import {
   createContext,
   useContext,
@@ -7,6 +8,7 @@ import {
 } from "react";
 import { useNavigate } from "react-router-dom";
 import { jwtDecode } from "jwt-decode";
+import { get } from "../services/api";
 
 interface DecodedTokenPayload {
   sub: string;
@@ -16,14 +18,20 @@ interface DecodedTokenPayload {
   authorities?: string[];
 }
 
+interface UserProfile {
+  nome: string;
+  email: string;
+  fotoPerfilUrl: string;
+}
+
 interface AuthContextType {
   isAuthenticated: boolean;
   isAdmin: boolean;
   userAuthorities: string[];
   userId: string | null;
-  photoUrl: string;
-  setPhotoUrl: (url: string) => void;
-  login: (token: string, expiresIn: number) => boolean;
+  userProfile: UserProfile | null;
+  setUserProfile: (profile: UserProfile) => void;
+  login: (token: string, expiresIn: number) => Promise<boolean>;
   logout: () => void;
   redirectToLogin: () => void;
   refreshToken: () => Promise<boolean>;
@@ -34,26 +42,15 @@ const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
 export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
   const navigate = useNavigate();
-
-  const [authState, setAuthState] = useState<{
-    isAuthenticated: boolean;
-    isAdmin: boolean;
-    userAuthorities: string[];
-    userId: string | null;
-    photoUrl: string;
-  }>({
+  const [authState, setAuthState] = useState({
     isAuthenticated: false,
     isAdmin: false,
-    userAuthorities: [],
-    userId: null,
-    photoUrl: "",
+    userAuthorities: [] as string[],
+    userId: null as string | null,
   });
 
+  const [userProfile, setUserProfile] = useState<UserProfile | null>(null);
   const [isLoading, setIsLoading] = useState(true);
-
-  const setPhotoUrl = (url: string) => {
-    setAuthState((prev) => ({ ...prev, photoUrl: url }));
-  };
 
   const logout = useCallback(() => {
     localStorage.removeItem("accessToken");
@@ -63,35 +60,32 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
       isAdmin: false,
       userAuthorities: [],
       userId: null,
-      photoUrl: "",
     });
+    setUserProfile(null);
     navigate("/");
   }, [navigate]);
 
-  const redirectToLogin = useCallback(() => {
-    navigate("/");
-  }, [navigate]);
+  const redirectToLogin = useCallback(() => navigate("/"), [navigate]);
 
   const decodeAndSetAuthState = useCallback(
-    (token: string): boolean => {
+    async (token: string): Promise<boolean> => {
       try {
         const decoded = jwtDecode<DecodedTokenPayload>(token);
-        const isAdminUser =
-          decoded.authorities?.includes("ROLE_ADMIN") || false;
-        const authoritiesFromToken = decoded.authorities || [];
+        const isAdminUser = decoded.authorities?.includes("ROLE_ADMIN") || false;
 
-        setAuthState((prev) => ({
-          ...prev,
+        setAuthState({
           isAuthenticated: true,
           isAdmin: isAdminUser,
-          userAuthorities: authoritiesFromToken,
+          userAuthorities: decoded.authorities || [],
           userId: decoded.sub,
-          photoUrl: prev.photoUrl || "",
-        }));
+        });
+
+        const response = await get<UserProfile>("/usuarios/me");
+        setUserProfile(response.data);
 
         return isAdminUser;
       } catch (error) {
-        console.error("AuthContext: Error al decodificar token JWT:", error);
+        console.error("Error al decodificar token:", error);
         logout();
         return false;
       }
@@ -100,7 +94,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
   );
 
   const login = useCallback(
-    (token: string, expiresIn: number): boolean => {
+    async (token: string, expiresIn: number): Promise<boolean> => {
       const expirationTime = Date.now() + expiresIn * 1000;
       localStorage.setItem("accessToken", token);
       localStorage.setItem("expirationTime", String(expirationTime));
@@ -110,48 +104,29 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
   );
 
   useEffect(() => {
-    const checkAuthStatus = () => {
+    const checkAuthStatus = async () => {
       const token = localStorage.getItem("accessToken");
-      if (token) {
-        const expirationTime = localStorage.getItem("expirationTime");
-        if (expirationTime && Date.now() < parseInt(expirationTime)) {
-          decodeAndSetAuthState(token);
-        } else {
-          logout();
-        }
+      const expirationTime = localStorage.getItem("expirationTime");
+      if (token && expirationTime && Date.now() < parseInt(expirationTime)) {
+        await decodeAndSetAuthState(token);
       } else {
-        setAuthState({
-          isAuthenticated: false,
-          isAdmin: false,
-          userAuthorities: [],
-          userId: null,
-          photoUrl: "",
-        });
+        logout();
       }
       setIsLoading(false);
     };
-
     checkAuthStatus();
   }, [decodeAndSetAuthState, logout]);
-
-  const refreshToken = useCallback(async (): Promise<boolean> => {
-    // Por implementar si decides tener refresh
-    return false;
-  }, []);
 
   return (
     <AuthContext.Provider
       value={{
-        isAuthenticated: authState.isAuthenticated,
-        isAdmin: authState.isAdmin,
-        userAuthorities: authState.userAuthorities,
-        userId: authState.userId,
-        photoUrl: authState.photoUrl,
-        setPhotoUrl,
+        ...authState,
+        userProfile,
+        setUserProfile,
         login,
         logout,
         redirectToLogin,
-        refreshToken,
+        refreshToken: async () => false,
         isLoading,
       }}
     >
@@ -162,7 +137,6 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
 
 export const useAuth = () => {
   const context = useContext(AuthContext);
-  if (!context)
-    throw new Error("useAuth debe usarse dentro de un AuthProvider");
+  if (!context) throw new Error("useAuth debe usarse dentro de un AuthProvider");
   return context;
 };

@@ -8,7 +8,7 @@ import { ImagemBanner } from "../components/Dashboard/ImagemBanner";
 import { TextMain } from "../components/text/TextMain";
 import { FormLogin } from "../components/Login/FormLogin";
 import { post } from "../services/api";
-
+import { formatarMensagemErro } from "../utils/formatarErrors"; 
 import { useForm, SubmitHandler } from "react-hook-form";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -31,6 +31,11 @@ const createFormDataSchema = z.object({
 
 type FormData = z.infer<typeof createFormDataSchema>;
 
+interface LoginResponse {
+  accessToken: string;
+  expiresIn: number;
+}
+
 export default function Login() {
   const navigate = useNavigate();
   const { login } = useAuth();
@@ -45,32 +50,32 @@ export default function Login() {
     resolver: zodResolver(createFormDataSchema),
   });
 
-  const onSubmit: SubmitHandler<FormData> = async (data) => {
-    setLoginError("");
-    try {
-      const response = await post("/auth/login", data);
+ const onSubmit: SubmitHandler<FormData> = async (data) => {
+  setLoginError("");
+  try {
+const response = await post<LoginResponse>("/auth/login", data);
 
-      if (response.data?.accessToken) {
-        const isUserAdmin = login(
-          response.data.accessToken,
-          response.data.expiresIn
-        );
-        navigate(isUserAdmin ? "/dashboard" : "/aulas");
-      } else {
-        setLoginError(response?.data?.message || "Credenciais inválidas");
-      }
-    } catch (error: any) {
-      if (error.response?.status === 401) {
-        setLoginError(
-          error.response?.data?.message || "E-mail ou senha incorretos"
-        );
-      } else if (error.code === "ECONNABORTED") {
-        setLoginError("Tempo de conexão esgotado. Tente novamente.");
-      } else {
-        setLoginError("Erro ao conectar com o servidor.");
-      }
+    if (response.data?.accessToken) {
+     const isUserAdmin = await login(
+  response.data.accessToken,
+  response.data.expiresIn
+);
+navigate(isUserAdmin ? "/dashboard" : "/aulas");
+    } else {
+      const mensagem = formatarMensagemErro(response);
+      setLoginError(mensagem);
     }
-  };
+  } catch (error) {
+    const mensagem = formatarMensagemErro(error);
+    console.log(mensagem)
+    if(mensagem.includes("Email ou senha incorretos")){
+setLoginError("Ops! Parece que o e-mail ou a senha estão incorretos. Por favor, verifique e tente novamente.");
+    }else{
+         setLoginError(mensagem);
+    }
+ 
+  }
+};
 
   const togglePasswordVisibility = () => setShowPassword((prev) => !prev);
   const handleInputChange = () => {
