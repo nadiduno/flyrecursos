@@ -36,6 +36,7 @@ interface AuthContextType {
   redirectToLogin: () => void;
   refreshToken: () => Promise<boolean>;
   isLoading: boolean;
+  syncUserProfile: () => Promise<void>;
 }
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
@@ -81,7 +82,8 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
         });
 
         const response = await get<UserProfile>("/usuarios/me");
-        setUserProfile(response.data);
+console.log("🧠 Perfil actualizado desde backend:", response.data);
+setUserProfile(response.data);
 
         return isAdminUser;
       } catch (error) {
@@ -117,6 +119,15 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
     checkAuthStatus();
   }, [decodeAndSetAuthState, logout]);
 
+const syncUserProfile = async () => {
+  try {
+    const response = await get<UserProfile>("/usuarios/me");
+    setUserProfile(response.data);
+  } catch (error) {
+    console.error("Error al sincronizar perfil:", error);
+  }
+};
+
   return (
     <AuthContext.Provider
       value={{
@@ -128,6 +139,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
         redirectToLogin,
         refreshToken: async () => false,
         isLoading,
+        syncUserProfile,
       }}
     >
       {children}

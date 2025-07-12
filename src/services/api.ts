@@ -22,12 +22,9 @@ export const api = axios.create({
     'Content-Type': 'application/json',
     'Accept': 'application/json'
   },
-<<<<<<< HEAD
-  timeout: 50000
-=======
-  timeout: 30000,
+  timeout: 50000,
   validateStatus: (status) => status < 500 // Considera como sucesso códigos < 500
->>>>>>> 78b830c4278efd4b5434d3b91ed42fb491cb9e9b
+
 });
 
 api.interceptors.request.use(
