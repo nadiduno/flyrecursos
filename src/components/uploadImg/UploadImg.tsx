@@ -1,11 +1,11 @@
 import { useState, useEffect } from "react";
 import { FaArrowUp, FaXmark } from "react-icons/fa6";
 import "./UploadImg.css";
-import imgCurso from "../../assets/imgprevvideo.png";
 import { patch } from "../../services/api";
 import { useAuth } from "../../context/AuthContext";
 import uploadToFirebase from "../../firebase/uploadToFirebase";
 import { formatarMensagemErro } from "../../utils/formatarErrors";
+import imgCurso from "../../assets/imgaulagrava.png";
 
 interface Props {
   estilos?: "perfil" | "curso";
@@ -13,15 +13,15 @@ interface Props {
 }
 
 export default function UploadImage({ estilos = "perfil", onUploadComplete }: Props) {
-  const { userId, userProfile, setUserProfile } = useAuth();
+  const { userId, userProfile, syncUserProfile } = useAuth();
   const [fileName, setFileName] = useState<string | null>(null);
   const [previewUrl, setPreviewUrl] = useState<string | null>(null);
 
- useEffect(() => {
-  if (estilos === "perfil" && userProfile?.fotoPerfilUrl) {
-    setPreviewUrl(userProfile.fotoPerfilUrl);
-  }
-}, [estilos, userProfile]);
+  useEffect(() => {
+    if (estilos === "perfil" && userProfile?.fotoPerfilUrl) {
+      setPreviewUrl(userProfile.fotoPerfilUrl);
+    }
+  }, [estilos, userProfile]);
 
   const handleUpload = async (event: React.ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0];
@@ -29,36 +29,37 @@ export default function UploadImage({ estilos = "perfil", onUploadComplete }: Pr
 
     try {
       const urlFirebase = await uploadToFirebase(file, userId);
-      await patch(`/usuarios/${userId}/foto`, { fotoUrl: urlFirebase });
+      await patch(`/usuarios/${userId}/foto`, { url: urlFirebase });
+      console.log("📸 Imagen subida correctamente:", urlFirebase);
+
+      await syncUserProfile(); // 🚀 Recarga desde el backend
 
       setPreviewUrl(urlFirebase);
       setFileName(file.name);
-      setUserProfile({ ...userProfile!, fotoPerfilUrl: urlFirebase });
       onUploadComplete(urlFirebase);
     } catch (error) {
       const mensaje = formatarMensagemErro(error);
-      console.error("Error al subir la imagen:", mensaje);
+      console.error("❌ Error al subir la imagen:", mensaje);
     }
   };
 
   const handleRemove = () => {
     setPreviewUrl(null);
     setFileName(null);
-    setUserProfile({ ...userProfile!, fotoPerfilUrl: "" });
     onUploadComplete("");
+    // O puedes permitir que el backend borre la imagen si lo deseas
   };
 
-  const imagenFallback = estilos === "curso"
-    ? imgCurso
-    : imgCurso; 
+  const imagenFallback = imgCurso;
 
   return (
     <div className={`upload-container ${estilos}`}>
       <div className={`container-img ${estilos}`}>
-<img
-  src={previewUrl || imagenFallback}
-  alt={previewUrl ? "Imagen cargada" : "Imagen por defecto"}
-/>      </div>
+        <img
+          src={previewUrl || imagenFallback}
+          alt={previewUrl ? "Imagen cargada" : "Imagen por defecto"}
+        />
+      </div>
 
       <label htmlFor="file-upload" className={`boton-upload ${estilos}`}>
         Cargar imagen <FaArrowUp />
