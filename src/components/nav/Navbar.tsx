@@ -13,6 +13,7 @@ export function Navbar() {
     logout,
     userProfile
   } = useAuth();
+  console.log("userProfile", userProfile);
 
   const [showCreateAccount, setShowCreateAccount] = useState(false);
   const [isDropdownVisible, setIsDropdownVisible] = useState(false);
@@ -57,7 +58,7 @@ export function Navbar() {
           <div className="relative">
             <img
               className="w-12 h-12 rounded-full object-cover cursor-pointer"
-              src={userProfile.fotoPerfilUrl || "/user.png"}
+              src={userProfile.fotoPerfilUrl}
               alt="Foto de perfil"
               onClick={toggleDropdown}
             />
