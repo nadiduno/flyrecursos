@@ -22,6 +22,12 @@ const collaborators = [
     altText: "Mulher parda, usando oculos de grau, fundo claro.",
   },
   {
+    name: "Gustavo Dias",
+    imageUrl: "https://github.com/dias-gxstavo.png",
+    linkedinUrl: "https://www.linkedin.com/in/gustavo-huguenin-dias/",
+    altText: "Homem pardo, cabelo curto, camisa azul e fundo branco.",
+  },
+  {
     name: "Jani Exaez",
     imageUrl: "https://github.com/jexaez.png",
     linkedinUrl: "https://www.linkedin.com/in/jexaez/",
@@ -29,11 +35,10 @@ const collaborators = [
       "Mulher branca, usando óculos e camisa branca com desenhos de cor azul.",
   },
   {
-    name: "Paula Gimenez",
-    imageUrl: "https://github.com/pbgv2705.png",
-    linkedinUrl: "https://www.linkedin.com/in/paula-gimenez-backend/",
-    altText:
-      "Mulher branca com cabelo branco, usando jaqueta marrom e cachecol cor laranja clara.",
+    name: "Marcus Branches",
+    imageUrl: "https://github.com//mbranches.png",
+    linkedinUrl: "https://www.linkedin.com/in/marcusbranches/",
+    altText: "Homem pardo, cabelo curto, camisa branca e fundo com árvores.",
   },
   {
     name: "Nadi Duno",
@@ -46,6 +51,13 @@ const collaborators = [
     imageUrl: "https://github.com/ravelos.png",
     linkedinUrl: "https://www.linkedin.com/in/raveloswaldo/",
     altText: "Homem pardo, fundo branco.",
+  },
+  {
+    name: "Paula Gimenez",
+    imageUrl: "https://github.com/pbgv2705.png",
+    linkedinUrl: "https://www.linkedin.com/in/paula-gimenez-backend/",
+    altText:
+      "Mulher branca com cabelo branco, usando jaqueta marrom e cachecol cor laranja clara.",
   },
   {
     name: "Thatiane Vasconcelos",
