@@ -8,10 +8,12 @@ import { ImagemBanner } from "../components/Dashboard/ImagemBanner";
 import { TextMain } from "../components/text/TextMain";
 import { FormLogin } from "../components/Login/FormLogin";
 import { post } from "../services/api";
-import { formatarMensagemErro } from "../utils/formatarErrors"; 
+import { formatarMensagemErro } from "../utils/formatarErrors";
 import { useForm, SubmitHandler } from "react-hook-form";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { UpdatePassword} from "../components/Login/UpdatePassword";
+
 
 // Zod schema
 const createFormDataSchema = z.object({
@@ -41,6 +43,9 @@ export default function Login() {
   const { login } = useAuth();
   const [loginError, setLoginError] = useState("");
   const [showPassword, setShowPassword] = useState(false);
+  // NOVO ESTADO: Para controlar a visibilidade do modal de atualização de senha
+  const [isUpdatePasswordModalVisible, setIsUpdatePasswordModalVisible] =
+    useState(false);
 
   const {
     register,
@@ -50,36 +55,45 @@ export default function Login() {
     resolver: zodResolver(createFormDataSchema),
   });
 
- const onSubmit: SubmitHandler<FormData> = async (data) => {
-  setLoginError("");
-  try {
-const response = await post<LoginResponse>("/auth/login", data);
+  const onSubmit: SubmitHandler<FormData> = async (data) => {
+    setLoginError("");
+    try {
+      const response = await post<LoginResponse>("/auth/login", data);
 
-    if (response.data?.accessToken) {
-     const isUserAdmin = await login(
-  response.data.accessToken,
-  response.data.expiresIn
-);
-navigate(isUserAdmin ? "/dashboard" : "/aulas");
-    } else {
-      const mensagem = formatarMensagemErro(response);
-      setLoginError(mensagem);
+      if (response.data?.accessToken) {
+        const isUserAdmin = await login(
+          response.data.accessToken,
+          response.data.expiresIn
+        );
+        navigate(isUserAdmin ? "/dashboard" : "/aulas"); // Ajustado para /aulas, como no seu código
+      } else {
+        const mensagem = formatarMensagemErro(response);
+        setLoginError(mensagem);
+      }
+    } catch (error) {
+      const mensagem = formatarMensagemErro(error);
+      console.log(mensagem);
+      if (mensagem.includes("Email ou senha incorretos")) {
+        setLoginError(
+          "Ops! Parece que o e-mail ou a senha estão incorretos. Por favor, verifique e tente novamente."
+        );
+      } else {
+        setLoginError(mensagem);
+      }
     }
-  } catch (error) {
-    const mensagem = formatarMensagemErro(error);
-    console.log(mensagem)
-    if(mensagem.includes("Email ou senha incorretos")){
-setLoginError("Ops! Parece que o e-mail ou a senha estão incorretos. Por favor, verifique e tente novamente.");
-    }else{
-         setLoginError(mensagem);
-    }
- 
-  }
-};
+  };
 
   const togglePasswordVisibility = () => setShowPassword((prev) => !prev);
   const handleInputChange = () => {
     if (loginError) setLoginError("");
+  };
+
+  // NOVO: Função para abrir o modal de atualização de senha
+  const handleForgotPasswordClick = (
+    event: React.MouseEvent<HTMLAnchorElement>
+  ) => {
+    event.preventDefault(); // Impede a navegação do Link
+    setIsUpdatePasswordModalVisible(true);
   };
 
   return (
@@ -107,6 +121,8 @@ setLoginError("Ops! Parece que o e-mail ou a senha estão incorretos. Por favor,
                   showPassword={showPassword}
                   togglePasswordVisibility={togglePasswordVisibility}
                   handleInputChange={handleInputChange}
+                  // NOVO: Passar o handler para o FormLogin
+                  onForgotPasswordClick={handleForgotPasswordClick}
                 />
               </div>
             </div>
@@ -117,6 +133,12 @@ setLoginError("Ops! Parece que o e-mail ou a senha estão incorretos. Por favor,
           <Footer />
         </footer>
       </div>
+
+      {/* NOVO: Renderiza o modal de atualização de senha */}
+      <UpdatePassword
+        isVisible={isUpdatePasswordModalVisible}
+        setIsVisible={setIsUpdatePasswordModalVisible}
+      />
     </div>
   );
 }
