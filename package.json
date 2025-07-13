@@ -13,7 +13,8 @@
     "@hookform/error-message": "^2.0.1",
     "@hookform/resolvers": "^5.0.1",
     "@tailwindcss/vite": "^4.0.15",
-    "axios": "^1.9.0",
+    "@types/xlsx": "^0.0.35",
+    "axios": "^1.10.0",
     "firebase": "^11.10.0",
     "gsap": "^3.13.0",
     "jwt-decode": "^4.0.0",
@@ -27,6 +28,7 @@
     "react-number-format": "^5.4.4",
     "react-router-dom": "^7.3.0",
     "react-stately": "^3.39.0",
+    "xlsx": "^0.18.5",
     "zod": "^3.25.53"
   },
   "devDependencies": {
