@@ -1,7 +1,5 @@
-// import desktopImage from "../assets/LoginPage/large.jpg";
 import { Footer } from "../components/footer/Footer";
-import { HeaderDashboard } from "../components/Dashboard/HeaderDashboard";
-// import { HeaderDashboard } from "../componets/HeaderDashboard";
+import { HeaderDashboard } from "../components/Dashboard/HeaderDashboardAdmin";
 import { ImagemBanner } from "../components/Dashboard/ImagemBanner";
 import { Navbar } from "../components//nav/Navbar";
 
