@@ -72,7 +72,7 @@ export default function Login() {
       }
     } catch (error) {
       const mensagem = formatarMensagemErro(error);
-      console.log(mensagem);
+      // console.log(mensagem);
       if (mensagem.includes("Email ou senha incorretos")) {
         setLoginError(
           "Ops! Parece que o e-mail ou a senha estão incorretos. Por favor, verifique e tente novamente."
@@ -104,7 +104,7 @@ export default function Login() {
         </nav>
 
         <header className="bg-white text-black border-b-[3px] border-primary2 rounded-2xl">
-          <div className="relative w-full h-full max-h-[28rem] overflow-hidden md:h-[28rem] lg:h-[28rem] rounded-2xl">
+          <div className="relative w-full h-[40rem] max-h-[28rem] overflow-hidden md:h-[28rem] lg:h-[28rem] rounded-2xl">
             <ImagemBanner />
             <div className="absolute top-0 left-0 w-full h-full flex flex-col md:flex-row items-start md:items-center px-4 md:px-20 py-4">
               <TextMain />

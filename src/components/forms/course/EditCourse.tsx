@@ -52,12 +52,18 @@ export const EditCourse: React.FC<EditCourseProps> = ({
 
   const onSubmit = async (formData: FormDataCourse) => {
     if (!courseData?.id) {
-      toastCustomError("Edição de Curso", "ID do curso não encontrado para edição.");
+      toastCustomError(
+        "Edição de Curso",
+        "ID do curso não encontrado para edição."
+      );
       return;
     }
 
     if (!userId) {
-      toastCustomError("Edição de Curso", "Usuário não autenticado. Faça login novamente.");
+      toastCustomError(
+        "Edição de Curso",
+        "Usuário não autenticado. Faça login novamente."
+      );
       return;
     }
 
@@ -77,7 +83,7 @@ export const EditCourse: React.FC<EditCourseProps> = ({
         titulo: formData.titulo,
         autorId: autorId, // Enviar o autorId na atualização se a API exigir
       };
-      console.log(`Enviando PUT para /api/cursos/${cursoId} com payload:`, updatePayload);
+      // console.log(`Enviando PUT para /api/cursos/${cursoId} com payload:`, updatePayload);
       await put(`/api/cursos/${cursoId}`, updatePayload);
 
       // 2. Sincronizar módulos (associar novos, desassociar removidos)
@@ -90,13 +96,13 @@ export const EditCourse: React.FC<EditCourseProps> = ({
 
       // Desassociar módulos
       for (const moduloId of modulesToRemove) {
-        console.log(`Deletando associação: /api/cursos/${cursoId}/modulos/${moduloId}`);
+        // console.log(`Deletando associação: /api/cursos/${cursoId}/modulos/${moduloId}`);
         await del(`/api/cursos/${cursoId}/modulos/${moduloId}`);
       }
 
       // Associar novos módulos
       for (const moduloId of modulesToAdd) {
-        console.log(`Criando associação: /api/cursos/${cursoId}/modulos/${moduloId}`);
+        // console.log(`Criando associação: /api/cursos/${cursoId}/modulos/${moduloId}`);
         await post(`/api/cursos/${cursoId}/modulos/${moduloId}`, {}); // Payload vazio ou nulo
       }
 

@@ -5,36 +5,30 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { FormDataCourse } from "../../../types/typeFormData";
 import { Checkbox, CheckboxGroup } from "react-aria-components";
 
-// Interface ModuloOption (assumindo que já existe em algum lugar ou será definida aqui)
 interface ModuloOption {
   id: number;
   titulo: string;
 }
 
-// Zod schema para validação do formulário de edição de curso
-// Mantém a mesma validação do CreateCourseForm
 const FormDataSchema = z.object({
   titulo: z
     .string()
     .nonempty("O título do curso é obrigatório.")
     .min(3, "O título deve ter no mínimo 3 caracteres.")
     .max(100, "O título deve ter no máximo 100 caracteres."),
-  modulosIds: z
-    .array(z.number())
-    .optional(), // Módulos são opcionais no Zod para o formulário
+  modulosIds: z.array(z.number()).optional(),
 });
 
-// Tipo de dados do formulário local
 type FormData = z.infer<typeof FormDataSchema> & {
-  id?: number; // Para edição, o ID é parte dos dados do formulário
-  autorId?: number; // Se o autorId for manipulado ou exibido no form
+  id?: number;
+  autorId?: number;
 };
 
 interface EditCourseFormProps {
   onSubmit: SubmitHandler<FormData>;
-  defaultData?: FormDataCourse; // Dados do curso a ser editado
+  defaultData?: FormDataCourse;
   setIsVisible: React.Dispatch<React.SetStateAction<boolean>>;
-  modulosDisponiveis: ModuloOption[]; // Recebe os módulos do componente pai
+  modulosDisponiveis: ModuloOption[];
 }
 
 export const EditCourseForm: React.FC<EditCourseFormProps> = ({
@@ -46,7 +40,7 @@ export const EditCourseForm: React.FC<EditCourseFormProps> = ({
   const {
     register,
     handleSubmit,
-    reset, // Usado para pré-popular o formulário
+    reset,
     formState: { errors },
     setValue,
   } = useForm<FormData>({
@@ -59,7 +53,6 @@ export const EditCourseForm: React.FC<EditCourseFormProps> = ({
 
   const [selectedModules, setSelectedModules] = useState<number[]>([]);
 
-  // Inicializa os valores do formulário e `selectedModules` quando `defaultData` muda
   useEffect(() => {
     if (defaultData) {
       reset({
@@ -68,9 +61,9 @@ export const EditCourseForm: React.FC<EditCourseFormProps> = ({
         id: defaultData.id,
         autorId: defaultData.autorId,
       });
-      setSelectedModules(defaultData.modulosIds || []); // Sincroniza com o estado do checkbox
+      // Sincroniza selectedModules com o estado inicial
+      setSelectedModules(defaultData.modulosIds || []);
     } else {
-      // Se defaultData for nulo (caso de reset ou formulário de criação convertido)
       reset({
         titulo: "",
         modulosIds: [],
@@ -81,10 +74,11 @@ export const EditCourseForm: React.FC<EditCourseFormProps> = ({
     }
   }, [defaultData, reset]);
 
-  // Sincroniza selectedModules com o form state quando o usuário interage com o CheckboxGroup
-  const handleSelectedModulesChange = (newSelection: number[]) => {
-    setSelectedModules(newSelection);
-    setValue("modulosIds", newSelection, { shouldValidate: true });
+  const handleSelectedModulesChange = (newSelection: string[]) => {
+    // Converte os IDs de string para number
+    const newSelectionAsNumbers = newSelection.map(Number);
+    setSelectedModules(newSelectionAsNumbers);
+    setValue("modulosIds", newSelectionAsNumbers, { shouldValidate: true });
   };
 
   return (
@@ -122,7 +116,6 @@ export const EditCourseForm: React.FC<EditCourseFormProps> = ({
           </label>
           <div className="flex items-center gap-8">
             <div className="">
-              {/* Campo de busca para módulos (opcional, manter se necessário) */}
               <input
                 type="text"
                 placeholder="Digite o nome para consultar"
@@ -130,18 +123,6 @@ export const EditCourseForm: React.FC<EditCourseFormProps> = ({
                 autoComplete="name"
               />
             </div>
-            {/* Divisor removido ou ajustado conforme layout */}
-            {/* <div className="hidden md:block w-px h-8 bg-gray-300"></div> */}
-            {/* Se você tiver um componente para criar módulos (como CreateModulePopover), ele pode ir aqui.
-                No contexto de edição, talvez não seja o lugar mais comum, mas se for necessário, mantenha.
-                Se não, remova o div abaixo. */}
-            {/* <div className="pl-0 md:pl-0">
-              <CreateModulePopover onModuleCreated={(newModuleId) => {
-                // Lógica para adicionar o novo módulo à lista se for relevante
-                // e talvez pré-selecioná-lo no formulário de edição.
-                // Exemplo: onModulosRefetch(); // se houver um refetch de módulos no pai
-              }} />
-            </div> */}
           </div>
         </div>
 
@@ -152,8 +133,9 @@ export const EditCourseForm: React.FC<EditCourseFormProps> = ({
               Nenhum módulo disponível. Por favor, crie um módulo primeiro.
             </p>
           ) : (
-            <CheckboxGroup // Removido o argumento de tipo genérico <number[]>
-              value={selectedModules}
+            <CheckboxGroup
+              // Converta os IDs de number[] para string[] para a propriedade value
+              value={selectedModules.map(String)}
               onChange={handleSelectedModulesChange}
               className="w-full"
             >
@@ -161,7 +143,8 @@ export const EditCourseForm: React.FC<EditCourseFormProps> = ({
                 {modulosDisponiveis.map((modulo) => (
                   <Checkbox
                     key={modulo.id}
-                    value={modulo.id}
+                    // Converta modulo.id para string para a propriedade value
+                    value={String(modulo.id)}
                     className="flex items-center space-x-2 p-2 rounded-md hover:bg-primary2/20 focus:outline-none focus-visible:ring-2 focus-visible:ring-primary2 data-[selected]:bg-primary2/50 data-[selected]:text-white cursor-pointer"
                   >
                     {({ isSelected, isFocusVisible }) => (
@@ -170,7 +153,11 @@ export const EditCourseForm: React.FC<EditCourseFormProps> = ({
                           className={`
                             w-5 h-5 rounded border-2 flex items-center justify-center
                             ${isSelected ? "bg-primary text-white" : "bg-white"}
-                            ${isFocusVisible ? "ring-2 ring-offset-2 ring-primary2" : ""}
+                            ${
+                              isFocusVisible
+                                ? "ring-2 ring-offset-2 ring-primary2"
+                                : ""
+                            }
                           `}
                         >
                           {isSelected && (
@@ -209,7 +196,8 @@ export const EditCourseForm: React.FC<EditCourseFormProps> = ({
         {/* Seção de Módulos Agregados (exibição dos módulos selecionados) */}
         <div className="w-[95%] h-[17rem] md:h-[15rem] rounded-lg border border-primary2 overflow-auto p-2 py-4">
           <span className="text-white">
-            {selectedModules.length} Módulo{selectedModules.length !== 1 ? "s" : ""} de aprendizagem agregado
+            {selectedModules.length} Módulo
+            {selectedModules.length !== 1 ? "s" : ""} de aprendizagem agregado
             {selectedModules.length !== 1 ? "s" : ""}
           </span>
           <div className="w-full grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 mt-4">
@@ -223,8 +211,12 @@ export const EditCourseForm: React.FC<EditCourseFormProps> = ({
                   <span className="font-extralight text-white">MÓDULO</span>
                   <span className="text-primary2 pb-2">{module.titulo}</span>
                   <div className="pt-2 border-t border-white">
-                    <span className="font-extralight text-white">0 aula(s) - </span>
-                    <span className="font-extralight text-white">0 minutos</span>
+                    <span className="font-extralight text-white">
+                      0 aula(s) -{" "}
+                    </span>
+                    <span className="font-extralight text-white">
+                      0 minutos
+                    </span>
                   </div>
                 </div>
               ) : null;

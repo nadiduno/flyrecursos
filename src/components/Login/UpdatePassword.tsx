@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react"; 
+import React, { useEffect, useState } from "react";
 import { UpdatePasswordForm } from "../Login/UpdatePasswordForm";
 
 interface UpdatePasswordProps {
@@ -10,8 +10,10 @@ export const UpdatePassword: React.FC<UpdatePasswordProps> = ({
   isVisible: propIsVisible,
   setIsVisible,
 }) => {
-  
-  const formRef = React.useRef<{ submitForm: () => void; getIsSubmitting: () => boolean }>(null); // Adicionado getIsSubmitting
+  const formRef = React.useRef<{
+    submitForm: () => void;
+    getIsSubmitting: () => boolean;
+  }>(null); // Adicionado getIsSubmitting
   const [isSubmitting, setIsSubmitting] = useState(false); // Estado de carregamento local
 
   const handleEscape = (event: KeyboardEvent): void => {
@@ -60,7 +62,7 @@ export const UpdatePassword: React.FC<UpdatePasswordProps> = ({
           <button
             className="w-[8rem] md:w-[15rem] h-[3rem] rounded-[50px] border-secondary bg-white shadow-[0px_4px_4px_0px_rgba(0,0,0,0.2)] hover:bg-secondary2 hover:text-black transition-colors duration-200"
             type="button"
-            onClick={() => setIsVisible(false)} 
+            onClick={() => setIsVisible(false)}
             disabled={isSubmitting} // Desabilita se estiver submetendo
           >
             <p className="leading-tight tracking-normal text-center font-bold md:text-[1.25rem] text-secondary3">
@@ -74,7 +76,7 @@ export const UpdatePassword: React.FC<UpdatePasswordProps> = ({
             disabled={isSubmitting} // Desabilita se estiver submetendo
           >
             <p className="leading-tight tracking-normal text-center font-bold md:text-[1.25rem]">
-              {isSubmitting ? "Atualizando..." : "Atualizar Senha"} 
+              {isSubmitting ? "Atualizando..." : "Atualizar Senha"}
             </p>
           </button>
         </div>

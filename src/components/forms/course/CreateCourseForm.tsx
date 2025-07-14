@@ -40,8 +40,8 @@ export const CreateCourseForm: React.FC<CourseFormProps> = ({
   onModulosRefetch,
   selectedModuleIds,
   setSelectedModuleIds,
-  loadingModulos, 
-  errorModulos,   
+  loadingModulos,
+  errorModulos,
 }) => {
   const {
     register,
@@ -155,7 +155,9 @@ export const CreateCourseForm: React.FC<CourseFormProps> = ({
         </div>
 
         {/* SEÇÃO DE SELEÇÃO DE MÓDULOS */}
-        <div className="w-[95%] h-[13rem] md:h-[10rem] rounded-lg border border-primary2 overflow-auto p-2 relative"> {/* Adicionado relative para posicionar o spinner */}
+        <div className="w-[95%] h-[13rem] md:h-[10rem] rounded-lg border border-primary2 overflow-auto p-2 relative">
+          {" "}
+          {/* Adicionado relative para posicionar o spinner */}
           {loadingModulos ? ( // Renderiza spinner se estiver carregando
             <div className="absolute inset-0 flex items-center justify-center bg-primary1/80 z-10">
               <div className="w-8 h-8 border-4 border-secondary border-t-transparent rounded-full animate-spin"></div>
@@ -187,7 +189,11 @@ export const CreateCourseForm: React.FC<CourseFormProps> = ({
                           className={`
                             w-5 h-5 rounded border-2 flex items-center justify-center
                             ${isSelected ? "bg-primary text-white" : "bg-white"}
-                            ${isFocusVisible ? "ring-2 ring-offset-2 ring-primary2" : ""}
+                            ${
+                              isFocusVisible
+                                ? "ring-2 ring-offset-2 ring-primary2"
+                                : ""
+                            }
                           `}
                         >
                           {isSelected && (
@@ -215,7 +221,6 @@ export const CreateCourseForm: React.FC<CourseFormProps> = ({
               </div>
             </CheckboxGroup>
           )}
-
           {errors.modulosIds && (
             <p className="text-red-500 text-xs md:text-[1rem] mt-1">
               {errors.modulosIds.message}
@@ -224,7 +229,9 @@ export const CreateCourseForm: React.FC<CourseFormProps> = ({
         </div>
 
         {/* SEÇÃO DE MÓDULOS AGREGADOS */}
-        <div className="w-[95%] h-[17rem] md:h-[15rem] rounded-lg border border-primary2 overflow-auto p-2 py-4 relative"> {/* Adicionado relative para posicionar o spinner */}
+        <div className="w-[95%] h-[17rem] md:h-[15rem] rounded-lg border border-primary2 overflow-auto p-2 py-4 relative">
+          {" "}
+          {/* Adicionado relative para posicionar o spinner */}
           {loadingModulos ? ( // Renderiza spinner aqui também
             <div className="absolute inset-0 flex items-center justify-center bg-primary1/80 z-10">
               <div className="w-8 h-8 border-4 border-secondary border-t-transparent rounded-full animate-spin"></div>
@@ -237,7 +244,8 @@ export const CreateCourseForm: React.FC<CourseFormProps> = ({
             <>
               <span className="text-white">
                 {selectedModuleIds.length} Módulo
-                {selectedModuleIds.length !== 1 ? "s" : ""} de aprendizagem agregado
+                {selectedModuleIds.length !== 1 ? "s" : ""} de aprendizagem
+                agregado
                 {selectedModuleIds.length !== 1 ? "s" : ""}
               </span>
               <div className="w-full grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 mt-4">
@@ -251,7 +259,9 @@ export const CreateCourseForm: React.FC<CourseFormProps> = ({
                       className="flex flex-col h-[6rem] rounded-lg border border-white p-2 px-4 gap-1"
                     >
                       <span className="font-extralight text-white">MÓDULO</span>
-                      <span className="text-primary2 pb-2">{module.titulo}</span>
+                      <span className="text-primary2 pb-2">
+                        {module.titulo}
+                      </span>
                       <div className="pt-2 border-t border-white">
                         <span className="font-extralight text-white">
                           0 aula(s) -{" "}

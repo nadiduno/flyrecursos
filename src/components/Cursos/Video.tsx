@@ -27,7 +27,7 @@ export function Video(props: VideoProps) {
         backgroundPosition: "right center",
         backgroundRepeat: "no-repeat",
         opacity: 1,
-        top: scrolled ? "0px" : "85px"
+        top: scrolled ? "0px" : "85px",
       }}
     >
       <button
@@ -40,8 +40,7 @@ export function Video(props: VideoProps) {
       </button>
 
       <div className="z-10 w-full h-full">
-        <div 
-        className="flex items-center justify-center w-full h-full md:h-full ml:h-full box-border bg-white/70">
+        <div className="flex items-center justify-center w-full h-full md:h-full ml:h-full box-border bg-white/70">
           <div className="z-10 md:w-[80%]  ml:w-[80%] md:h-full ml:h-full">
             <div className="w-full md:h-[calc(100%-4.5rem)] ml:h-[calc(100%-4.5rem)]">
               <iframe
@@ -56,7 +55,9 @@ export function Video(props: VideoProps) {
 
             <div className="w-full h-full bg-primary1">
               <div className="ml-[1.25rem] md:ml-[2rem] ml:ml-[2rem]">
-                <p className="pt-[0.5rem] md:pt-[1rem] ml:pt-[1rem] text-white text-xl">{props.title}</p>
+                <p className="pt-[0.5rem] md:pt-[1rem] ml:pt-[1rem] text-white text-xl">
+                  {props.title}
+                </p>
               </div>
             </div>
           </div>

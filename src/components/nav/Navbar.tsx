@@ -7,13 +7,8 @@ import UploadImage from "../uploadImg/UploadImg";
 
 export function Navbar() {
   const navigate = useNavigate();
-  const {
-    isAuthenticated,
-    isAdmin,
-    logout,
-    userProfile
-  } = useAuth();
-  console.log("userProfile", userProfile);
+  const { isAuthenticated, isAdmin, logout, userProfile } = useAuth();
+  // console.log("userProfile", userProfile);
 
   const [showCreateAccount, setShowCreateAccount] = useState(false);
   const [isDropdownVisible, setIsDropdownVisible] = useState(false);
@@ -28,13 +23,17 @@ export function Navbar() {
   };
 
   const toggleDropdown = () => {
-    setIsDropdownVisible(prev => !prev);
+    setIsDropdownVisible((prev) => !prev);
   };
 
   return (
     <div className="w-full h-[80px] flex justify-between py-4 px-3 items-center">
       <div className="lg:w-[6%] h-[100%] flex items-center justify-start xs:w-[20%]">
-        <img className="h-full w-full object-contain" src={logo} alt="fly logo" />
+        <img
+          className="h-full w-full object-contain"
+          src={logo}
+          alt="fly logo"
+        />
       </div>
 
       <div className="flex justify-end lg:w-[40%] gap-3 items-center sm:w-[85%] md:w-[60%] xs:w-[80%]">
@@ -72,20 +71,20 @@ export function Navbar() {
                 </span>
 
                 <button
-                  onClick={() => setShowUploader(prev => !prev)}
+                  onClick={() => setShowUploader((prev) => !prev)}
                   className="w-full border border-gray-300 rounded-full text-blue-500 hover:bg-blue-500 hover:text-white px-4 py-1 my-2"
                 >
                   {showUploader ? "Cerrar editor" : "Editar imagen"}
                 </button>
 
-               {showUploader && (
-  <div className="mt-2 flex flex-col items-center gap-2">
-    <UploadImage
-      estilos="perfil"
-      onUploadComplete={() => setShowUploader(false)}
-    />
-  </div>
-)}
+                {showUploader && (
+                  <div className="mt-2 flex flex-col items-center gap-2">
+                    <UploadImage
+                      estilos="perfil"
+                      onUploadComplete={() => setShowUploader(false)}
+                    />
+                  </div>
+                )}
 
                 <button
                   onClick={handleLogout}

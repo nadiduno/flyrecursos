@@ -1,5 +1,5 @@
 import React from "react";
-import { IconType } from 'react-icons';
+import { IconType } from "react-icons";
 
 interface ButtonFlyProps {
   text: string;
@@ -18,7 +18,7 @@ export const ButtonFly: React.FC<ButtonFlyProps> = ({
   type = "button",
   disabled = false,
   icon: Icon,
-  iconPosition = 'left'
+  iconPosition = "left",
 }) => {
   const baseClasses = "flex justify-center rounded-b-md w-full items-center";
   const buttonFlyClasses = `
@@ -41,9 +41,9 @@ export const ButtonFly: React.FC<ButtonFlyProps> = ({
         className={buttonFlyClasses}
         disabled={disabled}
       >
-        {Icon && iconPosition === 'left' && <Icon size={18} />}
+        {Icon && iconPosition === "left" && <Icon size={18} />}
         {text}
-        {Icon && iconPosition === 'right' && <Icon size={18} />}
+        {Icon && iconPosition === "right" && <Icon size={18} />}
       </button>
     </div>
   );

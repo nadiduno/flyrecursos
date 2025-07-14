@@ -142,7 +142,6 @@ const ResourceComponent = ({ resource, onVideoSelect }: ResourceProps) => {
     }
   }, [isAuthenticated]);
 
-
   useEffect(() => {
     fetchAllResources();
   }, [fetchAllResources]);

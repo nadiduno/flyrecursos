@@ -55,7 +55,7 @@ export function Lesson() {
       setLoading(true);
       setError(null);
       const response = await get<TableRowData[]>("/api/aulas");
-      const fetchedData = response.data
+      const fetchedData = response.data;
       // console.log("Resposta do backend:", fetchedData);
 
       setLessons(fetchedData);
@@ -158,7 +158,7 @@ export function Lesson() {
           <CreateLesson
             isVisible={showCreateLesson}
             setIsVisible={setShowCreateLesson}
-            onLessonCreated={fetchLessons} 
+            onLessonCreated={fetchLessons}
           />
         )}
 

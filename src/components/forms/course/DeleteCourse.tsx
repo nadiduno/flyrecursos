@@ -4,10 +4,7 @@ import { TableRowDataCourse } from "../course/Course";
 import { formatarMensagemErro } from "../../../utils/formatarErrors";
 import { AxiosError } from "axios";
 
-import {
-  toastCustomSuccess,
-  toastCustomError,
-} from "../../ToastCustom";
+import { toastCustomSuccess, toastCustomError } from "../../ToastCustom";
 import { DeleteCourseForm } from "./DeleteCourseForm";
 
 interface DeleteCourseProps {
@@ -33,24 +30,27 @@ export const DeleteCourse: React.FC<DeleteCourseProps> = ({
     try {
       await del(`/api/cursos/${courseData.id}`);
       const nome = courseData.titulo || "Cuso";
-      toastCustomSuccess("Cuso",nome, "Foi eliminado com sucesso!");
+      toastCustomSuccess("Cuso", nome, "Foi eliminado com sucesso!");
 
       setTimeout(() => {
         onDeleteSuccess();
         setIsVisible(false);
       }, 500);
-
     } catch (error) {
       // Tratamento de erro mais robusto com AxiosError
       if (error instanceof AxiosError) {
-        console.error("Detalhes do erro da API (exclusão):", error.response?.data);
-        const errorMessage = error.response?.data?.message || formatarMensagemErro(error);
+        console.error(
+          "Detalhes do erro da API (exclusão):",
+          error.response?.data
+        );
+        const errorMessage =
+          error.response?.data?.message || formatarMensagemErro(error);
         const nome = courseData.titulo || "Cuso";
-        toastCustomError("Cuso",nome, errorMessage);
+        toastCustomError("Cuso", nome, errorMessage);
       } else {
         const errorMessage = formatarMensagemErro(error);
         const nome = courseData.titulo || "Cuso";
-        toastCustomError("Cuso",nome, errorMessage);
+        toastCustomError("Cuso", nome, errorMessage);
       }
     }
   };

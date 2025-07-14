@@ -66,7 +66,7 @@ export function Course() {
     setSelectedCourse(null);
   };
 
-   // Ler data API - cursos
+  // Ler data API - cursos
   const fetchCourses = async () => {
     try {
       setLoading(true);

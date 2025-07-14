@@ -72,7 +72,8 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
     async (token: string): Promise<boolean> => {
       try {
         const decoded = jwtDecode<DecodedTokenPayload>(token);
-        const isAdminUser = decoded.authorities?.includes("ROLE_ADMIN") || false;
+        const isAdminUser =
+          decoded.authorities?.includes("ROLE_ADMIN") || false;
 
         setAuthState({
           isAuthenticated: true,
@@ -82,8 +83,8 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
         });
 
         const response = await get<UserProfile>("/usuarios/me");
-console.log("🧠 Perfil actualizado desde backend:", response.data);
-setUserProfile(response.data);
+        // console.log("🧠 Perfil actualizado desde backend:", response.data);
+        setUserProfile(response.data);
 
         return isAdminUser;
       } catch (error) {
@@ -119,14 +120,14 @@ setUserProfile(response.data);
     checkAuthStatus();
   }, [decodeAndSetAuthState, logout]);
 
-const syncUserProfile = async () => {
-  try {
-    const response = await get<UserProfile>("/usuarios/me");
-    setUserProfile(response.data);
-  } catch (error) {
-    console.error("Error al sincronizar perfil:", error);
-  }
-};
+  const syncUserProfile = async () => {
+    try {
+      const response = await get<UserProfile>("/usuarios/me");
+      setUserProfile(response.data);
+    } catch (error) {
+      console.error("Error al sincronizar perfil:", error);
+    }
+  };
 
   return (
     <AuthContext.Provider
@@ -149,6 +150,7 @@ const syncUserProfile = async () => {
 
 export const useAuth = () => {
   const context = useContext(AuthContext);
-  if (!context) throw new Error("useAuth debe usarse dentro de un AuthProvider");
+  if (!context)
+    throw new Error("useAuth debe usarse dentro de un AuthProvider");
   return context;
 };

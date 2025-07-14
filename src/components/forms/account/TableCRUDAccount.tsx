@@ -11,8 +11,8 @@ interface TableCRUDAccountProps {
 }
 
 function formatarData(data: string): string {
-  const [ano, mes, dia] = data.split('-');
-  return `${dia.padStart(2, '0')}/${mes.padStart(2, '0')}/${ano}`;
+  const [ano, mes, dia] = data.split("-");
+  return `${dia.padStart(2, "0")}/${mes.padStart(2, "0")}/${ano}`;
 }
 
 export function TableCRUDAccount({
@@ -22,21 +22,21 @@ export function TableCRUDAccount({
   error,
   onEdit,
 }: TableCRUDAccountProps) {
-  
-
   if (loading) {
     return (
-    <div className="flex flex-col items-center justify-centertext-center text-yellow py-5">
-       <div className="w-12 h-12 border-4 border-secondary border-t-transparent rounded-full animate-spin"></div>
-        <span className="text-white pt-2">Preparando o conteúdo pra você...</span>
-    </div>
+      <div className="flex flex-col items-center justify-centertext-center text-yellow py-5">
+        <div className="w-12 h-12 border-4 border-secondary border-t-transparent rounded-full animate-spin"></div>
+        <span className="text-white pt-2">
+          Preparando o conteúdo pra você...
+        </span>
+      </div>
     );
   }
 
   if (error) {
-    return( 
+    return (
       <div className="flex flex-col items-center justify-centertext-center text-center text-red-500 py-5">
-      <div className="text-lg font-semibold">
+        <div className="text-lg font-semibold">
           Opa! Não conseguimos carregar os alunos no momento.
           <br />
           Tente novamente mais tarde.
@@ -83,9 +83,15 @@ export function TableCRUDAccount({
             students.map((row) => (
               <tr key={row.id}>
                 <td className="whitespace-nowrap py-2">{row.nome}</td>
-                <td className="whitespace-nowrap py-2 hidden md:table-cell lg:table-cell">{row.cpf}</td>
-                <td className="whitespace-nowrap py-2 hidden md:table-cell lg:table-cell">{row.email}</td>
-                <td className="whitespace-nowrap py-2 hidden md:table-cell lg:table-cell">{formatarData(row.dataNascimento)}</td>
+                <td className="whitespace-nowrap py-2 hidden md:table-cell lg:table-cell">
+                  {row.cpf}
+                </td>
+                <td className="whitespace-nowrap py-2 hidden md:table-cell lg:table-cell">
+                  {row.email}
+                </td>
+                <td className="whitespace-nowrap py-2 hidden md:table-cell lg:table-cell">
+                  {formatarData(row.dataNascimento)}
+                </td>
                 <td className="whitespace-nowrap text-right flex flex-row gap-4 py-2 px-2 justify-end">
                   <button onClick={() => onEdit(row)}>
                     <GrEdit
@@ -109,8 +115,6 @@ export function TableCRUDAccount({
           )}
         </tbody>
       </table>
-
-      
     </div>
   );
 }

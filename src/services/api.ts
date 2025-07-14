@@ -143,7 +143,7 @@ export const post = <T = unknown>(
 ) => handleRequest<T>(api.post<T>(url, data, {
   ...config,
   transformRequest: [(data) => {
-    console.log('Payload enviado:', data); // Log do payload
+    // console.log('Payload enviado:', data);
     return JSON.stringify(data);
   }]
 }));

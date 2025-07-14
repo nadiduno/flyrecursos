@@ -28,7 +28,9 @@ export function CourseDetails({ curso, modulos }: Props) {
 
       {/* Lista de Módulos con links */}
       <div>
-        <h3 className="text-xl font-bold text-primary2 mb-2">📦 Módulos del curso</h3>
+        <h3 className="text-xl font-bold text-primary2 mb-2">
+          📦 Módulos del curso
+        </h3>
         <ul className="list-none list-inside space-y-2">
           {modulos.map((modulo, index) => (
             <li key={modulo.id}>

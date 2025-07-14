@@ -3,13 +3,10 @@ import { useForm, SubmitHandler } from "react-hook-form";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { IoEye, IoEyeOff } from "react-icons/io5";
-import { put } from "../../services/api"; 
+import { put } from "../../services/api";
 import { AxiosError } from "axios";
 import { formatarMensagemErro } from "../../utils/formatarErrors";
-import {
-  toastCustomSuccess,
-  toastCustomError,
-} from "../ToastCustom"; 
+import { toastCustomSuccess, toastCustomError } from "../ToastCustom";
 
 const UpdatePasswordSchema = z
   .object({
@@ -60,7 +57,8 @@ interface UpdatePasswordFormProps {
 export const UpdatePasswordForm = React.forwardRef<
   { submitForm: () => void },
   UpdatePasswordFormProps
->(({ onSuccess, onSubmittingChange }, ref) => { // Adicionado onSubmittingChange
+>(({ onSuccess, onSubmittingChange }, ref) => {
+  // Adicionado onSubmittingChange
   const {
     register,
     handleSubmit,
@@ -70,11 +68,9 @@ export const UpdatePasswordForm = React.forwardRef<
     resolver: zodResolver(UpdatePasswordSchema),
   });
 
-  
   useEffect(() => {
     onSubmittingChange(isSubmitting);
   }, [isSubmitting, onSubmittingChange]);
-
 
   const [updateError, setUpdateError] = useState<string | null>(null);
   const [showSenhaAtual, setShowSenhaAtual] = useState(false);

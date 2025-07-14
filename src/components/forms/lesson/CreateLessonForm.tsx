@@ -54,8 +54,8 @@ export const CreateLessonForm: React.FC<LessonFormProps> = ({
     register,
     handleSubmit,
     formState: { errors },
-    setValue, 
-    watch, 
+    setValue,
+    watch,
   } = useForm<FormData>({
     resolver: zodResolver(FormDataSchema),
     defaultValues: {
@@ -63,7 +63,7 @@ export const CreateLessonForm: React.FC<LessonFormProps> = ({
       tipo: "VIDEO",
       duracaoEstimada: 0,
       linkConteudo: "",
-      moduloId: undefined, 
+      moduloId: undefined,
     },
   });
 
@@ -75,11 +75,9 @@ export const CreateLessonForm: React.FC<LessonFormProps> = ({
   const [refreshModulos, setRefreshModulos] = useState(0);
   const [selectedModuleId, setSelectedModuleId] = useState<number | null>(null);
 
-  
   const currentModuloId = watch("moduloId");
-  
-  useEffect(() => {
-  }, [currentModuloId]);
+
+  useEffect(() => {}, [currentModuloId]);
 
   useEffect(() => {
     const fetchModulos = async () => {
@@ -117,7 +115,6 @@ export const CreateLessonForm: React.FC<LessonFormProps> = ({
 
   const handleFormSubmit = (data: FormData) => {
     if (!data.moduloId) {
-      
       return;
     }
 
@@ -136,7 +133,6 @@ export const CreateLessonForm: React.FC<LessonFormProps> = ({
           CRIAR AULA{" "}
         </p>
         <div className="w-full grid md:grid-cols-2 min-h-[20rem] gap-2 md:gap-6 px-4 md:px-8 lg:px-12 items-star content-start">
-          
           {/* Título da Aula */}
           <div className="w-full flex flex-col md:flex-col">
             <label className="w-full md:text-m p-b-[0.125rem] md:py-[0.125rem] md:pt-[1rem] text-left md:text-lg">
@@ -214,7 +210,7 @@ export const CreateLessonForm: React.FC<LessonFormProps> = ({
               </p>
             )}
           </div>
-          
+
           {/* Seleção de Módulo */}
           <div className="w-full flex flex-col md:col-span-2">
             <div className="flex items-center gap-2">

@@ -1,5 +1,5 @@
-import desktopImage from '../../assets/large.jpg';
-import mobileImage from '../../assets/small.jpg';
+import desktopImage from "../../assets/large.jpg";
+import mobileImage from "../../assets/small.jpg";
 
 export function ImagemBanner() {
   return (

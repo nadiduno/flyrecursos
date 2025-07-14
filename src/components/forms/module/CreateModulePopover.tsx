@@ -66,17 +66,17 @@ export function CreateModulePopover({
   });
 
   const onSubmit = async (data: ModuleFormData) => {
-  try {
-    const response = await post<{ id: number }>("/api/modulos", data);
-    if (response.data.id) {
-      onModuleCreated(response.data.id);
-      state.close();
-      reset();
+    try {
+      const response = await post<{ id: number }>("/api/modulos", data);
+      if (response.data.id) {
+        onModuleCreated(response.data.id);
+        state.close();
+        reset();
+      }
+    } catch (error) {
+      console.error("Erro ao criar módulo:", error);
     }
-  } catch (error) {
-    console.error("Erro ao criar módulo:", error);
-  }
-};
+  };
 
   return (
     <>

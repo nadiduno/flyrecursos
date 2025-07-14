@@ -131,7 +131,7 @@ export function FormLogin({
         )}
       </div>
 
-      <div className="w-full flex justify-end m-[-1rem] md:m-[0.125rem]">
+      <div className="text-sm w-full flex justify-end m-[-1.125rem] md:m-[0.125rem]">
         {/* Usar o Link com onClick para abrir o modal */}
         <Link
           to="#" // Pode ser "#" ou outro valor, já que o JS vai impedir a navegação
@@ -142,11 +142,15 @@ export function FormLogin({
         </Link>
       </div>
 
-      <div className="w-full text-center pt-[1rem] md:pt-[2rem] pb-[1rem] ">
+      <div className="text-sm w-full text-center pt-[1rem] md:pt-[2rem] pb-[1rem] ">
         <p>Só para estudantes da Fly</p>
       </div>
 
-      <ButtonFly text="Entrar" type="submit" aria-label="Entrar na plataforma" />
+      <ButtonFly
+        text="Entrar"
+        type="submit"
+        aria-label="Entrar na plataforma"
+      />
     </form>
   );
 }

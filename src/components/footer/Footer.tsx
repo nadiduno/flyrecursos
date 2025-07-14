@@ -79,7 +79,7 @@ export function Footer() {
       <div className="grid grid-cols-2 md:grid-cols-4 gap-8 p-10">
         <div className="mb-4">
           <img
-            className="h-auto w-[40%] md:w-[50%] object-contain"
+            className="h-auto w-[40%] md:w-[30%] object-contain"
             src={logo}
             alt="fly logo"
           />

@@ -143,7 +143,6 @@ export const CreateCourse: React.FC<CreateCourseProps> = ({
 
   if (!propIsVisible) return null;
 
-  
   // Função para passar para o CreateCourseForm
   const handleRefreshModulos = () => {
     setRefreshModulosTrigger((prev) => prev + 1);
