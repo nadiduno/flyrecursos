@@ -3,21 +3,21 @@ import { app } from "../../firebaseConfig";
 
 const storage = getStorage(app)
 const uploadToFirebase = async (file: File, userId: string): Promise<string> => {
-  console.log("⏳ Subiendo a Firebase:", { userId, file });
+  // console.log("⏳ Subiendo a Firebase:", { userId, file });
 
   try {
     const storageRef = ref(storage, `usuarios/${userId}/${file.name}`);
-    console.log("📁 Referencia Firebase creada:", storageRef.fullPath);
+    // console.log("📁 Referencia Firebase creada:", storageRef.fullPath);
 
     await uploadBytes(storageRef, file);
-    console.log("✅ Archivo subido con éxito");
+    // console.log("✅ Archivo subido con éxito");
 
     const downloadURL = await getDownloadURL(storageRef);
-    console.log("🔗 URL pública obtenida:", downloadURL);
+    // console.log("🔗 URL pública obtenida:", downloadURL);
 
     return downloadURL;
   } catch (err) {
-    console.error("🔥 Error al subir a Firebase:", err);
+    // console.error("🔥 Error al subir a Firebase:", err);
     throw err;
   }
 };

@@ -14,7 +14,7 @@ const firebaseConfig = {
 
 export const app = initializeApp(firebaseConfig);
 export const storage = getStorage(app);
-console.log("✅ Firebase app initialized:", app.name, app.options);
+// console.log("✅ Firebase app initialized:", app.name, app.options);
 // Import the functions you need from the SDKs you need
 
 // TODO: Add SDKs for Firebase products that you want to use

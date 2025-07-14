@@ -5,10 +5,7 @@ import { FormDataLesson } from "../../../types/typeFormData";
 import { formatarMensagemErro } from "../../../utils/formatarErrors";
 import { AxiosError } from "axios";
 
-import {
-  toastCustomSuccess,
-  toastCustomError,
-} from "../../ToastCustom";
+import { toastCustomSuccess, toastCustomError } from "../../ToastCustom";
 
 interface EditLessonProps {
   isVisible: boolean;
@@ -36,7 +33,7 @@ export const EditLesson: React.FC<EditLessonProps> = ({
     // const dataToUpdate = { ...formData, id: lessonData.id };
     const dataToUpdate = {
       ...formData,
-      id: lessonData.id, 
+      id: lessonData.id,
       ordem: lessonData.ordem,
     };
 

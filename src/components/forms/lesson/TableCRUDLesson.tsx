@@ -45,7 +45,7 @@ export function TableCRUDLesson({
 
   // Função para obter o título do módulo pelo ID
   const getModuloTitulo = (moduloId: number) => {
-    const modulo = modulos.find(m => m.id === moduloId);
+    const modulo = modulos.find((m) => m.id === moduloId);
     return modulo ? modulo.titulo : "Módulo não encontrado";
   };
 
@@ -53,13 +53,15 @@ export function TableCRUDLesson({
     return (
       <div className="flex flex-col items-center justify-center text-center text-yellow py-5">
         <div className="w-12 h-12 border-4 border-secondary border-t-transparent rounded-full animate-spin"></div>
-        <span className="text-white pt-2">Preparando o conteúdo pra você...</span>
+        <span className="text-white pt-2">
+          Preparando o conteúdo pra você...
+        </span>
       </div>
     );
   }
 
   if (error) {
-    return ( 
+    return (
       <div className="flex flex-col items-center justify-center text-center text-red-500 py-5">
         <div className="text-lg font-semibold">
           Opa! Não conseguimos carregar as aulas no momento.
@@ -112,9 +114,13 @@ export function TableCRUDLesson({
               <tr key={row.id}>
                 <td className="whitespace-nowrap py-2">{row.titulo}</td>
                 <td className="whitespace-nowrap py-2 hidden md:table-cell lg:table-cell">
-                  {row.tipo === "VIDEO" ? "Vídeo" : 
-                   row.tipo === "ARTIGO" ? "Artigo" : 
-                   row.tipo === "PDF" ? "PDF" : row.tipo}
+                  {row.tipo === "VIDEO"
+                    ? "Vídeo"
+                    : row.tipo === "ARTIGO"
+                    ? "Artigo"
+                    : row.tipo === "PDF"
+                    ? "PDF"
+                    : row.tipo}
                 </td>
                 <td className="whitespace-nowrap py-2 hidden md:table-cell lg:table-cell">
                   {getModuloTitulo(row.moduloId)}

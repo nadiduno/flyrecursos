@@ -116,9 +116,7 @@ export const CreateAccountForm: React.FC<AccountFormProps> = ({
   const perfilSelecionado = watch("perfil");
 
   return (
-    <form
-      onSubmit={handleSubmit(onSubmit)}
-    >
+    <form onSubmit={handleSubmit(onSubmit)}>
       <div className="flex flex-col justify-center items-center gap-2">
         <p className="my-[1rem] md:mt-[3rem] text-m md:text-xl lg:text-xl mx-auto text-center font-bold ">
           CRIAR CONTA{" "}
@@ -137,7 +135,9 @@ export const CreateAccountForm: React.FC<AccountFormProps> = ({
               placeholder="Digite seu nome completo"
             />
             {errors.nome && (
-              <p className="text-red-500 text-xs md:text-[1rem] mt-1 md:mt-5">{errors.nome.message}</p>
+              <p className="text-red-500 text-xs md:text-[1rem] mt-1 md:mt-5">
+                {errors.nome.message}
+              </p>
             )}
           </div>
 
@@ -154,7 +154,9 @@ export const CreateAccountForm: React.FC<AccountFormProps> = ({
               placeholder="Digite seu email"
             />
             {errors.email && (
-              <p className="text-red-500 text-xs md:text-[1rem] mt-1 md:mt-5">{errors.email.message}</p>
+              <p className="text-red-500 text-xs md:text-[1rem] mt-1 md:mt-5">
+                {errors.email.message}
+              </p>
             )}
           </div>
 
@@ -179,7 +181,9 @@ export const CreateAccountForm: React.FC<AccountFormProps> = ({
               )}
             />
             {errors.cpf && (
-              <p className="text-red-500 text-xs md:text-[1rem] mt-1 md:mt-5">{errors.cpf.message}</p>
+              <p className="text-red-500 text-xs md:text-[1rem] mt-1 md:mt-5">
+                {errors.cpf.message}
+              </p>
             )}
           </div>
 
@@ -215,7 +219,9 @@ export const CreateAccountForm: React.FC<AccountFormProps> = ({
                 placeholder="Digite sua data de nascimento"
               />
               {errors.dataNascimento && (
-                <p className="text-red-500 text-xs md:text-[1rem] mt-1 md:mt-5">{errors.dataNascimento.message}</p>
+                <p className="text-red-500 text-xs md:text-[1rem] mt-1 md:mt-5">
+                  {errors.dataNascimento.message}
+                </p>
               )}
             </div>
           )}
@@ -225,7 +231,7 @@ export const CreateAccountForm: React.FC<AccountFormProps> = ({
           <button
             className="w-[8rem] md:w-[15rem] h-[3rem]  rounded-[50px]  border-secondary bg-white shadow-[0px_4px_4px_0px_rgba(0,0,0,0.2)]  hover:bg-secondary2 hover:text-black transition-colors duration-200"
             type="button"
-            onClick={() => setIsVisible(false)} 
+            onClick={() => setIsVisible(false)}
           >
             {" "}
             <p className="leading-tight tracking-normal text-center font-bold md:text-[1.25rem] text-secondary3">

@@ -19,7 +19,9 @@ export const DeleteCourseForm: React.FC<DeleteCourseFormProps> = ({
 
       <p className="flex flex-col text-sm md:text-md text-center text-white">
         Tem certeza que deseja excluir a conta de{" "}
-        <span className="font-bold text-yellow p-4 md:p-8 mb-1">{courseName}?</span>
+        <span className="font-bold text-yellow p-4 md:p-8 mb-1">
+          {courseName}?
+        </span>
         Esta ação não pode ser desfeita.
       </p>
 

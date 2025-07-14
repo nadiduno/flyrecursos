@@ -21,13 +21,15 @@ export function TableCRUDCourse({
     return (
       <div className="flex flex-col items-center justify-center text-center text-yellow py-5">
         <div className="w-12 h-12 border-4 border-secondary border-t-transparent rounded-full animate-spin"></div>
-        <span className="text-white pt-2">Preparando o conteúdo pra você...</span>
+        <span className="text-white pt-2">
+          Preparando o conteúdo pra você...
+        </span>
       </div>
     );
   }
 
   if (error) {
-    return ( 
+    return (
       <div className="flex flex-col items-center justify-center text-center text-red-500 py-5">
         <div className="text-lg font-semibold">
           Opa! Não conseguimos carregar os cursos no momento.
@@ -77,7 +79,7 @@ export function TableCRUDCourse({
                 <td className="whitespace-nowrap py-2 hidden md:table-cell lg:table-cell">
                   {course.modulos?.length > 0 ? (
                     <ul className="list-decimal pl-4">
-                      {course.modulos.map(modulo => (
+                      {course.modulos.map((modulo) => (
                         <li key={modulo.id}>{modulo.titulo}</li>
                       ))}
                     </ul>

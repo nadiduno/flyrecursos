@@ -1,7 +1,12 @@
-import { Link } from "react-router-dom";
+import { Link } from "react-router-dom"; // Ainda manteremos Link para estrutura, mas usaremos onClick
 import { ButtonFly } from "../botoes/ButtonFly";
 import { IoEye, IoEyeOff } from "react-icons/io5";
-import { FieldErrors, UseFormHandleSubmit, UseFormRegister, SubmitHandler } from "react-hook-form";
+import {
+  FieldErrors,
+  UseFormHandleSubmit,
+  UseFormRegister,
+  SubmitHandler,
+} from "react-hook-form";
 
 interface FormData {
   email: string;
@@ -17,6 +22,8 @@ interface FormLoginProps {
   showPassword: boolean;
   togglePasswordVisibility: () => void;
   handleInputChange: () => void;
+  // NOVO: Adicionado o callback para o clique em "Esqueci minha senha?"
+  onForgotPasswordClick: (event: React.MouseEvent<HTMLAnchorElement>) => void;
 }
 
 export function FormLogin({
@@ -27,10 +34,15 @@ export function FormLogin({
   loginError,
   showPassword,
   togglePasswordVisibility,
-  handleInputChange
+  handleInputChange,
+  onForgotPasswordClick, // NOVO
 }: FormLoginProps) {
   return (
-    <form onSubmit={handleSubmit(onSubmit)} className="w-full flex flex-col" aria-label="Formulário de Login">
+    <form
+      onSubmit={handleSubmit(onSubmit)}
+      className="w-full flex flex-col"
+      aria-label="Formulário de Login"
+    >
       {/* E-mail */}
       <div className="w-full text-left">
         <label htmlFor="email">E-mail</label>
@@ -47,7 +59,10 @@ export function FormLogin({
         aria-describedby="email-error"
       />
       {errors.email ? (
-        <p id="email-error" className="text-red-500 text-[0.6rem] md:text-sm transition-all duration-20 mb-2">
+        <p
+          id="email-error"
+          className="text-red-500 text-[0.6rem] md:text-sm transition-all duration-20 mb-2"
+        >
           {errors.email.message}
         </p>
       ) : (
@@ -78,14 +93,23 @@ export function FormLogin({
           aria-controls="senha"
         >
           {showPassword ? (
-            <IoEye size={18} className="opacity-90 hover:opacity-100 hover:text-primary1" />
+            <IoEye
+              size={18}
+              className="opacity-90 hover:opacity-100 hover:text-primary1"
+            />
           ) : (
-            <IoEyeOff size={18} className="opacity-90 hover:opacity-100 hover:text-primary1" />
+            <IoEyeOff
+              size={18}
+              className="opacity-90 hover:opacity-100 hover:text-primary1"
+            />
           )}
         </button>
       </div>
       {errors.senha ? (
-        <p id="senha-error" className="text-red-500 text-[0.6rem] md:text-sm transition-all duration-20 mb-2">
+        <p
+          id="senha-error"
+          className="text-red-500 text-[0.6rem] md:text-sm transition-all duration-20 mb-2"
+        >
           {errors.senha.message}
         </p>
       ) : (
@@ -95,7 +119,10 @@ export function FormLogin({
       {/* Erro login */}
       <div className="min-h-[1rem] text-[0.6rem] md:text-sm transition-all duration-200">
         {loginError && (
-          <p className="text-red-500 h-[1rem] mb-[-1rem] md:mb-[0.125rem] mt-[-1rem] md:mt-[-0.5rem]" aria-live="polite">
+          <p
+            className="text-red-500 h-[1rem] mb-[-1rem] md:mb-[0.125rem] mt-[-1rem] md:mt-[-0.5rem]"
+            aria-live="polite"
+          >
             {loginError}
           </p>
         )}
@@ -104,17 +131,26 @@ export function FormLogin({
         )}
       </div>
 
-      <div className="w-full flex justify-end m-[-1rem] md:m-[0.125rem]">
-        <Link to="/recuperar-senha" className="hover:underline">
+      <div className="text-sm w-full flex justify-end m-[-1.125rem] md:m-[0.125rem]">
+        {/* Usar o Link com onClick para abrir o modal */}
+        <Link
+          to="#" // Pode ser "#" ou outro valor, já que o JS vai impedir a navegação
+          onClick={onForgotPasswordClick}
+          className="hover:underline"
+        >
           Esqueci minha senha?
         </Link>
       </div>
 
-      <div className="w-full text-center pt-[1rem] md:pt-[2rem] pb-[1rem] ">
+      <div className="text-sm w-full text-center pt-[1rem] md:pt-[2rem] pb-[1rem] ">
         <p>Só para estudantes da Fly</p>
       </div>
 
-      <ButtonFly text="Entrar" type="submit" aria-label="Entrar na plataforma" />
+      <ButtonFly
+        text="Entrar"
+        type="submit"
+        aria-label="Entrar na plataforma"
+      />
     </form>
   );
 }
