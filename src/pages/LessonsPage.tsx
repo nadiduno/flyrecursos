@@ -105,7 +105,7 @@ const modulosData: Modulo[] = [
   },
 ];
 
-export function LessonsPage() {
+export default function LessonsPage() {
   const [selectedVideo, setSelectedVideo] = useState<CardVideoType | null>(null);
 
   const handleVideoSelect = (video: CardVideoType) => {

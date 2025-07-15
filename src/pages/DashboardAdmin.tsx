@@ -3,7 +3,7 @@ import { HeaderDashboard } from "../components/Dashboard/HeaderDashboardAdmin";
 import { ImagemBanner } from "../components/Dashboard/ImagemBanner";
 import { Navbar } from "../components//nav/Navbar";
 
-export function DashboardAdmin() {
+export default function DashboardAdmin() {
   return (
     <div className="w-full mx-auto min-h-screen">
       <div className="w-[95%] mx-auto">
