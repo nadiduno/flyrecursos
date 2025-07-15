@@ -9,6 +9,7 @@ import {
 import { useNavigate } from "react-router-dom";
 import { jwtDecode } from "jwt-decode";
 import { get } from "../services/api";
+import { UserProfile } from "../types/interfaceApi";
 
 interface DecodedTokenPayload {
   sub: string;
@@ -18,11 +19,7 @@ interface DecodedTokenPayload {
   authorities?: string[];
 }
 
-interface UserProfile {
-  nome: string;
-  email: string;
-  fotoPerfilUrl: string;
-}
+
 
 interface AuthContextType {
   isAuthenticated: boolean;
