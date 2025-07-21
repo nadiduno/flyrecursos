@@ -9,6 +9,7 @@ import {
 import { useNavigate } from "react-router-dom";
 import { jwtDecode } from "jwt-decode";
 import { get } from "../services/api";
+import { UserProfile } from "../types/interfaceApi";
 
 interface DecodedTokenPayload {
   sub: string;
@@ -24,6 +25,7 @@ interface UserProfile {
   fotoPerfilUrl: string;
   cursoIds:string[]
 }
+
 
 interface AuthContextType {
   isAuthenticated: boolean;

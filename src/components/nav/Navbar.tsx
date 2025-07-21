@@ -3,7 +3,7 @@ import logo from "../../assets/logo.png";
 import { CreateAccount } from "../forms/account/CreateAccount";
 import { useAuth } from "../../context/AuthContext";
 import { useNavigate } from "react-router-dom";
-import UploadImage from "../uploadImg/UploadImg";
+import { UploadImgem } from "../uploadImg/UploadImgem";
 
 export function Navbar() {
   const navigate = useNavigate();
@@ -79,7 +79,7 @@ export function Navbar() {
 
                 {showUploader && (
                   <div className="mt-2 flex flex-col items-center gap-2">
-                    <UploadImage
+                    <UploadImgem
                       estilos="perfil"
                       onUploadComplete={() => setShowUploader(false)}
                     />

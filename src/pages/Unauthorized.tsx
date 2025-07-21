@@ -3,7 +3,7 @@ import { Footer } from "../components/footer/Footer";
 import { NavbarLoginPage } from "../components/nav/NavBarLoginPage";
 import { TextUnauthorized } from "../components/text/TextUnauthorized";
 
-export function Unauthorized() {
+export default function Unauthorized() {
   return (
     <div className="w-full mx-auto min-h-screen">
       <div className="w-[95%] mx-auto">
