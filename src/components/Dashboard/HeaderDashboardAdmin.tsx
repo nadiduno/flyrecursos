@@ -5,12 +5,14 @@ import { Course } from "../forms/course/Course";
 import { Module } from "../forms/module/Module";
 import { Lesson } from "../forms/lesson/Lesson";
 import { Toaster } from "react-hot-toast";
+import { Matricular } from "../forms/Matricula";
 
 export const menuItemsConfig = [
   { label: "Conta", action: "Conta" },
   { label: "Curso", action: "Curso" },
   { label: "Módulo", action: "Modulo" },
   { label: "Aula", action: "Aula" },
+  { label: "Matricular", action: "Matricular" },
   { label: "Ver recursos", action: "Recursos" },
 ];
 
@@ -31,6 +33,8 @@ export function HeaderDashboard() {
       setConteudoHeader(<Module />);
     } else if (action === "Aula") {
       setConteudoHeader(<Lesson />);
+    }else if (action === "Matricular") {
+      setConteudoHeader(<Matricular />);
     } else {
       setConteudoHeader(null);
     }
