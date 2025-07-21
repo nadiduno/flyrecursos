@@ -22,6 +22,7 @@ interface UserProfile {
   nome: string;
   email: string;
   fotoPerfilUrl: string;
+  cursoIds:string[]
 }
 
 interface AuthContextType {
