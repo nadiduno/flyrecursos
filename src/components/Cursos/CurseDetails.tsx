@@ -1,49 +1,21 @@
-interface CursoInfo {
-  nombre: string;
-  descripcion: string;
-  horasTotales: number;
-}
-
-interface Modulo {
-  id: number;
-  titulo: string;
-}
+import { CursoInfo } from "../../types/interface";
 
 interface Props {
   curso: CursoInfo;
-  modulos: Modulo[];
 }
 
-export function CourseDetails({ curso, modulos }: Props) {
+export function CourseDetails({ curso }: Props) {
   return (
-    <section className="rounded-2xl p-4 bg-white text-black shadow-lg mb-6 border-primary2 border-[3px] transition-all hover:shadow-2xl scroll-smooth">
-      {/* Detalles del Curso */}
-      <div className="mb-4">
-        <h2 className="text-3xl font-bold text-primary1">{curso.nombre}</h2>
-        <p className="text-gray-700 text-lg mt-2">{curso.descripcion}</p>
-        <p className="text-sm mt-1 text-primary2 font-semibold">
-          ⏳ Duración total: {curso.horasTotales} horas
-        </p>
-      </div>
-
-      {/* Lista de Módulos con links */}
-      <div>
-        <h3 className="text-xl font-bold text-primary2 mb-2">
-          📦 Módulos del curso
-        </h3>
-        <ul className="list-none list-inside space-y-2">
-          {modulos.map((modulo, index) => (
-            <li key={modulo.id}>
-              <a
-                href={`#modulo-${modulo.id}`}
-                className="block bg-gray-100 p-3 rounded-md text-black hover:bg-primary1 hover:text-white transition duration-300"
-              >
-                {index + 1}. {modulo.titulo}
-              </a>
-            </li>
-          ))}
-        </ul>
-      </div>
-    </section>
+    <div className="rounded-2xl p-[0.25rem] md:p-[3rem] z-20 h-fit w-full md:max-w-[620px] text-xs bg-white m-4 bg-opacity-70">
+      <h2 className="p-6 md:p-0 md:font-bold lg:font-bold text-black md:text-2xl lg:text-3xl md:pb-8">
+        {curso.titulo}
+      </h2>
+      <p className="hidden md:block text-sm leading-relaxed text-gray-800 md:text-[17px] mt-3">
+        {curso.descricao}
+      </p>
+      <p className="hidden md:block text-sm leading-relaxed text-gray-800 md:text-[16px] mt-2">
+        ⏳ <strong>Duración total:</strong> {curso.horasTotales} horas
+      </p>
+    </div>
   );
 }
