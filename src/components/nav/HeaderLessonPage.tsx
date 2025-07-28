@@ -38,11 +38,11 @@ const modulosMenu: MenuItem[] = curso?.modulos?.map((modulo) => ({
         </div>
       ) : (
         // Senão renderiza o conteúdo principal
-        <div className="relative w-full h-full max-h-[28rem] overflow-hidden md:h-[28rem] lg:h-[28rem] rounded-2xl">
+        <div className="relative w-full h-full max-h-[24rem] overflow-hidden md:h-[28rem] lg:h-[28rem] rounded-2xl">
           <ImagemBanner />
           <div className="absolute top-0 left-0 w-full h-full flex flex-col md:flex-row items-start md:items-center px-[1rem] md:px-[5rem] ld:px-[5rem] pt-4 md:py-0">
            {loading && (
-  <div className="text-gray-500 p-2">Carregando curso...</div>
+  <div className="text-black-500 p-2">Carregando curso...</div>
 )}
 {curso && (
  <CourseDetails
@@ -66,7 +66,8 @@ const modulosMenu: MenuItem[] = curso?.modulos?.map((modulo) => ({
                 {modulosMenu.map((item, index) => (
                   <li
                     key={index}
-className="leading-5 py-2 px-3 rounded-md ease-in-out cursor-pointer opacity-90  bg-gray-100 hover:bg-primary1 hover:text-primary2 hover:translate-x-1 hover:opacity-100 transition-all duration-500 md:text-lg"                  >
+className="leading-5 py-2 px-3 rounded-md ease-in-out cursor-pointer opacity-90 bg-gray-100 text-primary1 hover:bg-primary1 hover:text-secondary2 hover:translate-x-1 hover:opacity-100 transition-all duration-500 md:text-lg"
+              >
                     <a href={item.href} className="block w-full h-full">
                       {item.label}
                     </a>
@@ -78,6 +79,7 @@ className="leading-5 py-2 px-3 rounded-md ease-in-out cursor-pointer opacity-90 
           </div>
         </div>
       )}
+      
     </div>
   );
 }
