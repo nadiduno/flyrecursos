@@ -1,5 +1,3 @@
-// src/components/admin/module/Module.tsx
-
 import { CiSearch } from "react-icons/ci";
 import { TableCRUDModule } from "./TableCRUDModule";
 import { CreateModule } from "./CreateModule";
@@ -13,16 +11,6 @@ import { DeleteModule } from "./DeleteModule";
 export interface TableRowDataModule {
   id: number;
   titulo: string;
-}
-
-// A interface para a resposta paginada da API (igual à anterior)
-interface PaginatedModulosResponse {
-  content: TableRowDataModule[]; // O tipo do conteúdo deve ser o que você espera na tabela
-  totalPages: number;
-  totalElements: number;
-  size: number;
-  number: number;
-  // Adicione outros campos de paginação se precisar usar
 }
 
 export function Module() {
@@ -54,34 +42,19 @@ export function Module() {
     setSelectedModule(null);
   };
 
-  // --- ALTERAÇÃO PRINCIPAL AQUI: fetchModules para buscar todas as páginas ---
+  // Ler data API - modules
   const fetchModules = async () => {
     try {
       setLoading(true);
       setError(null);
+      const response = await get<{ content: TableRowDataModule[] }>(
+        "/api/modulos"
+      );
+      const fetchedData = response.data.content || [];
+      // console.log("Resposta do backend (módulos):", fetchedData);
 
-      let allModulos: TableRowDataModule[] = [];
-      let page = 0;
-      let totalPages = 1; // Inicializa com 1 para garantir que o loop comece
-
-      do {
-        console.log(`🐛 Debug (Module): Buscando página ${page} de módulos...`);
-        const response = await get<PaginatedModulosResponse>(
-          `/api/modulos?page=${page}&size=100` // Ajuste 'size' conforme sua preferência e limites da API
-        );
-
-        if (response.data.content && response.data.content.length > 0) {
-          allModulos = allModulos.concat(response.data.content);
-        }
-
-        totalPages = response.data.totalPages;
-        page++;
-
-      } while (page < totalPages); // Continua enquanto houver mais páginas
-
-      console.log(`🐛 Debug (Module): Total de módulos carregados: ${allModulos.length}`);
-      setModulesData(allModulos); // Define os dados completos
-      setFilteredModules(allModulos); // Inicializa a lista filtrada com todos os dados
+      setModulesData(fetchedData);
+      setFilteredModules(fetchedData);
     } catch (err) {
       console.error("Erro ao buscar módulos:", err);
       setError("Não foi possível carregar os dados dos módulos.");
@@ -91,7 +64,6 @@ export function Module() {
       setLoading(false);
     }
   };
-  // --- FIM DA ALTERAÇÃO PRINCIPAL ---
 
   useEffect(() => {
     fetchModules();
@@ -104,7 +76,7 @@ export function Module() {
     } else {
       const lowerCaseSearchTerm = searchTerm.toLowerCase();
       const results = modulesData.filter(
-        (module) => module.titulo.toLowerCase().includes(lowerCaseSearchTerm)
+        (module) => module.titulo.toLowerCase().includes(lowerCaseSearchTerm) // Buscar por 'titulo'
       );
       setFilteredModules(results);
     }
@@ -165,7 +137,7 @@ export function Module() {
           <TableCRUDModule
             onEdit={handleEditModule}
             onDelete={handleDelete}
-            modules={filteredModules} // Continua usando filteredModules
+            modules={filteredModules}
             loading={loading}
             error={error}
           />
