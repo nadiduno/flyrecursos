@@ -47,10 +47,8 @@ export function Module() {
     try {
       setLoading(true);
       setError(null);
-      const response = await get<{ content: TableRowDataModule[] }>(
-        "/api/modulos"
-      );
-      const fetchedData = response.data.content || [];
+      const response = await get<TableRowDataModule[]>("/api/modulos");
+      const fetchedData = response.data || [];
       // console.log("Resposta do backend (módulos):", fetchedData);
 
       setModulesData(fetchedData);
