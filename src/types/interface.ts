@@ -20,5 +20,5 @@ export interface Aula {
   moduloId: number;
   ordem: number;
   tipo: string;
-  imagemCapa?: string;
+  urlCapa?: string;
 }

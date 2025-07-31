@@ -1,14 +1,21 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useMemo } from "react";
 import { useForm, SubmitHandler } from "react-hook-form";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { FormDataCourse } from "../../../types/typeFormData";
 import { CreateModulePopover } from "../module/CreateModulePopover";
 import { Checkbox, CheckboxGroup } from "react-aria-components";
+import { get } from "../../../services/api";
+import { Aula } from "../../../types/interface";
 
 interface ModuloOption {
   id: number;
   titulo: string;
+}
+
+interface ModuloDetails {
+  totalAulas: number;
+  totalDuracao: number;
 }
 
 const FormDataSchema = z.object({
@@ -25,7 +32,7 @@ export type FormData = z.infer<typeof FormDataSchema>;
 interface CourseFormProps {
   onSubmit: SubmitHandler<FormDataCourse>;
   setIsVisible: React.Dispatch<React.SetStateAction<boolean>>;
-  modulosDisponiveis: ModuloOption[]; // Lista completa de módulos
+  modulosDisponiveis: ModuloOption[];
   onModulosRefetch: () => void;
   selectedModuleIds: string[];
   setSelectedModuleIds: React.Dispatch<React.SetStateAction<string[]>>;
@@ -36,7 +43,7 @@ interface CourseFormProps {
 export const CreateCourseForm: React.FC<CourseFormProps> = ({
   onSubmit,
   setIsVisible,
-  modulosDisponiveis, // Esta é a lista original recebida via props
+  modulosDisponiveis,
   onModulosRefetch,
   selectedModuleIds,
   setSelectedModuleIds,
@@ -56,14 +63,19 @@ export const CreateCourseForm: React.FC<CourseFormProps> = ({
     },
   });
 
-  // --- NOVOS ESTADOS PARA BUSCA E FILTRO ---
   const [searchTerm, setSearchTerm] = useState<string>("");
   const [filteredModulos, setFilteredModulos] =
     useState<ModuloOption[]>(modulosDisponiveis);
 
-  // --- EFEITO PARA FILTRAR OS MÓDULOS SEMPRE QUE modulosDisponiveis OU searchTerm MUDAR ---
+  const [allLessons, setAllLessons] = useState<Aula[]>([]);
+  const [loadingLessons, setLoadingLessons] = useState(true);
+  const [errorLessons, setErrorLessons] = useState<string | null>(null);
+  const [moduloAggregatedDetails, setModuloAggregatedDetails] = useState<
+    Record<number, ModuloDetails>
+  >({});
+
+  // Buscar modulos
   useEffect(() => {
-    console.log("🐛 [CreateCourseForm] - Filtrando módulos...");
     if (searchTerm.trim() === "") {
       setFilteredModulos(modulosDisponiveis);
     } else {
@@ -73,27 +85,21 @@ export const CreateCourseForm: React.FC<CourseFormProps> = ({
       );
       setFilteredModulos(results);
     }
-  }, [searchTerm, modulosDisponiveis]); // Depende de searchTerm e modulosDisponiveis
+  }, [searchTerm, modulosDisponiveis]);
 
   useEffect(() => {
     setValue("modulosIds", selectedModuleIds, { shouldValidate: true });
   }, [selectedModuleIds, setValue]);
 
   useEffect(() => {
-    // Ao receber novos modulosDisponiveis (ex: após criar um novo módulo),
-    // filtra os módulos selecionados para garantir que apenas IDs válidos permaneçam.
     setSelectedModuleIds((prevSelected) => {
       const validSelected = prevSelected.filter((idString) =>
         modulosDisponiveis.some((mod) => mod.id === parseInt(idString))
       );
-      // Se um módulo selecionado for filtrado para fora da vista pelo searchTerm,
-      // ele ainda deve aparecer como selecionado quando o searchTerm é limpo.
-      // A lógica de filtragem aqui apenas garante que os IDs existam.
       return validSelected;
     });
   }, [modulosDisponiveis, setSelectedModuleIds]);
 
-  // Handler para quando a seleção de módulos muda via CheckboxGroup
   const handleSelectedModulesChange = (newSelection: string[]) => {
     setSelectedModuleIds(newSelection);
   };
@@ -106,6 +112,81 @@ export const CreateCourseForm: React.FC<CourseFormProps> = ({
       titulo: data.titulo,
       modulosIds: modulosIdsAsNumbers,
     });
+  };
+
+  const fetchAllLessons = async () => {
+    try {
+      setLoadingLessons(true);
+      setErrorLessons(null);
+      const response = await get<Aula[]>("/api/aulas");
+      const fetchedLessons = response.data || [];
+      setAllLessons(fetchedLessons);
+    } catch (err) {
+      setErrorLessons("Não foi possível carregar as informações das aulas.");
+      setAllLessons([]);
+    } finally {
+      setLoadingLessons(false);
+    }
+  };
+
+  useEffect(() => {
+    fetchAllLessons();
+  }, []);
+
+  useEffect(() => {
+    const details: Record<number, ModuloDetails> = {};
+    modulosDisponiveis.forEach((modulo) => {
+      const lessonsInModule = allLessons.filter(
+        (lesson) => lesson.moduloId === modulo.id
+      );
+      const totalAulas = lessonsInModule.length;
+      const totalDuracao = lessonsInModule.reduce(
+        (sum, lesson) => sum + (lesson.duracaoEstimada || 0),
+        0
+      );
+      details[modulo.id] = { totalAulas, totalDuracao };
+    });
+    setModuloAggregatedDetails(details);
+  }, [modulosDisponiveis, allLessons]);
+
+  const { totalSelectedAulas, totalSelectedDuracao } = useMemo(() => {
+    let totalAulas = 0;
+    let totalDuracao = 0; 
+
+    selectedModuleIds.forEach((moduleIdString) => {
+      const moduleId = parseInt(moduleIdString);
+      const details = moduloAggregatedDetails[moduleId];
+      if (details) {
+        totalAulas += details.totalAulas;
+        totalDuracao += details.totalDuracao;
+      }
+    });
+
+    return {
+      totalSelectedAulas: totalAulas,
+      totalSelectedDuracao: totalDuracao,
+    };
+  }, [selectedModuleIds, moduloAggregatedDetails]); 
+
+  // Função para formatar a duração em horas e minutos
+  const formatDuration = (totalMinutes: number): string => {
+    if (totalMinutes < 0) return "Duração inválida";
+    const hours = Math.floor(totalMinutes / 60);
+    const minutes = totalMinutes % 60;
+
+    let parts = [];
+    if (hours > 0) {
+      parts.push(`${hours} hora${hours !== 1 ? "s" : ""}`);
+    }
+    if (minutes > 0) {
+      parts.push(`${minutes} minuto${minutes !== 1 ? "s" : ""}`);
+    }
+
+    if (parts.length === 0) {
+      return "0 minutos";
+    }
+
+    return parts.join(" e ");
   };
 
   return (
@@ -142,14 +223,13 @@ export const CreateCourseForm: React.FC<CourseFormProps> = ({
           </label>
           <div className="flex items-center gap-8">
             <div className="">
-              {/* --- INPUT DE BUSCA MODIFICADO --- */}
               <input
                 type="text"
                 placeholder="Digite o nome para consultar"
                 className="w-[14rem] h-[1.5rem] md:w-[20rem] md:h-[2.5rem] rounded-[4rem] rounded-br-none border border-gray-300 bg-white p-3 text-black text-sm md:text-base focus:outline-none focus:ring-2 focus:ring-secondary"
-                autoComplete="off" // Para evitar sugestões do navegador
-                value={searchTerm} // Controlado pelo estado
-                onChange={(e) => setSearchTerm(e.target.value)} // Atualiza o estado da busca
+                autoComplete="off"
+                value={searchTerm}
+                onChange={(e) => setSearchTerm(e.target.value)}
               />
             </div>
 
@@ -159,7 +239,8 @@ export const CreateCourseForm: React.FC<CourseFormProps> = ({
               <CreateModulePopover
                 onModuleCreated={async (newModuleId) => {
                   if (newModuleId) {
-                    await onModulosRefetch(); // Recarrega a lista completa de módulos
+                    await onModulosRefetch(); 
+                    await fetchAllLessons(); 
                     const newModuleIdString = newModuleId.toString();
 
                     setSelectedModuleIds((prevSelected) => {
@@ -168,8 +249,6 @@ export const CreateCourseForm: React.FC<CourseFormProps> = ({
                       }
                       return prevSelected;
                     });
-                    // Opcional: Limpar o termo de busca para mostrar o novo módulo
-                    // setSearchTerm("");
                   }
                 }}
               />
@@ -179,21 +258,19 @@ export const CreateCourseForm: React.FC<CourseFormProps> = ({
 
         {/* SEÇÃO DE SELEÇÃO DE MÓDULOS */}
         <div className="w-[95%] h-[8.5rem] rounded-lg border border-primary2 overflow-auto p-2 mb-1 relative">
-          {" "}
-          {/* Adicionado relative para posicionar o spinner */}
-          {loadingModulos ? ( // Renderiza spinner se estiver carregando
+          {loadingModulos || loadingLessons ? (
             <div className="absolute inset-0 flex items-center justify-center bg-primary1/80 z-10">
               <div className="w-8 h-8 border-4 border-secondary border-t-transparent rounded-full animate-spin"></div>
             </div>
-          ) : errorModulos ? ( // Renderiza erro se houver
+          ) : errorModulos || errorLessons ? (
             <p className="text-red-500 text-sm mt-2 text-center absolute inset-0 flex items-center justify-center bg-primary1/80 z-10">
-              {errorModulos}
+              {errorModulos || errorLessons}
             </p>
-          ) : filteredModulos.length === 0 && searchTerm === "" ? ( // Nenhum módulo E nenhum termo de busca
+          ) : filteredModulos.length === 0 && searchTerm === "" ? (
             <p className="text-red-500 text-sm mt-2 text-center">
               Nenhum módulo disponível. Por favor, crie um módulo primeiro.
             </p>
-          ) : filteredModulos.length === 0 && searchTerm !== "" ? ( // Nenhum módulo encontrado com o termo de busca
+          ) : filteredModulos.length === 0 && searchTerm !== "" ? (
             <p className="text-yellow text-sm mt-2 text-center">
               Nenhum módulo encontrado para "{searchTerm}".
             </p>
@@ -204,7 +281,6 @@ export const CreateCourseForm: React.FC<CourseFormProps> = ({
               className="w-full"
             >
               <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-2">
-                {/* --- RENDERIZA OS MÓDULOS FILTRADOS --- */}
                 {filteredModulos.map((modulo) => (
                   <Checkbox
                     key={modulo.id}
@@ -256,17 +332,15 @@ export const CreateCourseForm: React.FC<CourseFormProps> = ({
           )}
         </div>
 
-        {/* SEÇÃO DE MÓDULOS AGREGADOS (os módulos selecionados, independente do filtro) */}
+        {/* SEÇÃO DE MÓDULOS AGREGADOS*/}
         <div className="w-[95%] h-[9.5rem] rounded-lg border border-primary2 overflow-auto p-2 py-4 relative">
-          {" "}
-          {/* Adicionado relative para posicionar o spinner */}
-          {loadingModulos ? ( // Renderiza spinner aqui também
+          {loadingModulos || loadingLessons ? (
             <div className="absolute inset-0 flex items-center justify-center bg-primary1/80 z-10">
               <div className="w-8 h-8 border-4 border-secondary border-t-transparent rounded-full animate-spin"></div>
             </div>
-          ) : errorModulos ? ( // Renderiza erro aqui também
+          ) : errorModulos || errorLessons ? (
             <p className="text-red-500 text-sm mt-2 text-center absolute inset-0 flex items-center justify-center bg-primary1/80 z-10">
-              {errorModulos}
+              {errorModulos || errorLessons}
             </p>
           ) : (
             <>
@@ -274,14 +348,28 @@ export const CreateCourseForm: React.FC<CourseFormProps> = ({
                 {selectedModuleIds.length} Módulo
                 {selectedModuleIds.length !== 1 ? "s" : ""} de aprendizagem
                 agregado
-                {selectedModuleIds.length !== 1 ? "s" : ""}
+                {selectedModuleIds.length !== 1 ? "s" : ""}{" "}
+                {selectedModuleIds.length > 0 && (
+                  <>
+                    <br className="sm:hidden" />{" "}
+                    <span>(</span>
+                    <span className="text-yellow">
+                      {totalSelectedAulas} aula
+                      {totalSelectedAulas !== 1 ? "s" : ""}
+                    </span>
+                    <span> {" "}- Tempo aprox: {formatDuration(totalSelectedDuracao)})</span>
+                  </>
+                )}
               </span>
               <div className="w-full grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mt-4">
                 {selectedModuleIds.map((moduleIdString) => {
                   const module = modulosDisponiveis.find(
-                    // Busca na lista COMPLETA de módulos disponíveis
                     (m) => m.id === parseInt(moduleIdString)
                   );
+                  const details = moduloAggregatedDetails[
+                    parseInt(moduleIdString)
+                  ] || { totalAulas: 0, totalDuracao: 0 };
+
                   return module ? (
                     <div
                       key={module.id}
@@ -293,10 +381,10 @@ export const CreateCourseForm: React.FC<CourseFormProps> = ({
                       </span>
                       <div className="pt-2 border-t border-white">
                         <span className="font-extralight text-white">
-                          0 aula(s) -{" "}
+                          {details.totalAulas} aula(s) -{" "}
                         </span>
                         <span className="font-extralight text-white">
-                          0 minutos
+                          {details.totalDuracao} min
                         </span>
                       </div>
                     </div>
