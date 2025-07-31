@@ -31,8 +31,8 @@ export function TableCRUDLesson({
   useEffect(() => {
     const fetchModulos = async () => {
       try {
-        const response = await get<{ content: Modulo[] }>("/api/modulos");
-        setModulos(response.data.content || []);
+        const response = await get<Modulo[]>("/api/modulos");
+        setModulos(response.data || []);
       } catch (err) {
         console.error("Erro ao buscar módulos:", err);
       } finally {

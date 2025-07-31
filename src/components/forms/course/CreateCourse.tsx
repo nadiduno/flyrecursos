@@ -150,7 +150,7 @@ export const CreateCourse: React.FC<CreateCourseProps> = ({
 
   return (
     <div className="fixed inset-0 flex items-start justify-center bg-[#FFFFFFB2] z-50">
-      <div className="mt-[1.5rem] md:mt-[0.25rem] font-bold bg-primary1 text-white w-[90%] md:w-[70%] h-[33.5rem] md:h-[38rem] rounded-t-[10px] shadow-2xl">
+      <div className="mt-[1.5rem] md:mt-[0.25rem] font-bold bg-primary1 text-white w-[90%] md:w-[85%] h-[33.5rem] md:h-[38rem] rounded-t-[10px] shadow-2xl">
         <CreateCourseForm
           onSubmit={onSubmit}
           setIsVisible={setIsVisible}
