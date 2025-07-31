@@ -38,8 +38,8 @@ export const CreateCourse: React.FC<CreateCourseProps> = ({
       try {
         setLoadingModulos(true);
         setErrorModulos(null); // Limpa erros anteriores
-        const response = await get<{ content: Modulo[] }>("/api/modulos");
-        setModulosDisponiveis(response.data.content || []);
+        const response = await get<Modulo[]>("/api/modulos");
+        setModulosDisponiveis(response.data || []);
       } catch (err) {
         console.error("Erro ao carregar módulos:", err);
         setErrorModulos("Não foi possível carregar os módulos.");
@@ -150,7 +150,7 @@ export const CreateCourse: React.FC<CreateCourseProps> = ({
 
   return (
     <div className="fixed inset-0 flex items-start justify-center bg-[#FFFFFFB2] z-50">
-      <div className="mt-[0.25rem] font-bold bg-primary1 text-white w-[90%] md:w-[70%] h-screen rounded-t-[10px] shadow-2xl">
+      <div className="mt-[1.5rem] md:mt-[0.25rem] font-bold bg-primary1 text-white w-[90%] md:w-[70%] h-[33.5rem] md:h-[38rem] rounded-t-[10px] shadow-2xl">
         <CreateCourseForm
           onSubmit={onSubmit}
           setIsVisible={setIsVisible}

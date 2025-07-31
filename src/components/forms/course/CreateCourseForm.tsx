@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { useForm, SubmitHandler } from "react-hook-form";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -25,7 +25,7 @@ export type FormData = z.infer<typeof FormDataSchema>;
 interface CourseFormProps {
   onSubmit: SubmitHandler<FormDataCourse>;
   setIsVisible: React.Dispatch<React.SetStateAction<boolean>>;
-  modulosDisponiveis: ModuloOption[];
+  modulosDisponiveis: ModuloOption[]; // Lista completa de módulos
   onModulosRefetch: () => void;
   selectedModuleIds: string[];
   setSelectedModuleIds: React.Dispatch<React.SetStateAction<string[]>>;
@@ -36,7 +36,7 @@ interface CourseFormProps {
 export const CreateCourseForm: React.FC<CourseFormProps> = ({
   onSubmit,
   setIsVisible,
-  modulosDisponiveis,
+  modulosDisponiveis, // Esta é a lista original recebida via props
   onModulosRefetch,
   selectedModuleIds,
   setSelectedModuleIds,
@@ -56,15 +56,39 @@ export const CreateCourseForm: React.FC<CourseFormProps> = ({
     },
   });
 
+  // --- NOVOS ESTADOS PARA BUSCA E FILTRO ---
+  const [searchTerm, setSearchTerm] = useState<string>("");
+  const [filteredModulos, setFilteredModulos] =
+    useState<ModuloOption[]>(modulosDisponiveis);
+
+  // --- EFEITO PARA FILTRAR OS MÓDULOS SEMPRE QUE modulosDisponiveis OU searchTerm MUDAR ---
+  useEffect(() => {
+    console.log("🐛 [CreateCourseForm] - Filtrando módulos...");
+    if (searchTerm.trim() === "") {
+      setFilteredModulos(modulosDisponiveis);
+    } else {
+      const lowerCaseSearchTerm = searchTerm.toLowerCase();
+      const results = modulosDisponiveis.filter((modulo) =>
+        modulo.titulo.toLowerCase().includes(lowerCaseSearchTerm)
+      );
+      setFilteredModulos(results);
+    }
+  }, [searchTerm, modulosDisponiveis]); // Depende de searchTerm e modulosDisponiveis
+
   useEffect(() => {
     setValue("modulosIds", selectedModuleIds, { shouldValidate: true });
   }, [selectedModuleIds, setValue]);
 
   useEffect(() => {
+    // Ao receber novos modulosDisponiveis (ex: após criar um novo módulo),
+    // filtra os módulos selecionados para garantir que apenas IDs válidos permaneçam.
     setSelectedModuleIds((prevSelected) => {
       const validSelected = prevSelected.filter((idString) =>
         modulosDisponiveis.some((mod) => mod.id === parseInt(idString))
       );
+      // Se um módulo selecionado for filtrado para fora da vista pelo searchTerm,
+      // ele ainda deve aparecer como selecionado quando o searchTerm é limpo.
+      // A lógica de filtragem aqui apenas garante que os IDs existam.
       return validSelected;
     });
   }, [modulosDisponiveis, setSelectedModuleIds]);
@@ -73,12 +97,6 @@ export const CreateCourseForm: React.FC<CourseFormProps> = ({
   const handleSelectedModulesChange = (newSelection: string[]) => {
     setSelectedModuleIds(newSelection);
   };
-
-  // Para debug os módulos criados e seleccionados
-  // useEffect(() => {
-  //   console.log("Módulos Seleccionados:", selectedModuleIds);
-  //   console.log("Módulos Disponibles:", modulosDisponiveis);
-  // }, [selectedModuleIds, modulosDisponiveis]);
 
   const handleFormSubmit: SubmitHandler<FormData> = (data) => {
     const modulosIdsAsNumbers =
@@ -119,16 +137,19 @@ export const CreateCourseForm: React.FC<CourseFormProps> = ({
             )}
           </div>
 
-          <label className="w-full md:text-m p-b-[0.125rem] md:py-[0.125rem] md:pt-[1rem] text-left md:text-lg">
+          <label className="w-full md:text-m p-b-[0.125rem] text-left md:text-lg">
             Selecione os módulos para o curso
           </label>
           <div className="flex items-center gap-8">
             <div className="">
+              {/* --- INPUT DE BUSCA MODIFICADO --- */}
               <input
                 type="text"
                 placeholder="Digite o nome para consultar"
                 className="w-[14rem] h-[1.5rem] md:w-[20rem] md:h-[2.5rem] rounded-[4rem] rounded-br-none border border-gray-300 bg-white p-3 text-black text-sm md:text-base focus:outline-none focus:ring-2 focus:ring-secondary"
-                autoComplete="name"
+                autoComplete="off" // Para evitar sugestões do navegador
+                value={searchTerm} // Controlado pelo estado
+                onChange={(e) => setSearchTerm(e.target.value)} // Atualiza o estado da busca
               />
             </div>
 
@@ -138,7 +159,7 @@ export const CreateCourseForm: React.FC<CourseFormProps> = ({
               <CreateModulePopover
                 onModuleCreated={async (newModuleId) => {
                   if (newModuleId) {
-                    await onModulosRefetch();
+                    await onModulosRefetch(); // Recarrega a lista completa de módulos
                     const newModuleIdString = newModuleId.toString();
 
                     setSelectedModuleIds((prevSelected) => {
@@ -147,6 +168,8 @@ export const CreateCourseForm: React.FC<CourseFormProps> = ({
                       }
                       return prevSelected;
                     });
+                    // Opcional: Limpar o termo de busca para mostrar o novo módulo
+                    // setSearchTerm("");
                   }
                 }}
               />
@@ -155,7 +178,7 @@ export const CreateCourseForm: React.FC<CourseFormProps> = ({
         </div>
 
         {/* SEÇÃO DE SELEÇÃO DE MÓDULOS */}
-        <div className="w-[95%] h-[13rem] md:h-[10rem] rounded-lg border border-primary2 overflow-auto p-2 relative">
+        <div className="w-[95%] h-[8.5rem] rounded-lg border border-primary2 overflow-auto p-2 mb-1 relative">
           {" "}
           {/* Adicionado relative para posicionar o spinner */}
           {loadingModulos ? ( // Renderiza spinner se estiver carregando
@@ -166,9 +189,13 @@ export const CreateCourseForm: React.FC<CourseFormProps> = ({
             <p className="text-red-500 text-sm mt-2 text-center absolute inset-0 flex items-center justify-center bg-primary1/80 z-10">
               {errorModulos}
             </p>
-          ) : modulosDisponiveis.length === 0 ? (
+          ) : filteredModulos.length === 0 && searchTerm === "" ? ( // Nenhum módulo E nenhum termo de busca
             <p className="text-red-500 text-sm mt-2 text-center">
               Nenhum módulo disponível. Por favor, crie um módulo primeiro.
+            </p>
+          ) : filteredModulos.length === 0 && searchTerm !== "" ? ( // Nenhum módulo encontrado com o termo de busca
+            <p className="text-yellow text-sm mt-2 text-center">
+              Nenhum módulo encontrado para "{searchTerm}".
             </p>
           ) : (
             <CheckboxGroup
@@ -177,7 +204,8 @@ export const CreateCourseForm: React.FC<CourseFormProps> = ({
               className="w-full"
             >
               <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-2">
-                {modulosDisponiveis.map((modulo) => (
+                {/* --- RENDERIZA OS MÓDULOS FILTRADOS --- */}
+                {filteredModulos.map((modulo) => (
                   <Checkbox
                     key={modulo.id}
                     value={modulo.id.toString()}
@@ -228,8 +256,8 @@ export const CreateCourseForm: React.FC<CourseFormProps> = ({
           )}
         </div>
 
-        {/* SEÇÃO DE MÓDULOS AGREGADOS */}
-        <div className="w-[95%] h-[17rem] md:h-[15rem] rounded-lg border border-primary2 overflow-auto p-2 py-4 relative">
+        {/* SEÇÃO DE MÓDULOS AGREGADOS (os módulos selecionados, independente do filtro) */}
+        <div className="w-[95%] h-[9.5rem] rounded-lg border border-primary2 overflow-auto p-2 py-4 relative">
           {" "}
           {/* Adicionado relative para posicionar o spinner */}
           {loadingModulos ? ( // Renderiza spinner aqui também
@@ -248,9 +276,10 @@ export const CreateCourseForm: React.FC<CourseFormProps> = ({
                 agregado
                 {selectedModuleIds.length !== 1 ? "s" : ""}
               </span>
-              <div className="w-full grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 mt-4">
+              <div className="w-full grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mt-4">
                 {selectedModuleIds.map((moduleIdString) => {
                   const module = modulosDisponiveis.find(
+                    // Busca na lista COMPLETA de módulos disponíveis
                     (m) => m.id === parseInt(moduleIdString)
                   );
                   return module ? (
@@ -277,7 +306,7 @@ export const CreateCourseForm: React.FC<CourseFormProps> = ({
             </>
           )}
         </div>
-        <div className="w-full h-[7.5rem] md:h-[10rem] rounded-b-[10px] bg-white flex justify-center items-center space-x-4 mt-[1rem] border-b-[3px] border-primary2">
+        <div className="w-full h-[7rem] rounded-b-[10px] bg-white flex justify-center items-center space-x-4 mt-[1rem] border-b-[3px] border-primary2">
           <button
             className="w-[8rem] md:w-[15rem] h-[3rem] rounded-[50px] border-secondary bg-white shadow-[0px_4px_4px_0px_rgba(0,0,0,0.2)] hover:bg-secondary2 hover:text-black transition-colors duration-200"
             type="button"
