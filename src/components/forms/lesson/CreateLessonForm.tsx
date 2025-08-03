@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { FormDataLesson } from "../../../types/typeFormData";
+import { Aula } from "../../../types/interface";
 import { get } from "../../../services/api";
 import { CreateModulePopover } from "../module/CreateModulePopover";
 
@@ -42,7 +42,7 @@ const FormDataSchema = z.object({
 export type FormData = z.infer<typeof FormDataSchema>;
 
 interface LessonFormProps {
-  onSubmit: (data: FormDataLesson) => void;
+  onSubmit: (data: Aula) => void;
   setIsVisible: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
@@ -123,7 +123,7 @@ export const CreateLessonForm: React.FC<LessonFormProps> = ({
       moduloId: data.moduloId,
     };
 
-    onSubmit(payload as FormDataLesson);
+    onSubmit(payload as Aula);
   };
 
   return (

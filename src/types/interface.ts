@@ -1,4 +1,5 @@
 export interface CursoInfo {
+  id?:number;
   titulo: string;
   descricao: string;
   horasTotales: number;
