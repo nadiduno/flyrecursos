@@ -10,28 +10,28 @@ export const useCursoActivo = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
   const cursoId = userProfile?.cursoIds?.[0];
+  const nomeUsuario = userProfile?.nome || "aluno";
 
-useEffect(() => {
-  if (!cursoId) {
-    setError("ID de curso não encontrado.");
-    setLoading(false);
-    return;
-  }
-
-  const fetchCurso = async () => {
-    try {
-      const response = await get<CursoInfo>(`/api/cursos/${cursoId}`);
-      setCurso(response.data);
-    } catch (err) {
-      setError(formatarMensagemErro(err));
-    } finally {
+  useEffect(() => {
+    if (!cursoId) {
+      setError("Desculpe, você ainda não tem um curso atribuído.");
       setLoading(false);
+      return;
     }
-  };
 
-  fetchCurso();
-}, [cursoId]); // ✅ más limpio y válido para ESLint
+    const fetchCurso = async () => {
+      try {
+        const response = await get<CursoInfo>(`/api/cursos/${cursoId}`);
+        setCurso(response.data);
+      } catch (err) {
+        setError(formatarMensagemErro(err));
+      } finally {
+        setLoading(false);
+      }
+    };
 
+    fetchCurso();
+  }, [cursoId]);
 
-  return { curso, loading, error };
+  return { curso, loading, error, nomeUsuario };
 };
