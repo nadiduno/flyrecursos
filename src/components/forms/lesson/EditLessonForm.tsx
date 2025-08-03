@@ -120,8 +120,8 @@ export const EditLessonForm: React.FC<EditLessonFormProps> = ({
     const fetchModulos = async () => {
       try {
         setLoadingModulos(true);
-        const response = await get<{ content: ModuloOption[] }>("/api/modulos");
-        setModulosDisponiveis(response.data.content || []);
+        const response = await get< ModuloOption[] >("/api/modulos");
+        setModulosDisponiveis(response.data || []);
       } catch (err) {
         setErrorModulos("Não foi possível carregar os módulos");
       } finally {
