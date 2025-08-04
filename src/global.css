@@ -52,3 +52,52 @@ h1, h2, h3, h4, h5, h6 {
 section {
   scroll-margin-top: 28rem;
 }
+
+/* Tabelas */
+.fixed-table {
+  table-layout: fixed;
+  width: 100%;
+}
+
+.sticky-header {
+  position: sticky;
+  top: 0;
+  z-index: 10;
+  background-color: var(--primary1);
+}
+
+.table-row-hover:hover {
+  background-color: rgba(255, 200, 0, 0.05);
+}
+
+.table-cell {
+  padding: 0.5rem 0.75rem;
+  vertical-align: middle;
+}
+
+.truncate {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* Container da tabela */
+.table-container {
+  height: calc(100vh - 300px);
+  overflow: auto;
+}
+
+/* Personalização da scrollbar */
+.table-scroll-content::-webkit-scrollbar {
+  width: 8px;
+}
+
+.table-scroll-content::-webkit-scrollbar-thumb {
+  background-color: rgba(156, 163, 175, 0.5);
+  border-radius: 4px;
+}
+
+.table-scroll-content::-webkit-scrollbar-track {
+  background-color: rgba(156, 163, 175, 0.1);
+}
+

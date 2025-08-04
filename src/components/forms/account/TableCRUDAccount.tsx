@@ -1,6 +1,7 @@
 import { GrEdit } from "react-icons/gr";
 import { RiDeleteBin6Line } from "react-icons/ri";
 import { TableRowData } from "./Account";
+import { Table, Column, Row, Cell, TableHeader, TableBody } from 'react-aria-components';
 
 interface TableCRUDAccountProps {
   students: TableRowData[];
@@ -24,7 +25,7 @@ export function TableCRUDAccount({
 }: TableCRUDAccountProps) {
   if (loading) {
     return (
-      <div className="flex flex-col items-center justify-centertext-center text-yellow py-5">
+      <div className="flex flex-col items-center justify-center text-center text-yellow py-5">
         <div className="w-12 h-12 border-4 border-secondary border-t-transparent rounded-full animate-spin"></div>
         <span className="text-white pt-2">
           Preparando o conteúdo pra você...
@@ -35,7 +36,7 @@ export function TableCRUDAccount({
 
   if (error) {
     return (
-      <div className="flex flex-col items-center justify-centertext-center text-center text-red-500 py-5">
+      <div className="flex flex-col items-center justify-center text-center text-red-500 py-5">
         <div className="text-lg font-semibold">
           Opa! Não conseguimos carregar os alunos no momento.
           <br />
@@ -46,75 +47,89 @@ export function TableCRUDAccount({
   }
 
   return (
-    <div className="overflow-x-auto flex justify-center p-1">
-      <table className="min-w-[95%]">
-        <colgroup>
-          <col />
-          <col className="hidden md:table-cell lg:table-cell" />
-          <col className="w-22" />
-        </colgroup>
-        <thead className="border-b border-secondary">
-          <tr className="px-6 py-4 text-left font-medium tracking-wider text-yellow md:text-[17px]">
-            <th scope="col" className="py-3">
+    <div className="relative h-full overflow-hidden">
+      <div className="h-[calc(100vh-300px)] overflow-auto">
+        <Table 
+          aria-label="Lista de alunos" 
+          className="w-full fixed-table"
+        >
+          <TableHeader className="sticky-header border-b border-secondary">
+            <Column 
+              isRowHeader 
+              className="w-[25%] min-w-[150px] px-2 py-3 text-left font-medium text-yellow"
+            >
               Nome Completo
-            </th>
-            <th scope="col" className="py-3 hidden md:table-cell lg:table-cell">
+            </Column>
+            <Column 
+              className="w-[20%] px-2 py-3 text-left font-medium text-yellow hidden md:table-cell"
+            >
               CPF
-            </th>
-            <th scope="col" className="py-3 hidden md:table-cell lg:table-cell">
+            </Column>
+            <Column 
+              className="w-[22%] px-2 py-3 text-left font-medium text-yellow hidden md:table-cell"
+            >
               E-mail
-            </th>
-            <th scope="col" className="py-3 hidden md:table-cell lg:table-cell">
-              Data de Nasc.
-            </th>
-            <th scope="col" className="flex justify-end py-3 px-2">
+            </Column>
+            <Column 
+              className="w-[13%] px-2 py-3 text-left font-medium text-yellow hidden md:table-cell"
+            >
+              Data Nasc.
+            </Column>
+            <Column 
+              className="w-[20%] px-2 py-3 text-right font-medium text-yellow"
+            >
               Ações
-            </th>
-          </tr>
-        </thead>
-        <tbody className="divide-y border-b divide-secondary md:text-s lg:text-s">
-          {students.length === 0 ? (
-            <tr>
-              <td colSpan={3} className="flex text-center py-4 text-gray-500">
-                Nenhum aluno encontrado.
-              </td>
-            </tr>
-          ) : (
-            students.map((row) => (
-              <tr key={row.id}>
-                <td className="whitespace-nowrap py-2">{row.nome}</td>
-                <td className="whitespace-nowrap py-2 hidden md:table-cell lg:table-cell">
-                  {row.cpf}
-                </td>
-                <td className="whitespace-nowrap py-2 hidden md:table-cell lg:table-cell">
-                  {row.email}
-                </td>
-                <td className="whitespace-nowrap py-2 hidden md:table-cell lg:table-cell">
-                  {formatarData(row.dataNascimento)}
-                </td>
-                <td className="whitespace-nowrap text-right flex flex-row gap-4 py-2 px-2 justify-end">
-                  <button onClick={() => onEdit(row)}>
-                    <GrEdit
-                      size={18}
-                      className=" opacity-90 hover:opacity-100 hover:text-yellow cursor-pointer transition-transform duration-500"
-                      title="Editar"
-                      aria-label="Editar"
-                    />
-                  </button>
-                  <button onClick={() => onDelete(row)}>
-                    <RiDeleteBin6Line
-                      size={18}
-                      className="opacity-90 hover:opacity-100 hover:text-red-500 cursor-pointer transition-transform duration-500"
-                      title="Eliminar"
-                      aria-label="Eliminar"
-                    />
-                  </button>
-                </td>
-              </tr>
-            ))
-          )}
-        </tbody>
-      </table>
+            </Column>
+          </TableHeader>
+          
+          <TableBody className="divide-y divide-secondary">
+            {students.length === 0 ? (
+              <Row>
+                <Cell colSpan={5} className="text-center py-4 text-gray-500">
+                  Nenhum aluno encontrado.
+                </Cell>
+              </Row>
+            ) : (
+              students.map((student) => (
+                <Row key={student.id} className="table-row-hover">
+                  <Cell className="table-cell truncate">
+                    {student.nome}
+                  </Cell>
+                  <Cell className="table-cell md:table-cell">
+                    {student.cpf}
+                  </Cell>
+                  <Cell className="table-cell md:table-cell truncate">
+                    {student.email}
+                  </Cell>
+                  <Cell className="hidden md:table-cell">
+                    {formatarData(student.dataNascimento)}
+                  </Cell>
+                  <Cell className="table-cell">
+                    <div className="flex justify-end gap-2">
+                      <button 
+                        onClick={() => onEdit(student)}
+                        className="p-1 focus:outline-none focus:ring-2 focus:ring-yellow rounded"
+                        aria-label={`Editar aluno ${student.nome}`}
+                        title="Editar aluno"
+                      >
+                        <GrEdit className="text-lg opacity-70 hover:opacity-100 hover:text-yellow transition-colors" />
+                      </button>
+                      <button 
+                        onClick={() => onDelete(student)}
+                        className="p-1 focus:outline-none focus:ring-2 focus:ring-red-500 rounded"
+                        aria-label={`Excluir aluno ${student.nome}`}
+                        title="Excluir aluno"
+                      >
+                        <RiDeleteBin6Line className="text-lg opacity-70 hover:opacity-100 hover:text-red-500 transition-colors" />
+                      </button>
+                    </div>
+                  </Cell>
+                </Row>
+              ))
+            )}
+          </TableBody>
+        </Table>
+      </div>
     </div>
   );
 }

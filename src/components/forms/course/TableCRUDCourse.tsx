@@ -140,15 +140,17 @@ export function TableCRUDCourse({
                         onClick={() => onEdit(course)}
                         className="p-1 focus:outline-none focus:ring-2 focus:ring-yellow rounded"
                         aria-label={`Editar curso ${course.titulo}`}
+                        title="Editar curso"
                       >
-                        <GrEdit className="opacity-90 hover:opacity-100 hover:text-yellow transition-colors" />
+                        <GrEdit className="text-lg opacity-70 hover:opacity-100 hover:text-yellow transition-colors" />
                       </button>
                       <button 
                         onClick={() => onDelete(course)}
                         className="p-1 focus:outline-none focus:ring-2 focus:ring-red-500 rounded"
                         aria-label={`Excluir curso ${course.titulo}`}
+                        title="Excluir curso"
                       >
-                        <RiDeleteBin6Line className="opacity-90 hover:opacity-100 hover:text-red-500 transition-colors" />
+                        <RiDeleteBin6Line className="text-lg opacity-70 hover:opacity-100 hover:text-red-500 transition-colors" />
                       </button>
                     </div>
                   </Cell>

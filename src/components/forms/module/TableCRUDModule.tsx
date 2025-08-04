@@ -1,8 +1,9 @@
 import { GrEdit } from "react-icons/gr";
 import { RiDeleteBin6Line } from "react-icons/ri";
 import { TableRowDataModule } from "./Module";
+import { Table, Column, Row, Cell, TableHeader, TableBody } from 'react-aria-components';
 
-export interface TableCRUDModuleProps {
+interface TableCRUDModuleProps {
   modules: TableRowDataModule[];
   loading: boolean;
   error: string | null;
@@ -41,60 +42,65 @@ export function TableCRUDModule({
   }
 
   return (
-    <div className="overflow-x-auto flex justify-center p-1">
-      <table className="min-w-[95%]">
-        <colgroup>
-          <col />
-          <col className="hidden md:table-cell lg:table-cell" />
-          <col className="hidden md:table-cell lg:table-cell" />
-          <col className="w-22" />
-        </colgroup>
-        <thead className="border-b border-secondary">
-          <tr className="px-6 py-4 text-left font-medium tracking-wider text-yellow md:text-[17px]">
-            <th scope="col" className="py-3">
+    <div className="relative h-full overflow-hidden">
+      <div className="h-[calc(100vh-300px)] overflow-auto">
+        <Table 
+          aria-label="Lista de módulos" 
+          className="w-full fixed-table"
+        >
+          <TableHeader className="sticky-header border-b border-secondary">
+            <Column 
+              isRowHeader 
+              className="w-[70%] px-2 py-3 text-left font-medium text-yellow"
+            >
               Título do Módulo
-            </th>
-            <th scope="col" className="flex justify-end py-3 px-2">
+            </Column>
+            <Column 
+              className="w-[30%] px-2 py-3 text-right font-medium text-yellow"
+            >
               Ações
-            </th>
-          </tr>
-        </thead>
-        <tbody className="divide-y border-b divide-secondary md:text-s lg:text-s">
-          {modules.length === 0 ? ( // Usar 'modules'
-            <tr>
-              <td colSpan={2} className="flex text-center py-4 text-gray-500">
-                {" "}
-                {/* colSpan ajustado para 2 colunas */}
-                Nenhum módulo encontrado.
-              </td>
-            </tr>
-          ) : (
-            modules.map((row) => (
-              <tr key={row.id}>
-                <td className="whitespace-nowrap py-2">{row.titulo}</td>
-                <td className="whitespace-nowrap text-right flex flex-row gap-4 py-2 px-2 justify-end">
-                  <button onClick={() => onEdit(row)}>
-                    <GrEdit
-                      size={18}
-                      className=" opacity-90 hover:opacity-100 hover:text-yellow cursor-pointer transition-transform duration-500"
-                      title="Editar"
-                      aria-label="Editar"
-                    />
-                  </button>
-                  <button onClick={() => onDelete(row)}>
-                    <RiDeleteBin6Line
-                      size={18}
-                      className="opacity-90 hover:opacity-100 hover:text-red-500 cursor-pointer transition-transform duration-500"
-                      title="Eliminar"
-                      aria-label="Eliminar"
-                    />
-                  </button>
-                </td>
-              </tr>
-            ))
-          )}
-        </tbody>
-      </table>
+            </Column>
+          </TableHeader>
+          
+          <TableBody className="divide-y divide-secondary">
+            {modules.length === 0 ? (
+              <Row>
+                <Cell colSpan={2} className="text-center py-4 text-gray-500">
+                  Nenhum módulo encontrado.
+                </Cell>
+              </Row>
+            ) : (
+              modules.map((module) => (
+                <Row key={module.id} className="table-row-hover">
+                  <Cell className="table-cell truncate">
+                    {module.titulo}
+                  </Cell>
+                  <Cell className="table-cell">
+                    <div className="flex justify-end gap-2">
+                      <button 
+                        onClick={() => onEdit(module)}
+                        className="p-1 focus:outline-none focus:ring-2 focus:ring-yellow rounded"
+                        aria-label={`Editar módulo ${module.titulo}`}
+                        title="Editar módulo"
+                      >
+                        <GrEdit className="text-lg opacity-70 hover:opacity-100 hover:text-yellow transition-colors" />
+                      </button>
+                      <button 
+                        onClick={() => onDelete(module)}
+                        className="p-1 focus:outline-none focus:ring-2 focus:ring-red-500 rounded"
+                        aria-label={`Excluir módulo ${module.titulo}`}
+                        title="Excluir módulo"
+                      >
+                        <RiDeleteBin6Line className="text-lg opacity-70 hover:opacity-100 hover:text-red-500 transition-colors" />
+                      </button>
+                    </div>
+                  </Cell>
+                </Row>
+              ))
+            )}
+          </TableBody>
+        </Table>
+      </div>
     </div>
   );
 }
