@@ -1,8 +1,7 @@
 import { useState } from "react";
-import { post } from "../../services/api";
+import { post } from "../../../services/api";
 import toast from "react-hot-toast";
-import { formatarMensagemErro } from "../../utils/formatarErrors";
-
+import { formatarMensagemErro } from "../../../utils/formatarErrors";
 export function Matricular() {
   const [alunoId, setAlunoId] = useState("");
   const [cursoId, setCursoId] = useState("");
