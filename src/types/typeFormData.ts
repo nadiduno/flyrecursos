@@ -8,10 +8,16 @@ export type FormData = {
 };
 
 export type FormDataCourse = {
-  id?: number;
+  id?: number; 
   titulo: string;
-  modulosIds?: number [];
-  autorId?: number;
+  modulosIds?: number[];
+  autorId?: number; 
+  dataPublicacao: string;
+  dataInicio: string;
+  dataConclusao: string;
+  duracaoFormatada: string;
+  totalAulas: number;
+  totalHoras: number;
 };
 
 export type FormDataModule = {

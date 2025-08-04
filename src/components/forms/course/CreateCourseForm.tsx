@@ -1,12 +1,14 @@
+// src/components/course/CreateCourseForm.tsx
 import React, { useEffect, useState, useMemo } from "react";
 import { useForm, SubmitHandler } from "react-hook-form";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { FormDataCourse } from "../../../types/typeFormData";
-import { CreateModulePopover } from "../module/CreateModulePopover";
+// import { CreateModulePopover } from "../module/CreateModulePopover";
 import { Checkbox, CheckboxGroup } from "react-aria-components";
 import { get } from "../../../services/api";
 import { Aula } from "../../../types/interface";
+import { MdAccessTimeFilled } from "react-icons/md";
 
 interface ModuloOption {
   id: number;
@@ -18,14 +20,28 @@ interface ModuloDetails {
   totalDuracao: number;
 }
 
-const FormDataSchema = z.object({
-  titulo: z
-    .string()
-    .nonempty("O título do curso é obrigatório.")
-    .min(3, "O título deve ter no mínimo 3 caracteres.")
-    .max(100, "O título deve ter no máximo 100 caracteres."),
-  modulosIds: z.array(z.string()).optional(),
-});
+const FormDataSchema = z
+  .object({
+    titulo: z
+      .string()
+      .nonempty("O título do curso é obrigatório.")
+      .min(3, "O título deve ter no mínimo 3 caracteres.")
+      .max(100, "O título deve ter no máximo 100 caracteres."),
+    modulosIds: z.array(z.string()).optional(),
+    dataInicio: z.string().nonempty("A data de início é obrigatória."),
+    dataConclusao: z.string().nonempty("A data de conclusão é obrigatória."),
+  })
+  .refine(
+    (data) => new Date(data.dataInicio) >= new Date(new Date().toDateString()),
+    {
+      message: "A data de início não pode ser anterior à data atual.",
+      path: ["dataInicio"],
+    }
+  )
+  .refine((data) => new Date(data.dataConclusao) > new Date(data.dataInicio), {
+    message: "A data de conclusão deve ser posterior à data de início.",
+    path: ["dataConclusao"],
+  });
 
 export type FormData = z.infer<typeof FormDataSchema>;
 
@@ -44,7 +60,7 @@ export const CreateCourseForm: React.FC<CourseFormProps> = ({
   onSubmit,
   setIsVisible,
   modulosDisponiveis,
-  onModulosRefetch,
+  // onModulosRefetch,
   selectedModuleIds,
   setSelectedModuleIds,
   loadingModulos,
@@ -60,6 +76,8 @@ export const CreateCourseForm: React.FC<CourseFormProps> = ({
     defaultValues: {
       titulo: "",
       modulosIds: selectedModuleIds,
+      dataInicio: "",
+      dataConclusao: "",
     },
   });
 
@@ -108,9 +126,19 @@ export const CreateCourseForm: React.FC<CourseFormProps> = ({
     const modulosIdsAsNumbers =
       data.modulosIds?.map((idString) => parseInt(idString)) || [];
 
+    // Capturar a data atual para 'dataPublicacao'
+    const dataPublicacao = new Date().toISOString().split("T")[0];
+    const duracaoFormatada = formatDuration(totalSelectedDuracao);
+
     onSubmit({
       titulo: data.titulo,
       modulosIds: modulosIdsAsNumbers,
+      dataPublicacao: dataPublicacao,
+      dataInicio: data.dataInicio,
+      dataConclusao: data.dataConclusao,
+      totalAulas: totalSelectedAulas,
+      totalHoras: totalSelectedDuracao,
+      duracaoFormatada: duracaoFormatada,
     });
   };
 
@@ -151,7 +179,7 @@ export const CreateCourseForm: React.FC<CourseFormProps> = ({
 
   const { totalSelectedAulas, totalSelectedDuracao } = useMemo(() => {
     let totalAulas = 0;
-    let totalDuracao = 0; 
+    let totalDuracao = 0;
 
     selectedModuleIds.forEach((moduleIdString) => {
       const moduleId = parseInt(moduleIdString);
@@ -166,7 +194,7 @@ export const CreateCourseForm: React.FC<CourseFormProps> = ({
       totalSelectedAulas: totalAulas,
       totalSelectedDuracao: totalDuracao,
     };
-  }, [selectedModuleIds, moduloAggregatedDetails]); 
+  }, [selectedModuleIds, moduloAggregatedDetails]);
 
   // Função para formatar a duração em horas e minutos
   const formatDuration = (totalMinutes: number): string => {
@@ -189,13 +217,15 @@ export const CreateCourseForm: React.FC<CourseFormProps> = ({
     return parts.join(" e ");
   };
 
+  const today = new Date().toISOString().split('T')[0];
+
   return (
     <form onSubmit={handleSubmit(handleFormSubmit)}>
-      <div className="flex flex-col justify-center items-center gap-0 md:gap-1">
+      <div className="flex flex-col justify-center items-center gap-0 ">
         <p className="my-[1rem] md:mt-[1rem] text-m md:text-xl lg:text-xl mx-auto text-center font-bold mb-0">
           CRIAR CURSO
         </p>
-        <div className="w-[95%] grid gap-2 md:gap-6 pb-4 items-star content-start">
+        <div className="w-[95%] grid gap-2 md:gap-6 pb-2 items-star content-start">
           <div className="w-full flex flex-col md:flex-col">
             <label
               htmlFor="titulo"
@@ -218,29 +248,33 @@ export const CreateCourseForm: React.FC<CourseFormProps> = ({
             )}
           </div>
 
-          <label className="w-full md:text-m p-b-[0.125rem] text-left md:text-lg">
-            Selecione os módulos para o curso
-          </label>
-          <div className="flex items-center gap-8">
+          {/* Modulos */}
+          <div className="flex items-center justify-between gap-8">
+            <div>
+              <label className="w-full md:text-m p-b-[0.125rem] text-left lg:text-lg md:pr-1">
+                Selecione os módulos para o curso
+              </label>
+            </div>
             <div className="">
               <input
                 type="text"
-                placeholder="Digite o nome para consultar"
-                className="w-[14rem] h-[1.5rem] md:w-[20rem] md:h-[2.5rem] rounded-[4rem] rounded-br-none border border-gray-300 bg-white p-3 text-black text-sm md:text-base focus:outline-none focus:ring-2 focus:ring-secondary"
+                placeholder="Digite o nome do módulo para consultar"
+                className="w-[14rem] h-[1.5rem] md:w-[22rem] md:h-[2.5rem] rounded-[4rem] rounded-br-none border border-gray-300 bg-white p-3 text-black text-sm md:text-base focus:outline-none focus:ring-2 focus:ring-secondary"
                 autoComplete="off"
                 value={searchTerm}
                 onChange={(e) => setSearchTerm(e.target.value)}
               />
             </div>
 
-            <div className="hidden md:block w-px h-8 bg-gray-300"></div>
+            {/* <div className="hidden md:block w-px h-8 bg-gray-300"></div> */}
 
-            <div className="pl-0 md:pl-0">
+            {/* Novo Modulo */}
+            {/* <div className="pl-0 md:pl-0">
               <CreateModulePopover
                 onModuleCreated={async (newModuleId) => {
                   if (newModuleId) {
-                    await onModulosRefetch(); 
-                    await fetchAllLessons(); 
+                    await onModulosRefetch();
+                    await fetchAllLessons();
                     const newModuleIdString = newModuleId.toString();
 
                     setSelectedModuleIds((prevSelected) => {
@@ -252,12 +286,13 @@ export const CreateCourseForm: React.FC<CourseFormProps> = ({
                   }
                 }}
               />
-            </div>
+            </div> */}
+            
           </div>
         </div>
 
         {/* SEÇÃO DE SELEÇÃO DE MÓDULOS */}
-        <div className="w-[95%] h-[8.5rem] rounded-lg border border-primary2 overflow-auto p-2 mb-1 relative">
+        <div className="w-[95%] h-[6.5rem] rounded-lg border border-primary2 overflow-auto p-2 mb-1 relative">
           {loadingModulos || loadingLessons ? (
             <div className="absolute inset-0 flex items-center justify-center bg-primary1/80 z-10">
               <div className="w-8 h-8 border-4 border-secondary border-t-transparent rounded-full animate-spin"></div>
@@ -333,7 +368,7 @@ export const CreateCourseForm: React.FC<CourseFormProps> = ({
         </div>
 
         {/* SEÇÃO DE MÓDULOS AGREGADOS*/}
-        <div className="w-[95%] h-[9.5rem] rounded-lg border border-primary2 overflow-auto p-2 py-4 relative">
+        <div className="w-[95%] h-[10.125rem] rounded-lg border border-primary2 overflow-auto p-2 py-4 relative">
           {loadingModulos || loadingLessons ? (
             <div className="absolute inset-0 flex items-center justify-center bg-primary1/80 z-10">
               <div className="w-8 h-8 border-4 border-secondary border-t-transparent rounded-full animate-spin"></div>
@@ -351,17 +386,29 @@ export const CreateCourseForm: React.FC<CourseFormProps> = ({
                 {selectedModuleIds.length !== 1 ? "s" : ""}{" "}
                 {selectedModuleIds.length > 0 && (
                   <>
-                    <br className="sm:hidden" />{" "}
-                    <span>(</span>
-                    <span className="text-yellow">
-                      {totalSelectedAulas} aula
-                      {totalSelectedAulas !== 1 ? "s" : ""}
+                    <br className="md:hidden" />{" "}
+                    {/* Quebra de linha apenas em telas menores (mobile) */}
+                    <span className="inline-flex items-center">
+                      <span>(</span>
+                      <span className="text-yellow">
+                        {totalSelectedAulas} aula
+                        {totalSelectedAulas !== 1 ? "s" : ""}
+                      </span>
+                      <span className="mx-1">-</span>
+                      <span className="inline-flex items-center">
+                        <span className="mr-1">Tempo aprox:</span>
+                        <span className="flex items-center">
+                          <span className="mr-1">
+                            <MdAccessTimeFilled />
+                          </span>
+                          <span>{formatDuration(totalSelectedDuracao)})</span>
+                        </span>
+                      </span>
                     </span>
-                    <span> {" "}- Tempo aprox: {formatDuration(totalSelectedDuracao)})</span>
                   </>
                 )}
               </span>
-              <div className="w-full grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mt-4">
+              <div className="w-full grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 mt-4">
                 {selectedModuleIds.map((moduleIdString) => {
                   const module = modulosDisponiveis.find(
                     (m) => m.id === parseInt(moduleIdString)
@@ -376,14 +423,17 @@ export const CreateCourseForm: React.FC<CourseFormProps> = ({
                       className="flex flex-col h-[6rem] rounded-lg border border-white p-2 px-4 gap-1"
                     >
                       <span className="font-extralight text-white">MÓDULO</span>
-                      <span className="text-primary2 pb-2">
+                      <span className="text-primary2 pb-1">
                         {module.titulo}
                       </span>
                       <div className="pt-2 border-t border-white">
-                        <span className="font-extralight text-white">
+                        <span className="font-extralight text-yellow">
                           {details.totalAulas} aula(s) -{" "}
                         </span>
-                        <span className="font-extralight text-white">
+                        <span className="font-extralight text-white inline-flex items-start">
+                          <span className="mr-1">
+                            <MdAccessTimeFilled />
+                          </span>
                           {details.totalDuracao} min
                         </span>
                       </div>
@@ -394,6 +444,45 @@ export const CreateCourseForm: React.FC<CourseFormProps> = ({
             </>
           )}
         </div>
+        <div className="w-full grid md:grid-cols-2 gap-2 md:gap-6 px-4 md:px-8 items-star content-start mt-5">
+          {/* Data de Inicio */}
+          <div className="w-full flex flex-col md:flex-col">
+            <label className="w-full md:text-m text-left md:text-lg">
+              Data de Inicio
+            </label>
+            <input
+              className="w-full min-h-[2.5rem] bg-white rounded-[5px] pl-1 text-black md:text-m font-normal border-secondary shadow-[0px_4px_4px_0px_rgba(0,0,0,0.2)] 
+            placeholder:text-secondary md:text-lg"
+              {...register("dataInicio")}
+              min={today} // A data de início não pode ser anterior à data atual
+              type="date"
+            />
+            {errors.dataInicio && (
+              <p className="text-red-500 text-xs md:text-[1rem] mt-1 md:mt-5">
+                {errors.dataInicio.message}
+              </p>
+            )}
+          </div>
+
+          {/* Data de Conclusão */}
+          <div className="w-full flex flex-col md:flex-col">
+            <label className="w-full md:text-m text-left md:text-lg">
+              Data de Conclusão
+            </label>
+            <input
+              className="w-full min-h-[2.5rem] bg-white rounded-[5px] pl-1 text-black md:text-m font-normal border-secondary shadow-[0px_4px_4px_0px_rgba(0,0,0,0.2)] 
+            placeholder:text-secondary md:text-lg"
+              {...register("dataConclusao")}
+              type="date"
+            />
+            {errors.dataConclusao && (
+              <p className="text-red-500 text-xs md:text-[1rem] mt-1 ">
+                {errors.dataConclusao.message}
+              </p>
+            )}
+          </div>
+        </div>
+
         <div className="w-full h-[7rem] rounded-b-[10px] bg-white flex justify-center items-center space-x-4 mt-[1rem] border-b-[3px] border-primary2">
           <button
             className="w-[8rem] md:w-[15rem] h-[3rem] rounded-[50px] border-secondary bg-white shadow-[0px_4px_4px_0px_rgba(0,0,0,0.2)] hover:bg-secondary2 hover:text-black transition-colors duration-200"

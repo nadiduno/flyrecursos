@@ -7,33 +7,20 @@ import { CgAdd } from "react-icons/cg";
 import { get } from "../../../services/api";
 import { EditCourse } from "./EditCourse";
 import { DeleteCourse } from "./DeleteCourse";
-
-interface Modulo {
-  id: number;
-  titulo: string;
-  ordem?: number;
-}
-
-interface Autor {
-  id: number;
-  nome: string;
-  email: string;
-}
-
-interface CursoFromAPI {
-  id: number;
-  titulo: string;
-  dataPublicacao: string;
-  autor: Autor;
-  modulos: Modulo[];
-}
+import { CursoInfo, Modulos } from "../../../types/interface";
 
 export interface TableRowDataCourse {
   id: number;
   titulo: string;
-  modulos: Modulo[];
+  modulos: Modulos[];
   modulosTitulos?: string[];
   autorNome: string;
+  dataInicio: string;
+  dataConclusao: string;
+  dataPublicacao: string; 
+  totalAulas: number;
+  totalHoras: number; 
+  duracaoFormatada: string;
 }
 
 export function Course() {
@@ -71,14 +58,20 @@ export function Course() {
     try {
       setLoading(true);
       setError(null);
-      const response = await get<{ content: CursoFromAPI[] }>("/api/cursos");
+      const response = await get<{ content: CursoInfo[] }>("/api/cursos");
       const fetchedData = response.data.content || [];
       // console.log("Resposta do backend:", fetchedData);
       const transformedData = fetchedData.map((curso) => ({
-        id: curso.id,
+        id: curso.id || 0, // Garante que o id não é undefined
         titulo: curso.titulo,
         modulos: curso.modulos,
-        autorNome: curso.autor.nome,
+        autorNome: curso.autor?.nome || 'N/A', // Acesso seguro ao nome do autor
+        dataInicio: curso.dataInicio,
+        dataConclusao: curso.dataConclusao,
+         dataPublicacao: curso.dataPublicacao,
+      totalAulas: curso.totalAulas,
+      totalHoras: curso.totalHoras, 
+        duracaoFormatada: curso.duracaoFormatada,
       }));
 
       setCoursesData(transformedData);
