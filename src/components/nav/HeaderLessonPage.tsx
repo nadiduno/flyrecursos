@@ -15,7 +15,7 @@ interface HeaderMainProps {
 }
 
 export function HeaderMain({ selectedVideo, onCloseVideo }: HeaderMainProps) {
- const { curso, loading, error } = useCursoActivo();
+ const { curso, loading, error, nomeUsuario } = useCursoActivo();
 
 const modulosMenu: MenuItem[] = curso?.modulos?.map((modulo) => ({
   label: modulo.titulo,
@@ -56,11 +56,7 @@ const modulosMenu: MenuItem[] = curso?.modulos?.map((modulo) => ({
             />
             
 )}
-{error && (
-  <div className="text-red-600 bg-red-100 p-3 rounded-md mb-4">
-    {error}
-  </div>
-)}
+
             <nav className="rounded-md z-20 w-full mb-4 md:mb-0">
                <ul className="list-none p-0 m-0 flex flex-col gap-2">
                 {modulosMenu.map((item, index) => (
@@ -76,6 +72,18 @@ className="leading-5 py-2 px-3 rounded-md ease-in-out cursor-pointer opacity-90 
               </ul>
 
             </nav>
+            {error && (
+  <div className="text-red-600 bg-red-100 p-4 rounded-xl shadow-md min-w-[90vh]">
+    <p className="font-semibold text-xl mb-1">Olá {nomeUsuario}!</p>
+    <p>{error}</p>
+    <p className="mt-2 leading-relaxed line-clamp-3">
+      Por favor, para mais informações entre em contato conosco pelo email:{" "}
+      <a href="mailto:atendimento@flyeducacao.org" className="text-blue-600 underline">
+        atendimento@flyeducacao.org
+      </a>
+    </p>
+  </div>
+)}
           </div>
         </div>
       )}
