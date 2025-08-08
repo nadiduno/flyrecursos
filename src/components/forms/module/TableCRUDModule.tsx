@@ -42,7 +42,7 @@ export function TableCRUDModule({
   }
 
   return (
-    <div className="relative h-full overflow-hidden">
+    <>
       <div className="h-[calc(100vh-300px)] overflow-auto">
         <Table 
           aria-label="Lista de módulos" 
@@ -51,12 +51,12 @@ export function TableCRUDModule({
           <TableHeader className="sticky-header border-b border-secondary">
             <Column 
               isRowHeader 
-              className="w-[70%] px-2 py-3 text-left font-medium text-yellow"
+              className="w-[70%] px-2 py-3 text-left font-medium text-yellow bg-primary1"
             >
               Título do Módulo
             </Column>
             <Column 
-              className="w-[30%] px-2 py-3 text-right font-medium text-yellow"
+              className="w-[30%] px-2 py-3 pr-6 text-right font-medium text-yellow bg-primary1"
             >
               Ações
             </Column>
@@ -101,6 +101,6 @@ export function TableCRUDModule({
           </TableBody>
         </Table>
       </div>
-    </div>
+    </>
   );
 }

@@ -56,27 +56,27 @@ export function TableCRUDAccount({
           <TableHeader className="sticky-header border-b border-secondary">
             <Column 
               isRowHeader 
-              className="w-[25%] min-w-[150px] px-2 py-3 text-left font-medium text-yellow"
+              className="w-[30%] min-w-[150px] px-2 py-3 text-left font-medium text-yellow bg-primary1"
             >
               Nome Completo
             </Column>
             <Column 
-              className="w-[20%] px-2 py-3 text-left font-medium text-yellow hidden md:table-cell"
+              className="w-[20%] px-2 py-3 text-left font-medium text-yellow hidden md:table-cell bg-primary1"
             >
               CPF
             </Column>
             <Column 
-              className="w-[22%] px-2 py-3 text-left font-medium text-yellow hidden md:table-cell"
+              className="w-[27%] px-2 py-3 text-left font-medium text-yellow hidden md:table-cell bg-primary1"
             >
               E-mail
             </Column>
             <Column 
-              className="w-[13%] px-2 py-3 text-left font-medium text-yellow hidden md:table-cell"
+              className="w-[13%] px-2 py-3 text-left font-medium text-yellow hidden md:table-cell bg-primary1"
             >
               Data Nasc.
             </Column>
             <Column 
-              className="w-[20%] px-2 py-3 text-right font-medium text-yellow"
+              className="w-[10%] px-2 py-3 pr-6text-right font-medium text-yellow bg-primary1"
             >
               Ações
             </Column>
@@ -95,10 +95,10 @@ export function TableCRUDAccount({
                   <Cell className="table-cell truncate">
                     {student.nome}
                   </Cell>
-                  <Cell className="table-cell md:table-cell">
+                  <Cell className="hidden md:table-cell">
                     {student.cpf}
                   </Cell>
-                  <Cell className="table-cell md:table-cell truncate">
+                  <Cell className="hidden md:table-cell truncate">
                     {student.email}
                   </Cell>
                   <Cell className="hidden md:table-cell">
