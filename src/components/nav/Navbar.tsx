@@ -1,9 +1,11 @@
+// Navbar.tsx
 import { useState } from "react";
 import logo from "../../assets/logo.png";
 import { CreateAccount } from "../forms/account/CreateAccount";
 import { useAuth } from "../../context/AuthContext";
 import { useNavigate } from "react-router-dom";
 import { UploadImgem } from "../uploadImg/UploadImgem";
+import { UpdatePassword } from "../Login/UpdatePassword";
 
 export function Navbar() {
   const navigate = useNavigate();
@@ -13,6 +15,8 @@ export function Navbar() {
   const [showCreateAccount, setShowCreateAccount] = useState(false);
   const [isDropdownVisible, setIsDropdownVisible] = useState(false);
   const [showUploader, setShowUploader] = useState(false);
+  // 1. Crie o estado para controlar a visibilidade do modal de alteração de senha
+  const [showUpdatePassword, setShowUpdatePassword] = useState(false);
 
   const handleLogout = () => {
     logout();
@@ -24,6 +28,12 @@ export function Navbar() {
 
   const toggleDropdown = () => {
     setIsDropdownVisible((prev) => !prev);
+  };
+  
+  // 2. Crie a função para abrir o modal de alteração de senha e fechar o dropdown
+  const handleOpenUpdatePassword = () => {
+    setShowUpdatePassword(true);
+    setIsDropdownVisible(false); // Opcional: fechar o dropdown ao abrir o modal
   };
 
   return (
@@ -86,9 +96,17 @@ export function Navbar() {
                   </div>
                 )}
 
+                {/* 3. Vincule a nova função ao evento onClick */}
+                <button
+                  onClick={handleOpenUpdatePassword}
+                  className="w-full border border-gray-300 text-blue-500 hover:bg-blue-500 hover:text-white px-4 py-1 rounded-full my-4"
+                >
+                  Alterar senha
+                </button>
+
                 <button
                   onClick={handleLogout}
-                  className="w-full border border-gray-300 text-red-500 hover:bg-red-500 hover:text-white px-4 py-1 rounded-lg my-4"
+                  className="w-full border border-gray-300 text-red-500 hover:bg-red-500 hover:text-white px-4 py-1 rounded-full my-4"
                 >
                   Sair
                 </button>
@@ -97,6 +115,14 @@ export function Navbar() {
           </div>
         )}
       </div>
+
+      {/* 4. Renderize o modal de forma condicional */}
+      {showUpdatePassword && (
+        <UpdatePassword
+          isVisible={showUpdatePassword}
+          setIsVisible={setShowUpdatePassword}
+        />
+      )}
     </div>
   );
 }
