@@ -88,97 +88,99 @@ export function TableCRUDLesson({
   }
 
   return (
-    <div className="relative h-full overflow-hidden">
-      <div className="h-[calc(100vh-300px)] overflow-auto">
-        <Table 
-          aria-label="Lista de aulas" 
-          className="w-full fixed-table"
-        >
-          <TableHeader className="sticky-header border-b border-secondary">
-            <Column 
-              isRowHeader 
-              className="w-[25%] px-2 py-3 text-left font-medium text-yellow"
-            >
-              Título
-            </Column>
-            <Column 
-              className="w-[15%] px-2 py-3 text-left font-medium text-yellow hidden md:table-cell"
-            >
-              Tipo
-            </Column>
-            <Column 
-              className="w-[20%] px-2 py-3 text-left font-medium text-yellow hidden md:table-cell"
-            >
-              Módulo
-            </Column>
-            <Column 
-              className="w-[10%] px-2 py-3 text-left font-medium text-yellow hidden md:table-cell"
-            >
-              Ordem
-            </Column>
-            <Column 
-              className="w-[10%] px-2 py-3 text-left font-medium text-yellow hidden md:table-cell"
-            >
-              Duração
-            </Column>
-            <Column 
-              className="w-[20%] px-2 py-3 text-right font-medium text-yellow"
-            >
-              Ações
-            </Column>
-          </TableHeader>
-          
-          <TableBody className="divide-y divide-secondary">
-            {lessons.length === 0 ? (
-              <Row>
-                <Cell colSpan={6} className="text-center py-4 text-gray-500">
-                  Nenhuma aula encontrada.
+    <>
+      {/* Container principal para a tabela com o scroll vertical */}
+      <Table 
+        aria-label="Lista de aulas" 
+        className="w-full h-full text-sm table-fixed" // Adicionei h-full e table-fixed
+      >
+        <TableHeader className="sticky-header border-b border-secondary">
+          <Column 
+            isRowHeader 
+            className="w-[30%] px-2 py-3 text-left font-medium text-yellow bg-primary1"
+          >
+            Título
+          </Column>
+          <Column 
+            className="w-[15%] px-2 py-3 text-left font-medium text-yellow hidden md:table-cell bg-primary1"
+          >
+            Tipo
+          </Column>
+          <Column 
+            className="w-[25%] px-2 py-3 text-left font-medium text-yellow hidden md:table-cell bg-primary1"
+          >
+            Módulo
+          </Column>
+          <Column 
+            className="w-[10%] px-2 py-3 text-left font-medium text-yellow hidden md:table-cell bg-primary1"
+          >
+            Ordem
+          </Column>
+          <Column 
+            className="w-[10%] px-2 py-3 text-left font-medium text-yellow hidden md:table-cell bg-primary1"
+          >
+            Duração
+          </Column>
+          <Column 
+            className="w-[10%] px-2 py-3 pr-6 text-right font-medium text-yellow bg-primary1"
+          >
+            Ações
+          </Column>
+        </TableHeader>
+        
+        {/* O TableBody agora é o contêiner com a rolagem vertical. */}
+        {/* Adicionei 'flex-1' para que ele ocupe o espaço restante do container pai */}
+        {/* E 'overflow-y-auto' para habilitar a rolagem vertical */}
+        <TableBody className="divide-y divide-secondary overflow-y-auto flex-1">
+          {lessons.length === 0 ? (
+            <Row>
+              <Cell colSpan={6} className="text-center py-4 text-gray-500">
+                Nenhuma aula encontrada.
+              </Cell>
+            </Row>
+          ) : (
+            lessons.map((lesson) => (
+              <Row key={lesson.id} className="table-row-hover">
+                <Cell className="table-cell truncate">
+                  {lesson.titulo}
+                </Cell>
+                <Cell className="hidden md:table-cell">
+                  {formatTipoAula(lesson.tipo)}
+                </Cell>
+                <Cell className="hidden md:table-cell truncate">
+                  {getModuloTitulo(lesson.moduloId)}
+                </Cell>
+                <Cell className="hidden md:table-cell">
+                  {lesson.ordem}
+                </Cell>
+                <Cell className="hidden md:table-cell">
+                  {lesson.duracaoEstimada} min
+                </Cell>
+                <Cell className="table-cell">
+                  <div className="flex justify-end gap-2">
+                    <button 
+                      onClick={() => onEdit(lesson)}
+                      className="p-1 focus:outline-none focus:ring-2 focus:ring-yellow rounded"
+                      aria-label={`Editar aula ${lesson.titulo}`}
+                      title="Editar aula"
+                    >
+                      <GrEdit className="text-lg opacity-70 hover:opacity-100 hover:text-yellow transition-colors" />
+                    </button>
+                    <button 
+                      onClick={() => onDelete(lesson)}
+                      className="p-1 focus:outline-none focus:ring-2 focus:ring-red-500 rounded"
+                      aria-label={`Excluir aula ${lesson.titulo}`}
+                      title="Excluir aula"
+                    >
+                      <RiDeleteBin6Line className="text-lg opacity-70 hover:opacity-100 hover:text-red-500 transition-colors" />
+                    </button>
+                  </div>
                 </Cell>
               </Row>
-            ) : (
-              lessons.map((lesson) => (
-                <Row key={lesson.id} className="table-row-hover">
-                  <Cell className="table-cell truncate">
-                    {lesson.titulo}
-                  </Cell>
-                  <Cell className="table-cell md:table-cell">
-                    {formatTipoAula(lesson.tipo)}
-                  </Cell>
-                  <Cell className="table-cell md:table-cell truncate">
-                    {getModuloTitulo(lesson.moduloId)}
-                  </Cell>
-                  <Cell className="table-cell md:table-cell">
-                    {lesson.ordem}
-                  </Cell>
-                  <Cell className="table-cell md:table-cell">
-                    {lesson.duracaoEstimada} min
-                  </Cell>
-                  <Cell className="table-cell">
-                    <div className="flex justify-end gap-2">
-                      <button 
-                        onClick={() => onEdit(lesson)}
-                        className="p-1 focus:outline-none focus:ring-2 focus:ring-yellow rounded"
-                        aria-label={`Editar aula ${lesson.titulo}`}
-                        title="Editar aula"
-                      >
-                        <GrEdit className="text-lg opacity-70 hover:opacity-100 hover:text-yellow transition-colors" />
-                      </button>
-                      <button 
-                        onClick={() => onDelete(lesson)}
-                        className="p-1 focus:outline-none focus:ring-2 focus:ring-red-500 rounded"
-                        aria-label={`Excluir aula ${lesson.titulo}`}
-                        title="Excluir aula"
-                      >
-                        <RiDeleteBin6Line className="text-lg opacity-70 hover:opacity-100 hover:text-red-500 transition-colors" />
-                      </button>
-                    </div>
-                  </Cell>
-                </Row>
-              ))
-            )}
-          </TableBody>
-        </Table>
-      </div>
-    </div>
+            ))
+          )}
+        </TableBody>
+      </Table>
+    </>
   );
 }

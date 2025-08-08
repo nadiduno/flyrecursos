@@ -31,13 +31,13 @@ export function TableCRUDCourse({
 
   if (error) {
     return (
-      <div className="flex flex-col items-center justify-center text-center text-red-500 py-5">
+      <>
         <div className="text-lg font-semibold">
           Opa! Não conseguimos carregar os cursos no momento.
           <br />
           Tente novamente mais tarde.
         </div>
-      </div>
+      </>
     );
   }
 
@@ -53,32 +53,32 @@ export function TableCRUDCourse({
           <TableHeader className="sticky top-0 z-10 bg-primary1 border-b border-secondary">
             <Column 
               isRowHeader 
-              className="w-[25%] min-w-[150px] px-2 py-3 text-left font-medium text-yellow"
+              className="w-[25%] min-w-[150px] px-2 py-3 text-left font-medium text-yellow bg-primary1"
             >
               Título
             </Column>
             <Column 
-              className="w-[25%] px-2 py-3 text-left font-medium text-yellow hidden md:table-cell"
+              className="w-[25%] px-2 py-3 text-left font-medium text-yellow hidden md:table-cell bg-primary1"
             >
               Módulos
             </Column>
             <Column 
-              className="w-[10%] px-2 py-3 text-left font-medium text-yellow hidden md:table-cell"
+              className="w-[10%] px-2 py-3 text-left font-medium text-yellow hidden md:table-cell bg-primary1"
             >
               Duração
             </Column>
             <Column 
-              className="w-[15%] px-2 py-3 text-left font-medium text-yellow hidden md:table-cell"
+              className="w-[15%] px-2 py-3 text-left font-medium text-yellow hidden md:table-cell bg-primary1"
             >
               Início
             </Column>
             <Column 
-              className="w-[15%] px-2 py-3 text-left font-medium text-yellow hidden md:table-cell"
+              className="w-[15%] px-2 py-3 text-left font-medium text-yellow hidden md:table-cell bg-primary1"
             >
               Culminação
             </Column>
             <Column 
-              className="w-[10%] px-2 py-3 text-right font-medium text-yellow"
+              className="w-[10%] px-2 py-3 pr-6 text-right font-medium text-yellow bg-primary1"
             >
               Ações
             </Column>

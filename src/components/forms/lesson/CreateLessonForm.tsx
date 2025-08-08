@@ -220,7 +220,7 @@ export const CreateLessonForm: React.FC<LessonFormProps> = ({
                 </label>
 
                 {loadingModulos ? (
-                  <p className="text-gray-300">Carregando módulos...</p>
+                  <div className="w-6 h-6 border-2 border-secondary border-t-transparent rounded-full animate-spin"></div>
                 ) : errorModulos ? (
                   <p className="text-red-500">{errorModulos}</p>
                 ) : (
