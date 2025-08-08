@@ -17,11 +17,13 @@ const UpdatePasswordSchema = z
     senhaAtual: z
       .string()
       .nonempty("A senha atual é obrigatória.")
-      .min(6, "A senha atual deve ter no mínimo 6 caracteres."),
+    .min(8, "A senha deve ter no mínimo 8 caracteres.")
+    .max(15, "A senha deve ter no máximo 15 caracteres."),
     novaSenha: z
       .string()
       .nonempty("A nova senha é obrigatória.")
-      .min(6, "A nova senha deve ter no mínimo 6 caracteres.")
+    .min(8, "A senha deve ter no mínimo 8 caracteres.")
+    .max(15, "A senha deve ter no máximo 15 caracteres.")
       .refine(
         (val) => /[A-Z]/.test(val),
         "A nova senha deve conter pelo menos uma letra maiúscula."

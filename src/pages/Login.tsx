@@ -28,7 +28,23 @@ const createFormDataSchema = z.object({
     .string()
     .nonempty("A senha é obrigatória.")
     .min(8, "A senha deve ter no mínimo 8 caracteres.")
-    .max(15, "A senha deve ter no máximo 15 caracteres."),
+    .max(15, "A senha deve ter no máximo 15 caracteres.")
+    .refine(
+        (val) => /[A-Z]/.test(val),
+        "A nova senha deve conter pelo menos uma letra maiúscula."
+      )
+      .refine(
+        (val) => /[a-z]/.test(val),
+        "A nova senha deve conter pelo menos uma letra minúscula."
+      )
+      .refine(
+        (val) => /[0-9]/.test(val),
+        "A nova senha deve conter pelo menos um número."
+      )
+      .refine(
+        (val) => /[!@#$%^&*(),.?":{}|<>]/.test(val),
+        "A nova senha deve conter pelo menos um caractere especial."
+      ),
 });
 
 type FormData = z.infer<typeof createFormDataSchema>;
