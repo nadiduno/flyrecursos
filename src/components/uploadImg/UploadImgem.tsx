@@ -1,56 +1,54 @@
 import { useState, useEffect } from "react";
-import { FaArrowUp, FaXmark } from "react-icons/fa6";
+import { FaArrowUp } from "react-icons/fa6";
 import "./UploadImgemStilos.css";
 import { patch } from "../../services/api";
 import { useAuth } from "../../context/AuthContext";
 import uploadToFirebase from "../../firebase/uploadToFirebase";
 import { formatarMensagemErro } from "../../utils/formatarErrors";
-import imgCurso from "../../assets/imgaulagrava.png";
 
 interface Props {
   estilos?: "perfil" | "curso";
   onUploadComplete: (url: string) => void;
+  imagenPorDefecto?: string;
+  idUsuario?: string;
 }
 
-export function UploadImgem({ estilos = "perfil", onUploadComplete }: Props) {
-  const { userId, userProfile, syncUserProfile } = useAuth();
-  const [fileName, setFileName] = useState<string | null>(null);
+export function UploadImgem({
+  estilos = "perfil",
+  onUploadComplete,
+  idUsuario,
+}: Props) {
+  const { userId, syncUserProfile, userProfile } = useAuth();
   const [previewUrl, setPreviewUrl] = useState<string | null>(null);
+  const imagenFallback = "https://firebasestorage.googleapis.com/v0/b/flyeducation-1eea5.firebasestorage.app/o/fotoUsuario.jpg?alt=media&token=85ad7339-51d8-42ae-a392-b5b362cc7f15";
 
-  useEffect(() => {
-    if (estilos === "perfil" && userProfile?.fotoPerfilUrl) {
-      setPreviewUrl(userProfile.fotoPerfilUrl);
-    }
-  }, [estilos, userProfile]);
+ useEffect(() => {
+  const id = idUsuario || userId;
+
+  if (estilos === "perfil" && id && userProfile?.fotoPerfilUrl) {
+    setPreviewUrl(userProfile.fotoPerfilUrl);
+  } else {
+    setPreviewUrl(imagenFallback);
+  }
+}, [estilos, idUsuario, userId, userProfile]);
 
   const handleUpload = async (event: React.ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0];
-    if (!file || !userId) return;
+    const id = idUsuario || userId;
+    if (!file || !id) return;
 
     try {
-      const urlFirebase = await uploadToFirebase(file, userId);
-      await patch(`/usuarios/${userId}/foto`, { url: urlFirebase });
-      console.log("📸 Imagen subida correctamente:", urlFirebase);
-
-      await syncUserProfile(); // Recarga desde el backend
+      const urlFirebase = await uploadToFirebase(file, id);
+      await patch(`/usuarios/${id}/foto`, { url: urlFirebase });
+      await syncUserProfile();
 
       setPreviewUrl(urlFirebase);
-      setFileName(file.name);
       onUploadComplete(urlFirebase);
     } catch (error) {
       const mensaje = formatarMensagemErro(error);
       console.error("Error al subir la imagen:", mensaje);
     }
   };
-
-  const handleRemove = () => {
-    setPreviewUrl(null);
-    setFileName(null);
-    onUploadComplete("");
-    // O puedes permitir que el backend borre la imagen si lo deseas
-  };
-
-  const imagenFallback = imgCurso;
 
   return (
     <div className={`upload-container ${estilos}`}>
@@ -71,15 +69,6 @@ export function UploadImgem({ estilos = "perfil", onUploadComplete }: Props) {
         onChange={handleUpload}
         style={{ display: "none" }}
       />
-
-      {previewUrl && (
-        <div className={`archivo-info ${estilos}`}>
-          <span>{fileName}</span>
-          <button className={`boton-excluir ${estilos}`} onClick={handleRemove}>
-            <FaXmark />
-          </button>
-        </div>
-      )}
     </div>
   );
 }
