@@ -1,7 +1,7 @@
 import React, { useEffect } from "react";
 import { CreateLessonForm } from "../lesson/CreateLessonForm";
 import { post } from "../../../services/api";
-import { FormDataLesson } from "../../../types/typeFormData";
+import { Aula } from "../../../types/interface";
 import { formatarMensagemErro } from "../../../utils/formatarErrors";
 import { AxiosError } from "axios";
 
@@ -22,9 +22,9 @@ export const CreateLesson: React.FC<CreateLessonProps> = ({
     if (event.key === "Escape") setIsVisible(false);
   };
 
-  const onSubmit = async (formData: FormDataLesson) => {
+  const onSubmit = async (formData: Aula) => {
     try {
-      const payload: Omit<FormDataLesson, "id" | "urlCapa" | "ordem"> = {
+      const payload: Omit<Aula, "id" | "urlCapa" | "ordem"> = {
         titulo: formData.titulo,
         tipo: formData.tipo,
         duracaoEstimada: formData.duracaoEstimada,
