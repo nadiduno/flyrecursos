@@ -99,7 +99,7 @@ export const CreateAccount: React.FC<CreateAccountProps> = ({
 
   return (
     <div className="fixed inset-0 flex items-start justify-center bg-[#FFFFFFB2] z-50">
-      <div className="mt-[1rem] md:mt-[4rem] font-bold bg-primary1 text-white w-[90%] md:w-[70%] h-[33.5rem] md:h-[40rem] rounded-t-[10px] shadow-2xl">
+      <div className="mt-[1rem] md:mt-[1.5rem] font-bold bg-primary1 text-white w-[90%] md:w-[70%] h-[33.5rem] md:h-[36rem] rounded-t-[10px] shadow-2xl">
         <CreateAccountForm onSubmit={onSubmit} setIsVisible={setIsVisible} />
       </div>
     </div>

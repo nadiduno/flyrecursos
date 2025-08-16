@@ -1,3 +1,4 @@
+
 import { useEffect, useRef, useState } from "react";
 import logo from "../../assets/logo.png";
 import { CreateAccount } from "../forms/account/CreateAccount";
@@ -5,6 +6,7 @@ import { useAuth } from "../../context/AuthContext";
 import { useNavigate } from "react-router-dom";
 import { UploadImgem } from "../uploadImg/UploadImgem";
 import { RemoverImagen } from "../uploadImg/PathImage";
+import { UpdatePassword } from "../Login/UpdatePassword";
 
 export function Navbar() {
   const navigate = useNavigate();
@@ -16,6 +18,8 @@ export function Navbar() {
   const [showUploader, setShowUploader] = useState(false);
   const dropdownRef = useRef<HTMLDivElement>(null);
   const toggleRef = useRef<HTMLImageElement>(null);
+  // 1. Crie o estado para controlar a visibilidade do modal de alteração de senha
+  const [showUpdatePassword, setShowUpdatePassword] = useState(false);
 
   const handleLogout = () => {
     logout();
@@ -28,9 +32,16 @@ export function Navbar() {
   const toggleDropdown = () => {
     setIsDropdownVisible((prev) => !prev);
   };
+    const handleOpenUpdatePassword = () => {
+    setShowUpdatePassword(true);
+    setIsDropdownVisible(false); // Opcional: fechar o dropdown ao abrir o modal
+  };
 useEffect(() => {
   const handleClickOutside = (event: MouseEvent) => {
-    const target = event.target as Node;
+  const target = event.target as Node;
+  
+  // 2. Crie a função para abrir o modal de alteração de senha e fechar o dropdown
+
 
     if (
       dropdownRef.current &&
@@ -117,9 +128,18 @@ useEffect(() => {
   urlPorDefecto="https://firebasestorage.googleapis.com/v0/b/flyeducation-1eea5.firebasestorage.app/o/fotoUsuario.jpg?alt=media&token=85ad7339-51d8-42ae-a392-b5b362cc7f15"
 />
 
+                {/* 3. Vincule a nova função ao evento onClick */}
+                <button
+                  onClick={handleOpenUpdatePassword}
+                  className="w-full border border-gray-300 text-blue-500 hover:bg-blue-500 hover:text-white px-4 py-1 rounded-full my-4"
+                >
+                  Alterar senha
+                </button>
+
                 <button
                   onClick={handleLogout}
                   className="w-full border border-gray-300 text-red-500 hover:bg-red-500 hover:text-white px-4 py-1 rounded-lg my-3"
+
                 >
                   Sair
                 </button>
@@ -128,6 +148,14 @@ useEffect(() => {
           </div>
         )}
       </div>
+
+      {/* 4. Renderize o modal de forma condicional */}
+      {showUpdatePassword && (
+        <UpdatePassword
+          isVisible={showUpdatePassword}
+          setIsVisible={setShowUpdatePassword}
+        />
+      )}
     </div>
   );
 }

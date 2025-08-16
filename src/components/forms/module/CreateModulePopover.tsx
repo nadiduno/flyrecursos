@@ -80,16 +80,16 @@ export function CreateModulePopover({
 
   return (
     <>
-      <div className="flex flex-row items-center gap-4">
+      <div className="flex flex-row items-center gap-2">
         <button
           {...buttonProps}
           ref={triggerRef}
           className="ml-1 md:ml-5 w-[1.5rem] h-[1.5rem] rounded-full text-primary2 flex items-center justify-center  hover:text-secondary4 transition-colors duration-200"
-          title="Adicionar novo módulo"
+          title="Adicionar um novo módulo"
         >
           <CgAdd size={30} />
         </button>
-        <span className="hidden md:block">Adicionar módulo</span>
+        <span className="hidden md:block">Adicionar um novo módulo</span>
       </div>
 
       {state.isOpen && (

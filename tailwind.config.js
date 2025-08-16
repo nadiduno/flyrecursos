@@ -6,6 +6,9 @@ export default {
       screens:{
         xs:'320px'
       },
+      height: {
+        'table-container': 'calc(100vh - 300px)',
+      },
       colors: {
         primary1: "#004054",
         primary2: "#00CBFE",

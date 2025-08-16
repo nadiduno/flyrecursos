@@ -3,6 +3,7 @@ import { RiDeleteBin6Line } from "react-icons/ri";
 import { TableRowData } from "./Lesson";
 import { useEffect, useState } from "react";
 import { get } from "../../../services/api";
+import { Table, Column, Row, Cell, TableHeader, TableBody } from 'react-aria-components';
 
 interface Modulo {
   id: number;
@@ -49,6 +50,20 @@ export function TableCRUDLesson({
     return modulo ? modulo.titulo : "Módulo não encontrado";
   };
 
+  // Função para formatar o tipo de aula
+  const formatTipoAula = (tipo: string) => {
+    switch (tipo) {
+      case "VIDEO":
+        return "Vídeo";
+      case "ARTIGO":
+        return "Artigo";
+      case "PDF":
+        return "PDF";
+      default:
+        return tipo;
+    }
+  };
+
   if (loading || loadingModulos) {
     return (
       <div className="flex flex-col items-center justify-center text-center text-yellow py-5">
@@ -73,87 +88,99 @@ export function TableCRUDLesson({
   }
 
   return (
-    <div className="overflow-x-auto flex justify-center p-1">
-      <table className="min-w-[95%]">
-        <colgroup>
-          <col />
-          <col className="hidden md:table-cell lg:table-cell" />
-          <col className="w-22" />
-        </colgroup>
-        <thead className="border-b border-secondary">
-          <tr className="px-6 py-4 text-left font-medium tracking-wider text-yellow md:text-[17px]">
-            <th scope="col" className="py-3">
-              Título
-            </th>
-            <th scope="col" className="py-3 hidden md:table-cell lg:table-cell">
-              Tipo
-            </th>
-            <th scope="col" className="py-3 hidden md:table-cell lg:table-cell">
-              Módulo
-            </th>
-            <th scope="col" className="py-3 hidden md:table-cell lg:table-cell">
-              Ordem
-            </th>
-            <th scope="col" className="py-3 hidden md:table-cell lg:table-cell">
-              Duração (min)
-            </th>
-            <th scope="col" className="flex justify-end py-3 px-2">
-              Ações
-            </th>
-          </tr>
-        </thead>
-        <tbody className="divide-y border-b divide-secondary md:text-s lg:text-s">
+    <>
+      {/* Container principal para a tabela com o scroll vertical */}
+      <Table 
+        aria-label="Lista de aulas" 
+        className="w-full h-full text-sm table-fixed" // Adicionei h-full e table-fixed
+      >
+        <TableHeader className="sticky-header border-b border-secondary">
+          <Column 
+            isRowHeader 
+            className="w-[30%] px-2 py-3 text-left font-medium text-yellow bg-primary1"
+          >
+            Título
+          </Column>
+          <Column 
+            className="w-[15%] px-2 py-3 text-left font-medium text-yellow hidden md:table-cell bg-primary1"
+          >
+            Tipo
+          </Column>
+          <Column 
+            className="w-[25%] px-2 py-3 text-left font-medium text-yellow hidden md:table-cell bg-primary1"
+          >
+            Módulo
+          </Column>
+          <Column 
+            className="w-[10%] px-2 py-3 text-left font-medium text-yellow hidden md:table-cell bg-primary1"
+          >
+            Ordem
+          </Column>
+          <Column 
+            className="w-[10%] px-2 py-3 text-left font-medium text-yellow hidden md:table-cell bg-primary1"
+          >
+            Duração
+          </Column>
+          <Column 
+            className="w-[10%] px-2 py-3 pr-6 text-right font-medium text-yellow bg-primary1"
+          >
+            Ações
+          </Column>
+        </TableHeader>
+        
+        {/* O TableBody agora é o contêiner com a rolagem vertical. */}
+        {/* Adicionei 'flex-1' para que ele ocupe o espaço restante do container pai */}
+        {/* E 'overflow-y-auto' para habilitar a rolagem vertical */}
+        <TableBody className="divide-y divide-secondary overflow-y-auto flex-1">
           {lessons.length === 0 ? (
-            <tr>
-              <td colSpan={6} className="flex text-center py-4 text-gray-500">
+            <Row>
+              <Cell colSpan={6} className="text-center py-4 text-gray-500">
                 Nenhuma aula encontrada.
-              </td>
-            </tr>
+              </Cell>
+            </Row>
           ) : (
-            lessons.map((row) => (
-              <tr key={row.id}>
-                <td className="whitespace-nowrap py-2">{row.titulo}</td>
-                <td className="whitespace-nowrap py-2 hidden md:table-cell lg:table-cell">
-                  {row.tipo === "VIDEO"
-                    ? "Vídeo"
-                    : row.tipo === "ARTIGO"
-                    ? "Artigo"
-                    : row.tipo === "PDF"
-                    ? "PDF"
-                    : row.tipo}
-                </td>
-                <td className="whitespace-nowrap py-2 hidden md:table-cell lg:table-cell">
-                  {getModuloTitulo(row.moduloId)}
-                </td>
-                <td className="whitespace-nowrap py-2 hidden md:table-cell lg:table-cell">
-                  {row.ordem}
-                </td>
-                <td className="whitespace-nowrap py-2 hidden md:table-cell lg:table-cell">
-                  {row.duracaoEstimada}
-                </td>
-                <td className="whitespace-nowrap text-right flex flex-row gap-4 py-2 px-2 justify-end">
-                  <button onClick={() => onEdit(row)}>
-                    <GrEdit
-                      size={18}
-                      className="opacity-90 hover:opacity-100 hover:text-yellow cursor-pointer transition-transform duration-500"
-                      title="Editar"
-                      aria-label="Editar"
-                    />
-                  </button>
-                  <button onClick={() => onDelete(row)}>
-                    <RiDeleteBin6Line
-                      size={18}
-                      className="opacity-90 hover:opacity-100 hover:text-red-500 cursor-pointer transition-transform duration-500"
-                      title="Eliminar"
-                      aria-label="Eliminar"
-                    />
-                  </button>
-                </td>
-              </tr>
+            lessons.map((lesson) => (
+              <Row key={lesson.id} className="table-row-hover">
+                <Cell className="table-cell truncate">
+                  {lesson.titulo}
+                </Cell>
+                <Cell className="hidden md:table-cell">
+                  {formatTipoAula(lesson.tipo)}
+                </Cell>
+                <Cell className="hidden md:table-cell truncate">
+                  {getModuloTitulo(lesson.moduloId)}
+                </Cell>
+                <Cell className="hidden md:table-cell">
+                  {lesson.ordem}
+                </Cell>
+                <Cell className="hidden md:table-cell">
+                  {lesson.duracaoEstimada} min
+                </Cell>
+                <Cell className="table-cell">
+                  <div className="flex justify-end gap-2">
+                    <button 
+                      onClick={() => onEdit(lesson)}
+                      className="p-1 focus:outline-none focus:ring-2 focus:ring-yellow rounded"
+                      aria-label={`Editar aula ${lesson.titulo}`}
+                      title="Editar aula"
+                    >
+                      <GrEdit className="text-lg opacity-70 hover:opacity-100 hover:text-yellow transition-colors" />
+                    </button>
+                    <button 
+                      onClick={() => onDelete(lesson)}
+                      className="p-1 focus:outline-none focus:ring-2 focus:ring-red-500 rounded"
+                      aria-label={`Excluir aula ${lesson.titulo}`}
+                      title="Excluir aula"
+                    >
+                      <RiDeleteBin6Line className="text-lg opacity-70 hover:opacity-100 hover:text-red-500 transition-colors" />
+                    </button>
+                  </div>
+                </Cell>
+              </Row>
             ))
           )}
-        </tbody>
-      </table>
-    </div>
+        </TableBody>
+      </Table>
+    </>
   );
 }

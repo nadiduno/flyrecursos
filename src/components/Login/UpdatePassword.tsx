@@ -50,15 +50,15 @@ export const UpdatePassword: React.FC<UpdatePasswordProps> = ({
 
   return (
     <div className="fixed inset-0 flex items-start justify-center bg-[#FFFFFFB2] z-50">
-      <div className="mt-[3.25rem] md:mt-[8rem] font-bold bg-primary1 text-white w-[90%] md:w-[60%] lg:w-[50%] h-[30rem] md:h-[40rem] rounded-t-[10px] shadow-2xl overflow-auto flex flex-col">
-        <div className="flex-grow">
+      <div className="mt-[3.25rem] font-bold  text-white w-[90%] md:w-[60%] lg:w-[50%] h-[30rem] md:h-[37rem] rounded-t-[10px] shadow-2xl overflow-auto flex flex-col">
+        <div className="flex-grow bg-primary1">
           <UpdatePasswordForm
             ref={formRef}
             onSuccess={handlePasswordUpdateSuccess}
             onSubmittingChange={setIsSubmitting} // Passa a função para atualizar o estado de isSubmitting
           />
         </div>
-        <div className="w-full h-[5.5rem] md:h-[9.5rem] rounded-b-[10px] bg-white flex justify-center items-center space-x-4 mt-[1rem] border-b-[3px] border-primary2">
+        <div className="w-full h-[5.5rem] md:h-[20rem] rounded-b-[10px] bg-white flex justify-center items-center space-x-4 border-b-[3px] border-primary2">
           <button
             className="w-[8rem] md:w-[15rem] h-[3rem] rounded-[50px] border-secondary bg-white shadow-[0px_4px_4px_0px_rgba(0,0,0,0.2)] hover:bg-secondary2 hover:text-black transition-colors duration-200"
             type="button"
@@ -81,6 +81,7 @@ export const UpdatePassword: React.FC<UpdatePasswordProps> = ({
           </button>
         </div>
       </div>
+      
     </div>
   );
 };

@@ -79,7 +79,7 @@ export const CreateLesson: React.FC<CreateLessonProps> = ({
 
   return (
     <div className="fixed inset-0 flex items-start justify-center bg-[#FFFFFFB2] z-50">
-      <div className="mt-[0.5rem] md:mt-[1rem] font-bold bg-primary1 text-white w-[90%] md:w-[70%] h-[30rem] md:h-[36rem] rounded-t-[10px] shadow-2xl">
+      <div className="mt-[1rem] md:mt-[1.5rem] font-bold bg-primary1 text-white w-[90%] md:w-[70%] h-[30rem] md:h-[36rem] rounded-t-[10px] shadow-2xl">
         <CreateLessonForm onSubmit={onSubmit} setIsVisible={setIsVisible} />
       </div>
     </div>

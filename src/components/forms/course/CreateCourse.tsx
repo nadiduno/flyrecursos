@@ -76,9 +76,12 @@ export const CreateCourse: React.FC<CreateCourseProps> = ({
 
       // --- Passo 1: Criar o curso SEM módulos no payload inicial ---
       const createCoursePayload = {
-        titulo: formData.titulo,
-        // autorId: autorId,
-      };
+      titulo: formData.titulo,
+      dataPublicacao: formData.dataPublicacao,
+      dataInicio: formData.dataInicio,
+      dataConclusao: formData.dataConclusao,
+      
+    };
 
       // console.log("Payload para criar curso (Passo 1):", createCoursePayload);
       const createCourseResponse = await post<{ id: number }>(
