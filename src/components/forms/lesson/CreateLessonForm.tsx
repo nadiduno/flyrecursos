@@ -5,6 +5,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { Aula } from "../../../types/interface";
 import { get } from "../../../services/api";
 import { CreateModulePopover } from "../module/CreateModulePopover";
+import { formatarMensagemErro } from "../../../utils/formatarErrors";
 
 interface ModuloOption {
   id: number;
@@ -27,6 +28,10 @@ const FormDataSchema = z.object({
     .min(1, "A duração estimada deve ser um número inteiro positivo.")
     .max(9999, "A duração máxima é 9999 minutos."),
   linkConteudo: z
+    .string()
+    .nonempty("O link do conteúdo é obrigatório.")
+    .url("O link do conteúdo deve ser uma URL válida."),
+     urlCapa: z
     .string()
     .nonempty("O link do conteúdo é obrigatório.")
     .url("O link do conteúdo deve ser uma URL válida."),
@@ -64,6 +69,7 @@ export const CreateLessonForm: React.FC<LessonFormProps> = ({
       duracaoEstimada: 0,
       linkConteudo: "",
       moduloId: undefined,
+      urlCapa: "",
     },
   });
 
@@ -86,7 +92,8 @@ export const CreateLessonForm: React.FC<LessonFormProps> = ({
         const response = await get<ModuloOption[]>("/api/modulos");
         setModulosDisponiveis(response.data || []);
       } catch (err) {
-        setErrorModulos("Não foi possível carregar os módulos");
+        const errorMessage = formatarMensagemErro(err);
+        setErrorModulos(errorMessage || "Não foi possível carregar os módulos");
       } finally {
         setLoadingModulos(false);
       }
@@ -191,7 +198,29 @@ export const CreateLessonForm: React.FC<LessonFormProps> = ({
               </p>
             )}
           </div>
-
+{/* Link da Capa (imagem) */}
+<div className="w-full flex flex-col md:col-span-2">
+  <label className="w-full md:text-m py-[0.125rem] md:pt-[1rem] text-left md:text-lg">
+    Link da Capa (imagem)
+  </label>
+  <input
+    {...register("urlCapa", {
+      required: "Informe o link da capa",
+      pattern: {
+        value: /^https?:\/\/.+/i,
+        message: "Informe uma URL válida iniciando com http(s)://",
+      },
+    })}
+    className="w-full min-h-[2.5rem] bg-white rounded-[5px] pl-1 text-black md:text-m font-normal border-secondary shadow-[0px_4px_4px_0px_rgba(0,0,0,0.2)] placeholder:text-secondary md:text-lg"
+    type="url"
+    placeholder="Ex: https://meusite.com/imagens/capa.jpg"
+  />
+  {errors.urlCapa?.message && (
+    <p className="text-red-500 text-xs md:text-[1rem] mt-1">
+      {errors.urlCapa.message}
+    </p>
+  )}
+</div>
           {/* Duração Estimada */}
           <div className="w-full flex flex-col md:flex-col">
             <label className="w-full md:text-m py-[0.125rem] md:pt-[1rem] text-left md:text-lg">
