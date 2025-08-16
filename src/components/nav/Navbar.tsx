@@ -30,7 +30,14 @@ export function Navbar() {
   };
 
   const toggleDropdown = () => {
-    setIsDropdownVisible((prev) => !prev);
+    setIsDropdownVisible((prev) => {
+    const next = !prev;
+    if (next) {
+      setShowUploader(false); 
+    }
+    return next;
+  });
+
   };
     const handleOpenUpdatePassword = () => {
     setShowUpdatePassword(true);
@@ -124,10 +131,10 @@ useEffect(() => {
                     />
                   </div>
                 )}
-<RemoverImagen
+{showUploader && (<RemoverImagen
   urlPorDefecto="https://firebasestorage.googleapis.com/v0/b/flyeducation-1eea5.firebasestorage.app/o/fotoUsuario.jpg?alt=media&token=85ad7339-51d8-42ae-a392-b5b362cc7f15"
 />
-
+)}
                 {/* 3. Vincule a nova função ao evento onClick */}
                 <button
                   onClick={handleOpenUpdatePassword}
