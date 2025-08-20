@@ -4,7 +4,7 @@ import { post } from "../../../services/api";
 import { Aula } from "../../../types/interface";
 import { formatarMensagemErro } from "../../../utils/formatarErrors";
 import { AxiosError } from "axios";
-
+import formatYouTubeUrl from "../../../utils/formatarUrlYoutube";
 import { toastCustomSuccess, toastCustomError } from "../../ToastCustom";
 
 interface CreateLessonProps {
@@ -24,11 +24,11 @@ export const CreateLesson: React.FC<CreateLessonProps> = ({
 
   const onSubmit = async (formData: Aula) => {
     try {
-      const payload: Omit<Aula, "id" | "urlCapa" | "ordem"> = {
+      const payload: Omit<Aula, "id" | "urlCapa" | "orden"> = {
         titulo: formData.titulo,
         tipo: formData.tipo,
         duracaoEstimada: formData.duracaoEstimada,
-        linkConteudo: formData.linkConteudo,
+        linkConteudo: formatYouTubeUrl(formData.linkConteudo),
         moduloId: formData.moduloId,
       };
 
