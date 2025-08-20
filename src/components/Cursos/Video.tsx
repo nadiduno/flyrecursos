@@ -1,5 +1,3 @@
-import { useEffect, useState } from "react";
-
 interface VideoProps {
   id?: number;
   title?: string;
@@ -10,24 +8,14 @@ interface VideoProps {
 }
 
 export function Video(props: VideoProps) {
-  const [scrolled, setScrolled] = useState(false);
-
-  useEffect(() => {
-    const onScroll = () => setScrolled(window.scrollY > 0);
-    window.addEventListener("scroll", onScroll);
-    return () => window.removeEventListener("scroll", onScroll);
-  }, []);
-
-  const videoSrc =
-    props.src?.trim() || "https://www.youtube.com/embed/LqXqBgIUbJg"; // fallback video
+  const videoSrc = props.src || "";
+  const isValidVideo = videoSrc.startsWith("https://www.youtube.com/embed/");
+  console.log("Video src final:", videoSrc);
 
   return (
     <div
       className="w-full h-[17rem] max-h-[28rem] overflow-hidden md:h-[28rem] lg:h-[28rem] top-0 z-20 flex items-center justify-center bg-black"
-      style={{
-        opacity: 1,
-        top: scrolled ? "0px" : "85px",
-      }}
+      style={{ opacity: 1 }}
     >
       <button
         onClick={props.onClose}
@@ -38,9 +26,9 @@ export function Video(props: VideoProps) {
         &times;
       </button>
 
-      <div className="z-10 w-full h-full">
-        <div className="flex items-center justify-center w-full h-full box-border">
-          <div className="z-10 md:w-[80%] h-full">
+      <div className="z-10 w-full h-full flex items-center justify-center">
+        {isValidVideo ? (
+          <div className="md:w-[80%] h-full">
             <div className="w-full md:h-[calc(100%-4.5rem)]">
               <iframe
                 width="100%"
@@ -51,7 +39,6 @@ export function Video(props: VideoProps) {
                 allowFullScreen
               ></iframe>
             </div>
-
             <div className="w-full h-full bg-primary1">
               <div className="ml-[1.25rem] md:ml-[2rem]">
                 <p className="pt-[0.5rem] md:pt-[1rem] text-white text-xl">
@@ -60,7 +47,14 @@ export function Video(props: VideoProps) {
               </div>
             </div>
           </div>
-        </div>
+        ) : (
+          <div className="text-white text-center p-4 bg-red-600 rounded-xl shadow-md max-w-md">
+            <p className="text-lg font-semibold">Problemas para carregar sua aula</p>
+            <p className="text-sm mt-2">
+              Por favor, recarregue a página. Se o problema persistir, entre em contato com o suporte técnico.
+            </p>
+          </div>
+        )}
       </div>
     </div>
   );
