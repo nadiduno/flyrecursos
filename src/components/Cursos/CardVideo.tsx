@@ -17,7 +17,7 @@ export interface CardVideoType {
   duracaoEstimada: number;
   linkConteudo: string;
   moduloId: number;
-  ordem: number;
+  orden: number;
   tipo: string;
   titulo: string;
   imagemCapa?: string;
@@ -42,13 +42,13 @@ export function CardVideo({ cardVideo }: CardVideoProps) {
   }, [cardVideo.imagemCapa]); 
 
   return (
-    <div className="flex-shrink-0 w-[18%] mx-2">
-      <img
-        src={imagenActual} // Usamos la imagen almacenada en el estado
-        alt={`Imagen - ${cardVideo.titulo}`}
-        title={cardVideo.titulo}
-        className="min-w-[247px] max-w-[380px] min-h-[200px] md:w-[264px] w-[200px] max-h-[150px] md:h-[150px] h-[114px] object-cover bg-lightgreen m-[5px] mx-[10px] cursor-pointer transition-transform duration-500 hover:scale-[1.4] rounded-xl"
-      />
-    </div>
+<div className="w-full h-[150px] md:h-[180px] overflow-hidden rounded-xl relative">
+  <img
+    src={imagenActual}
+    alt={`Imagen - ${cardVideo.titulo}`}
+    title={cardVideo.titulo}
+    className="w-full h-full object-cover cursor-pointer transition-transform duration-500 group-hover:scale-[1.1] transform-origin-center"
+  />
+</div>
   );
 }

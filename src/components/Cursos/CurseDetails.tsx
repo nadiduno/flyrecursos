@@ -14,7 +14,7 @@ export function CourseDetails({ curso }: Props) {
         {curso.descricao}
       </p>
       <p className="hidden md:block text-sm leading-relaxed text-gray-800 md:text-[16px] mt-2">
-        ⏳ <strong>Duración total:</strong> {curso.horasTotales} horas
+        ⏳ <strong>Duración total:</strong> {curso.totalHoras} horas
       </p>
     </div>
   );
