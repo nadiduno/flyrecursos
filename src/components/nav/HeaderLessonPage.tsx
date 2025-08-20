@@ -34,8 +34,10 @@ const modulosMenu: MenuItem[] = curso?.modulos?.map((modulo) => ({
             src={selectedVideo.linkConteudo}
             thumbnail={selectedVideo.imagemCapa}
             onClose={onCloseVideo}
+            
           />
         </div>
+        
       ) : (
         // Senão renderiza o conteúdo principal
         <div className="relative w-full h-full max-h-[24rem] overflow-hidden md:h-[28rem] lg:h-[28rem] rounded-2xl">
@@ -49,7 +51,7 @@ const modulosMenu: MenuItem[] = curso?.modulos?.map((modulo) => ({
               curso={{
                 titulo:curso.titulo,
                 descricao:curso.descricao,
-                horasTotales:curso.horasTotales || 0,
+                totalHoras:curso.totalHoras || 0,
                 modulos: curso.modulos || [],
               }}
               
