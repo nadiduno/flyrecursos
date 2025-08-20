@@ -24,22 +24,22 @@ export const ModuloAulas = ({ modulo, onVideoSelect }: ModuloAulasProps) => {
 
       <div
   ref={carouselRef}
-  className="h-full md:h-[250px] w-full overflow-x-hidden whitespace-nowrap flex items-start scroll-smooth pb-1"
+  className="h-full md:h-[260px] w-full overflow-x-hidden whitespace-nowrap flex items-start scroll-smooth pb-1"
 >
 
         {aulas.map((aula) => (
-          <div
-            key={aula.id}
-            className="w-[300px] w-[18%] mx-2 mr-4 cursor-pointer group"
-            onClick={() => onVideoSelect(aula)}
-          >
-            <div className="rounded-lg overflow-hidden shadow-md hover:shadow-xl transition-shadow duration-300">
-              <CardVideo cardVideo={aula} />
-            </div>
-            <p className="mt-2 text-sm text-center font-medium group-hover:text-primary1 transition-colors duration-300">
-              {aula.titulo}
-            </p>
-          </div>
+     <div
+  key={aula.id}
+  className="group cursor-pointer flex flex-col items-center justify-center flex-shrink-0 w-full sm:w-[48%] md:w-[48%] lg:w-[23%] max-w-[365px] mx-2 transition-transform duration-300 hover:scale-[1.02]"
+  onClick={() => onVideoSelect(aula)}
+>
+  <div className="rounded-xl shadow-md w-full overflow-hidden transition-shadow duration-300 group-hover:shadow-xl">
+    <CardVideo cardVideo={aula} />
+  </div>
+  <p className="mt-2 text-center font-semibold text-base sm:text-lg md:text-lg lg:text-lg break-words whitespace-normal transition-colors duration-300">
+    {aula.titulo}
+  </p>
+</div>
         ))}
       </div>
 
