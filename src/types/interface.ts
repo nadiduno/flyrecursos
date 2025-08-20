@@ -2,11 +2,11 @@ export interface CursoInfo {
   id?: number; 
   titulo: string;
   descricao?: string; 
-  dataPublicacao: string; 
-  dataInicio: string;
-  dataConclusao: string; 
-  duracaoFormatada: string; // Ex: '2 horas e 30 minutos'
-  totalAulas: number;
+  dataPublicacao?: string; 
+  dataInicio?: string;
+  dataConclusao?: string; 
+  duracaoFormatada?: string; // Ex: '2 horas e 30 minutos'
+  totalAulas?: number;
   totalHoras: number; // Em minutos
   modulos: Modulos[];
   autor?: {
@@ -17,19 +17,19 @@ export interface CursoInfo {
 }
 
 export interface Modulos{
-  id: number;
+  id?: number;
   titulo: string;
-  ordem: number;
+  orden: number;
   aulas: Aula[];
 }
 
 export interface Aula {
-  id: number;
+  id?: number;
   titulo: string;
   duracaoEstimada: number;
   linkConteudo: string;
   moduloId: number;
-  ordem: number;
+  orden: number;
   tipo: string;
   urlCapa?: string;
 }
