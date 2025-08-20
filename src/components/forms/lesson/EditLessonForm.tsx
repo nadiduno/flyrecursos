@@ -2,9 +2,11 @@ import React, { useEffect, useState } from "react";
 import { useForm, SubmitHandler } from "react-hook-form";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { FormDataLesson } from "../../../types/typeFormData";
+import { Aula } from "../../../types/interface";
 import { get } from "../../../services/api";
+import { formatarMensagemErro } from "../../../utils/formatarErrors";
 // import { PatternFormat } from "react-number-format";
+import formatYouTubeUrl from "../../../utils/formatarUrlYoutube";
 
 interface ModuloOption {
   id: number;
@@ -30,6 +32,9 @@ const FormDataSchema = z.object({
     .string()
     .nonempty("O link do conteúdo é obrigatório.")
     .url("O link do conteúdo deve ser uma URL válida."),
+ orden: z
+  .number({ invalid_type_error: "Informe um número" })
+  .min(1, "A orden deve ser maior que 0"),
   moduloId: z
     .number({
       required_error: "Selecione ou crie um módulo para a aula",
@@ -48,7 +53,7 @@ interface EditLessonFormProps {
   setCreationError: (msg: string | null) => void;
   message: string | null;
   creationError: string | null;
-  defaultData?: FormDataLesson;
+  defaultData?: Aula;
   setIsVisible: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
@@ -78,9 +83,10 @@ export const EditLessonForm: React.FC<EditLessonFormProps> = ({
             titulo: defaultData.titulo,
             tipo: defaultData.tipo as "VIDEO" | "ARTIGO" | "PDF", // Cast explícito
             duracaoEstimada: defaultData.duracaoEstimada,
-            linkConteudo: defaultData.linkConteudo,
+            linkConteudo: formatYouTubeUrl(defaultData.linkConteudo),
             moduloId: defaultData.moduloId,
             id: defaultData.id,
+            orden:defaultData.orden
           }
         : {}),
     },
@@ -107,6 +113,7 @@ export const EditLessonForm: React.FC<EditLessonFormProps> = ({
         linkConteudo: defaultData.linkConteudo,
         moduloId: defaultData.moduloId, // Garantido que é number
         id: defaultData.id,
+        orden: defaultData.orden
       });
       // Garante que só passa number ou null
       setSelectedModuleId(
@@ -123,6 +130,7 @@ export const EditLessonForm: React.FC<EditLessonFormProps> = ({
         const response = await get< ModuloOption[] >("/api/modulos");
         setModulosDisponiveis(response.data || []);
       } catch (err) {
+        formatarMensagemErro(err);
         setErrorModulos("Não foi possível carregar os módulos");
       } finally {
         setLoadingModulos(false);
@@ -230,7 +238,24 @@ export const EditLessonForm: React.FC<EditLessonFormProps> = ({
               </p>
             )}
           </div>
-
+{/* orden da aula no modulo */}
+          <div className="w-full flex flex-col md:flex-col">
+            <label className="w-full md:text-m py-[0.125rem] md:pt-[1rem] text-left md:text-lg">
+              Orden da aula no modulo
+            </label>
+            <input
+              {...register("orden", { valueAsNumber: true })}
+              className="w-full min-h-[2.5rem] bg-white rounded-[5px] pl-1 text-black md:text-m font-normal border-secondary shadow-[0px_4px_4px_0px_rgba(0,0,0,0.2)] 
+                        placeholder:text-secondary md:text-lg"
+              type="number"
+              placeholder="Orden da aula"
+            />
+            {errors.orden?.message && (
+              <p className="text-red-500 text-xs md:text-[1rem] mt-1">
+                {errors.orden.message}
+              </p>
+            )}
+          </div>
           {/* Seleção de Módulo */}
           <div className="w-full flex flex-col md:col-span-2">
             <div className="flex items-center gap-2">
@@ -286,7 +311,7 @@ export const EditLessonForm: React.FC<EditLessonFormProps> = ({
           >
             {" "}
             <p className="leading-tight tracking-normal text-center font-bold md:text-[1.25rem] text-secondary3">
-              Canelar
+              Cancelar
             </p>
           </button>
           <button

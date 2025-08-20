@@ -1,16 +1,17 @@
 import React, { useState, useEffect } from "react";
 import { EditLessonForm } from "../lesson/EditLessonForm";
 import { put } from "../../../services/api";
-import { FormDataLesson } from "../../../types/typeFormData";
+import { Aula } from "../../../types/interface";
 import { formatarMensagemErro } from "../../../utils/formatarErrors";
 import { AxiosError } from "axios";
 
 import { toastCustomSuccess, toastCustomError } from "../../ToastCustom";
+import formatYouTubeUrl from "../../../utils/formatarUrlYoutube";
 
 interface EditLessonProps {
   isVisible: boolean;
   setIsVisible: React.Dispatch<React.SetStateAction<boolean>>;
-  lessonData: FormDataLesson | null;
+  lessonData: Aula | null;
   onEditSuccess: () => void;
 }
 
@@ -23,7 +24,7 @@ export const EditLesson: React.FC<EditLessonProps> = ({
   const [message, setMessage] = useState<string | null>(null);
   const [creationError, setCreationError] = useState<string | null>(null);
 
-  const onSubmit = async (formData: FormDataLesson) => {
+  const onSubmit = async (formData: Aula) => {
     // console.log("Dados do formulário:", formData);
     if (!lessonData?.id) {
       toastCustomError("Conta", "ID do aula não encontrado para edição.");
@@ -34,7 +35,7 @@ export const EditLesson: React.FC<EditLessonProps> = ({
     const dataToUpdate = {
       ...formData,
       id: lessonData.id,
-      ordem: lessonData.ordem,
+      linkConteudo: formatYouTubeUrl(formData.linkConteudo),
     };
 
     try {
@@ -111,7 +112,7 @@ export const EditLesson: React.FC<EditLessonProps> = ({
                   linkConteudo: lessonData.linkConteudo,
                   moduloId: lessonData.moduloId,
                   id: lessonData.id,
-                  ordem: lessonData.ordem,
+                  orden: lessonData.orden,
                 }
               : undefined
           }
