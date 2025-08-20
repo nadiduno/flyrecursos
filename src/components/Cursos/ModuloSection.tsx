@@ -1,13 +1,12 @@
 import React from 'react';
-import { Resource } from '../resourse/Resource';
-import { CardVideoType } from '../Cursos/CardVideo'; 
-import { Aula } from '../../types/interfaceApi'; 
+import { Aula } from '../../types/interface';
+import { CardVideo } from '../Cursos/CardVideo';
 
 interface ModuloSectionProps {
   moduloId: number;
   moduloTitulo: string;
   aulas: Aula[];
-  onVideoSelect: (video: CardVideoType) => void;
+  onVideoSelect: (video: Aula) => void;
   isOdd: boolean;
 }
 
@@ -33,23 +32,23 @@ export const ModuloSection: React.FC<ModuloSectionProps> = ({
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 p-4">
         {aulas.length > 0 ? (
           aulas.map((aula) => (
-            <Resource
+            <div
               key={aula.id}
-              resource={{
-                id: aula.id,
-                titulo: aula.titulo,
-                duracaoEstimada: aula.duracaoEstimada,
-                linkConteudo: aula.linkConteudo,
-                moduloId: aula.moduloId,
-                ordem: aula.ordem,
-                tipo: aula.tipo,
-                urlCapa: aula.urlCapa, 
-              }}
-              onVideoSelect={onVideoSelect}
-            />
+              className="cursor-pointer group"
+              onClick={() => onVideoSelect(aula)}
+            >
+              <div className="rounded-lg overflow-hidden shadow-md hover:shadow-xl transition-shadow duration-300">
+                <CardVideo cardVideo={aula} />
+              </div>
+              <p className="mt-2 text-sm text-center font-medium group-hover:text-primary1 transition-colors duration-300">
+                {aula.titulo}
+              </p>
+            </div>
           ))
         ) : (
-          <p className={isOdd ? 'text-white' : 'text-primary2'}>Nenhuma aula encontrada para este módulo.</p>
+          <p className={isOdd ? 'text-white' : 'text-primary2'}>
+            Nenhuma aula encontrada para este módulo.
+          </p>
         )}
       </div>
     </section>
