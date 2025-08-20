@@ -3,6 +3,8 @@ import { useCursoActivo } from "../../utils/useCursoAtivo";
 import { ModuloAulas } from "./ModuloConAulas";
 import { Aula } from "../../../src/types/interface";
 
+// componente que muestra Una lista de secciones (módulos), cada una con sus aulas. Los colores de fondo alternan para mejorar la legibilidad, y al hacer clic en una aula, se dispara una acción (como reproducir un video o mostrar detalles).
+
 interface ResourceProps {
   onVideoSelect: (video: Aula) => void;
 }
