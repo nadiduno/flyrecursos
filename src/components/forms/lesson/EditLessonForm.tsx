@@ -32,9 +32,9 @@ const FormDataSchema = z.object({
     .string()
     .nonempty("O link do conteúdo é obrigatório.")
     .url("O link do conteúdo deve ser uma URL válida."),
- orden: z
+ ordem: z
   .number({ invalid_type_error: "Informe um número" })
-  .min(1, "A orden deve ser maior que 0"),
+  .min(1, "A ordem deve ser maior que 0"),
   moduloId: z
     .number({
       required_error: "Selecione ou crie um módulo para a aula",
@@ -78,6 +78,7 @@ export const EditLessonForm: React.FC<EditLessonFormProps> = ({
       duracaoEstimada: 0,
       linkConteudo: "",
       moduloId: undefined,
+      ordem:1,
       ...(defaultData
         ? {
             titulo: defaultData.titulo,
@@ -86,7 +87,7 @@ export const EditLessonForm: React.FC<EditLessonFormProps> = ({
             linkConteudo: formatYouTubeUrl(defaultData.linkConteudo),
             moduloId: defaultData.moduloId,
             id: defaultData.id,
-            orden:defaultData.orden
+            ordem:defaultData.ordem
           }
         : {}),
     },
@@ -113,7 +114,7 @@ export const EditLessonForm: React.FC<EditLessonFormProps> = ({
         linkConteudo: defaultData.linkConteudo,
         moduloId: defaultData.moduloId, // Garantido que é number
         id: defaultData.id,
-        orden: defaultData.orden
+        ordem: defaultData.ordem
       });
       // Garante que só passa number ou null
       setSelectedModuleId(
@@ -244,15 +245,16 @@ export const EditLessonForm: React.FC<EditLessonFormProps> = ({
               Orden da aula no modulo
             </label>
             <input
-              {...register("orden", { valueAsNumber: true })}
+              {...register("ordem", { valueAsNumber: true })}
               className="w-full min-h-[2.5rem] bg-white rounded-[5px] pl-1 text-black md:text-m font-normal border-secondary shadow-[0px_4px_4px_0px_rgba(0,0,0,0.2)] 
                         placeholder:text-secondary md:text-lg"
               type="number"
+              min={1}
               placeholder="Orden da aula"
             />
-            {errors.orden?.message && (
+            {errors.ordem?.message && (
               <p className="text-red-500 text-xs md:text-[1rem] mt-1">
-                {errors.orden.message}
+                {errors.ordem.message}
               </p>
             )}
           </div>
