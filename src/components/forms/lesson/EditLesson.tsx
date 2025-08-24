@@ -25,7 +25,7 @@ export const EditLesson: React.FC<EditLessonProps> = ({
   const [creationError, setCreationError] = useState<string | null>(null);
 
   const onSubmit = async (formData: Aula) => {
-    // console.log("Dados do formulário:", formData);
+    console.log("Dados do formulário:", formData);
     if (!lessonData?.id) {
       toastCustomError("Conta", "ID do aula não encontrado para edição.");
       return;
@@ -112,7 +112,7 @@ export const EditLesson: React.FC<EditLessonProps> = ({
                   linkConteudo: lessonData.linkConteudo,
                   moduloId: lessonData.moduloId,
                   id: lessonData.id,
-                  orden: lessonData.orden,
+                  ordem: lessonData.ordem,
                 }
               : undefined
           }
