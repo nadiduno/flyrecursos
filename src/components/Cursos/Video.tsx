@@ -1,3 +1,5 @@
+import { useCursoActivo } from "../../utils/useCursoAtivo";
+
 interface VideoProps {
   id?: number;
   title?: string;
@@ -11,7 +13,7 @@ export function Video(props: VideoProps) {
   const videoSrc = props.src || "";
   const isValidVideo = videoSrc.startsWith("https://www.youtube.com/embed/");
   console.log("Video src final:", videoSrc);
-
+  const { error, nomeUsuario } = useCursoActivo();
   return (
     <div
       className="w-full h-[17rem] max-h-[28rem] overflow-hidden md:h-[28rem] lg:h-[28rem] top-0 z-20 flex items-center justify-center bg-black"
@@ -48,12 +50,17 @@ export function Video(props: VideoProps) {
             </div>
           </div>
         ) : (
-          <div className="text-white text-center p-4 bg-red-600 rounded-xl shadow-md max-w-md">
-            <p className="text-lg font-semibold">Problemas para carregar sua aula</p>
-            <p className="text-sm mt-2">
-              Por favor, recarregue a página. Se o problema persistir, entre em contato com o suporte técnico.
-            </p>
-          </div>
+         <div className="max-w-[80%] text-red-600 bg-red-100 p-4 rounded-xl shadow-md min-w-[90vh]">
+    <p className="font-semibold text-xl mb-1">Olá {nomeUsuario}!</p>
+    <p>{error ? "Erro ao carregar a aula." : null}</p>
+    <p className="max-w-[80%] mt-2 leading-relaxed line-clamp-3">
+       Por favor, recarregue a página.
+       Se o problema persistir, entre em contato com o suporte técnico pelo email: {" "}
+      <a href="mailto:atendimento@flyeducacao.org" className="text-blue-600 underline">
+        atendimento@flyeducacao.org
+      </a>
+    </p>
+  </div>
         )}
       </div>
     </div>
