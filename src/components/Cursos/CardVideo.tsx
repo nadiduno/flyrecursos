@@ -13,6 +13,7 @@ const imagenesCapa = [
 ];
 
 export interface CardVideoType {
+  id?:number;
   linkConteudo: string;
   ordem: number;
   titulo: string;
