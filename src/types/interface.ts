@@ -19,7 +19,7 @@ export interface CursoInfo {
 export interface Modulos{
   id?: number;
   titulo: string;
-  orden: number;
+  ordem: number;
   aulas: Aula[];
 }
 
@@ -29,7 +29,7 @@ export interface Aula {
   duracaoEstimada: number;
   linkConteudo: string;
   moduloId: number;
-  orden: number;
+  ordem: number;
   tipo: string;
   urlCapa?: string;
 }
