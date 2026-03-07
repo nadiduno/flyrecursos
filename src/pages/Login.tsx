@@ -12,7 +12,7 @@ import { formatarMensagemErro } from "../utils/formatarErrors";
 import { useForm, SubmitHandler } from "react-hook-form";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { UpdatePassword} from "../components/Login/UpdatePassword";
+import { ForgotPassword} from "../components/Login/ForgotPassword";
 
 
 // Zod schema
@@ -60,7 +60,7 @@ export default function Login() {
   const [loginError, setLoginError] = useState("");
   const [showPassword, setShowPassword] = useState(false);
   // NOVO ESTADO: Para controlar a visibilidade do modal de atualização de senha
-  const [isUpdatePasswordModalVisible, setIsUpdatePasswordModalVisible] =
+  const [isForgotPasswordModalVisible, setIsForgotPasswordModalVisible] =
     useState(false);
 
   const {
@@ -109,7 +109,7 @@ export default function Login() {
     event: React.MouseEvent<HTMLAnchorElement>
   ) => {
     event.preventDefault(); // Impede a navegação do Link
-    setIsUpdatePasswordModalVisible(true);
+    setIsForgotPasswordModalVisible(true);
   };
 
   return (
@@ -151,9 +151,9 @@ export default function Login() {
       </div>
 
       {/* NOVO: Renderiza o modal de atualização de senha */}
-      <UpdatePassword
-        isVisible={isUpdatePasswordModalVisible}
-        setIsVisible={setIsUpdatePasswordModalVisible}
+      <ForgotPassword
+        isVisible={isForgotPasswordModalVisible}
+        setIsVisible={setIsForgotPasswordModalVisible}
       />
     </div>
   );
