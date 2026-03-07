@@ -4,6 +4,13 @@ import axios, {
   AxiosResponse
 } from 'axios';
 
+// Será inicializado com setLoadingCallback
+let loadingCallback: ((isLoading: boolean, message?: string) => void) | null = null;
+
+export const initializeLoadingHandler = (callback: (isLoading: boolean, message?: string) => void) => {
+  loadingCallback = callback;
+};
+
 type RespostaBackend<T> = AxiosResponse<T>;
 
 interface ErroBackend {
@@ -29,6 +36,11 @@ export const api = axios.create({
 
 api.interceptors.request.use(
   (config) => {
+    // Mostrar loading quando inicia a requisição
+    if (loadingCallback) {
+      loadingCallback(true, 'Processando...');
+    }
+
     if (
       config.url?.includes("firebasestorage.googleapis.com") ||
       config.baseURL?.includes("firebasestorage.googleapis.com")
@@ -46,8 +58,19 @@ api.interceptors.request.use(
 );
 
 api.interceptors.response.use(
-  (response) => response,
+  (response) => {
+    // Ocultar loading quando a resposta é bem-sucedida
+    if (loadingCallback) {
+      loadingCallback(false);
+    }
+    return response;
+  },
   (error: AxiosError<ErroBackend>) => {
+    // Ocultar loading mesmo em caso de erro
+    if (loadingCallback) {
+      loadingCallback(false);
+    }
+
     if (error.response?.status === 401) {
       console.warn('Token expirado ou inválido');
       localStorage.removeItem('accessToken');

@@ -79,7 +79,7 @@ export const toastCustomError = (entityType: string, entityName: string, errorMe
           className="w-full border border-transparent rounded-none rounded-r-lg p-4 flex items-center justify-center text-sm font-medium text-secondary hover:text-secondary3 focus:outline-none focus:ring-2 focus:ring-secondary"
         >
           Fechar
-        </button>    
+        </button>
       </div>
     </div>
   ));
