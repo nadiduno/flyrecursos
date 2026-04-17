@@ -1,5 +1,5 @@
-import { useLoading } from '../context/LoadingContext';
-import './LoadingOverlay.css';
+import { useLoading } from "../context/LoadingContext";
+import "./LoadingOverlay.css";
 
 export const LoadingOverlay = () => {
   const { isLoading, loadingMessage } = useLoading();
