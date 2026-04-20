@@ -8,7 +8,7 @@ import { PatternFormat } from "react-number-format";
 const calculateDigitCPF = (
   value: string,
   tamanho: number,
-  pesos: number[]
+  pesos: number[],
 ): number => {
   let soma = 0;
   for (let i = 1; i <= tamanho; i++) {
@@ -29,12 +29,12 @@ const validateCPF = (cpf: string): boolean => {
   const digito1 = calculateDigitCPF(
     cleanedCpf,
     9,
-    [10, 9, 8, 7, 6, 5, 4, 3, 2]
+    [10, 9, 8, 7, 6, 5, 4, 3, 2],
   );
   const digito2 = calculateDigitCPF(
     cleanedCpf,
     10,
-    [11, 10, 9, 8, 7, 6, 5, 4, 3, 2]
+    [11, 10, 9, 8, 7, 6, 5, 4, 3, 2],
   );
   return (
     digito1 === Number.parseInt(cleanedCpf.substring(9, 10)) &&
@@ -231,7 +231,7 @@ export const EditAccountForm: React.FC<EditAccountFormProps> = ({
           >
             {" "}
             <p className="leading-tight tracking-normal text-center font-bold md:text-[1.25rem] text-secondary3">
-              Canelar
+              Cancelar
             </p>
           </button>
           <button

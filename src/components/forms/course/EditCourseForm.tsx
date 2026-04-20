@@ -19,6 +19,12 @@ interface ModuloDetails {
   totalDuracao: number;
 }
 
+const getLocalISODate = (): string => {
+  const now = new Date();
+  const localDate = new Date(now.getTime() - now.getTimezoneOffset() * 60000);
+  return localDate.toISOString().split("T")[0];
+};
+
 const FormDataSchema = z
   .object({
     titulo: z
@@ -30,13 +36,6 @@ const FormDataSchema = z
     dataInicio: z.string().nonempty("A data de início é obrigatória."),
     dataConclusao: z.string().nonempty("A data de conclusão é obrigatória."),
   })
-  .refine(
-    (data) => new Date(data.dataInicio) >= new Date(new Date().toDateString()),
-    {
-      message: "A data de início não pode ser anterior à data atual.",
-      path: ["dataInicio"],
-    }
-  )
   .refine((data) => new Date(data.dataConclusao) > new Date(data.dataInicio), {
     message: "A data de conclusão deve ser posterior à data de início.",
     path: ["dataConclusao"],
@@ -72,6 +71,8 @@ export const EditCourseForm: React.FC<CourseFormProps> = ({
     handleSubmit,
     formState: { errors },
     setValue,
+    setError,
+    clearErrors,
   } = useForm<FormData>({
     resolver: zodResolver(FormDataSchema),
     defaultValues: {
@@ -106,7 +107,7 @@ export const EditCourseForm: React.FC<CourseFormProps> = ({
     } else {
       const lowerCaseSearchTerm = searchTerm.toLowerCase();
       const results = modulosDisponiveis.filter((modulo) =>
-        modulo.titulo.toLowerCase().includes(lowerCaseSearchTerm)
+        modulo.titulo.toLowerCase().includes(lowerCaseSearchTerm),
       );
       setFilteredModulos(results);
     }
@@ -119,7 +120,7 @@ export const EditCourseForm: React.FC<CourseFormProps> = ({
   useEffect(() => {
     setSelectedModuleIds((prevSelected) => {
       const validSelected = prevSelected.filter((idString) =>
-        modulosDisponiveis.some((mod) => mod.id === parseInt(idString))
+        modulosDisponiveis.some((mod) => mod.id === parseInt(idString)),
       );
       return validSelected;
     });
@@ -130,11 +131,22 @@ export const EditCourseForm: React.FC<CourseFormProps> = ({
   };
 
   const handleFormSubmit: SubmitHandler<FormData> = (data) => {
+    if (defaultData?.dataInicio && data.dataInicio < defaultData.dataInicio) {
+      setError("dataInicio", {
+        type: "manual",
+        message:
+          "Na edição, a data de início não pode ser anterior à data inicial original do curso.",
+      });
+      return;
+    }
+
+    clearErrors("dataInicio");
+
     const modulosIdsAsNumbers =
       data.modulosIds?.map((idString) => parseInt(idString)) || [];
 
     // Capturar a data atual para 'dataPublicacao'
-    const dataPublicacao = new Date().toISOString().split("T")[0];
+    const dataPublicacao = getLocalISODate();
     const duracaoFormatada = formatDuration(totalSelectedDuracao);
 
     onSubmit({
@@ -156,7 +168,7 @@ export const EditCourseForm: React.FC<CourseFormProps> = ({
       const response = await get<Aula[]>("/api/aulas");
       const fetchedLessons = response.data || [];
       setAllLessons(fetchedLessons);
-    } catch (err) {
+    } catch {
       setErrorLessons("Não foi possível carregar as informações das aulas.");
       setAllLessons([]);
     } finally {
@@ -172,12 +184,12 @@ export const EditCourseForm: React.FC<CourseFormProps> = ({
     const details: Record<number, ModuloDetails> = {};
     modulosDisponiveis.forEach((modulo) => {
       const lessonsInModule = allLessons.filter(
-        (lesson) => lesson.moduloId === modulo.id
+        (lesson) => lesson.moduloId === modulo.id,
       );
       const totalAulas = lessonsInModule.length;
       const totalDuracao = lessonsInModule.reduce(
         (sum, lesson) => sum + (lesson.duracaoEstimada || 0),
-        0
+        0,
       );
       details[modulo.id] = { totalAulas, totalDuracao };
     });
@@ -209,7 +221,7 @@ export const EditCourseForm: React.FC<CourseFormProps> = ({
     const hours = Math.floor(totalMinutes / 60);
     const minutes = totalMinutes % 60;
 
-    let parts = [];
+    const parts = [];
     if (hours > 0) {
       parts.push(`${hours} hora${hours !== 1 ? "s" : ""}`);
     }
@@ -224,7 +236,7 @@ export const EditCourseForm: React.FC<CourseFormProps> = ({
     return parts.join(" e ");
   };
 
-  const today = new Date().toISOString().split("T")[0];
+  const minEditStartDate = defaultData?.dataInicio || getLocalISODate();
 
   return (
     <form onSubmit={handleSubmit(handleFormSubmit)}>
@@ -272,7 +284,6 @@ export const EditCourseForm: React.FC<CourseFormProps> = ({
                 onChange={(e) => setSearchTerm(e.target.value)}
               />
             </div>
-
           </div>
         </div>
 
@@ -396,7 +407,7 @@ export const EditCourseForm: React.FC<CourseFormProps> = ({
               <div className="w-full grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 mt-4">
                 {selectedModuleIds.map((moduleIdString) => {
                   const module = modulosDisponiveis.find(
-                    (m) => m.id === parseInt(moduleIdString)
+                    (m) => m.id === parseInt(moduleIdString),
                   );
                   const details = moduloAggregatedDetails[
                     parseInt(moduleIdString)
@@ -439,7 +450,7 @@ export const EditCourseForm: React.FC<CourseFormProps> = ({
               className="w-full min-h-[2.5rem] bg-white rounded-[5px] pl-1 text-black md:text-m font-normal border-secondary shadow-[0px_4px_4px_0px_rgba(0,0,0,0.2)] 
             placeholder:text-secondary md:text-lg"
               {...register("dataInicio")}
-              min={today} // A data de início não pode ser anterior à data atual
+              min={minEditStartDate}
               type="date"
             />
             {errors.dataInicio && (
